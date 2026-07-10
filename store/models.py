@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 from users.models import PersonUser
-from mptt.models import MPTTModel, TreeForeignKey
 
 
 # Create your models here.
@@ -9,7 +8,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 class Customer(models.Model):
     user = models.OneToOneField(PersonUser, on_delete=models.CASCADE)
     phone = models.CharField(max_length=11)
-    address = models.CharField()
+    address = models.CharField(max_length=300)
 
     def __str__(self):
         return f'{self.user.email}'

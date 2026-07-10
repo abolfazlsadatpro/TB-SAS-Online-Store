@@ -51,11 +51,6 @@ def contact_page(request):
         else:
             print(form.errors)
 
-    return render(
-        request,
-        'main/contact_us.html'
-    )
-
     return render(request, 'main/contact_us.html', {'form': form})
 
 
