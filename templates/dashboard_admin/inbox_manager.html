@@ -1,0 +1,81 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% block title %}
+    Inbox Show
+{% endblock %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3 class="card-title">Inbox Manager</h3>
+
+            <div class="card-tools">
+                <ul class="pagination pagination-sm float-end">
+                    <li class="page-item">
+                        <a class="page-link" href="#">«</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">»</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+            <table class="table" role="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Operate</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in inboxes %}
+                <tr class="align-middle">
+                    <td>
+                        <div class="accordion-item">
+                        <h2 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ item.id }}" aria-expanded="false" aria-controls="collapseOne">
+                            {{ item.name }} - {{ item.email }} - {{ item.created_at }}
+                          </button>
+                        </h2>
+                        <div id="collapseOne{{ item.id }}"  class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
+                          <div class="accordion-body">
+                            <strong>
+                                {{ item.message }}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary">
+                            Seen
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+{% endblock %}

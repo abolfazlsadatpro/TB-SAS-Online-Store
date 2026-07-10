@@ -1,0 +1,401 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% block title %}
+    Banner Management
+{% endblock %}
+
+{% load static %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/new_banner_site.css' %}">
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="banner-page">
+
+        <div class="banner-header">
+
+            <div>
+                <h2 class="banner-title">
+
+                    {% if banner %}
+                        Edit Banner
+                    {% else %}
+                        Banner Management
+                    {% endif %}
+
+                </h2>
+
+                <p class="banner-subtitle">
+                    Manage homepage banners with a modern dashboard.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- LEFT -->
+            <div class="col-lg-8">
+
+                <div class="banner-card">
+
+                    <div class="banner-card-header">
+
+                        <i class="bi bi-image-fill"></i>
+
+                        <span>
+
+                        {% if banner %}
+                            Update Banner
+                        {% else %}
+                            Create New Banner
+                        {% endif %}
+
+                    </span>
+
+                    </div>
+
+                    <div class="banner-card-body">
+
+                        <form method="post" enctype="multipart/form-data">
+
+                            {% csrf_token %}
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Banner Title
+                                </label>
+
+                                {{ forms.title }}
+
+                                {% if forms.title.errors %}
+                                    <small class="text-danger">
+                                        {{ forms.title.errors }}
+                                    </small>
+                                {% endif %}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Description
+                                </label>
+
+                                {{ forms.description }}
+
+                                {% if forms.description.errors %}
+                                    <small class="text-danger">
+                                        {{ forms.description.errors }}
+                                    </small>
+                                {% endif %}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Banner Image
+                                </label>
+
+                                {{ forms.picture }}
+
+                                {% if forms.picture.errors %}
+                                    <small class="text-danger">
+                                        {{ forms.picture.errors }}
+                                    </small>
+                                {% endif %}
+
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+
+                                <a href="{% url 'banner_management' %}" class="btn btn-light px-4">
+                                    Cancel
+                                </a>
+
+                                <button class="btn btn-success px-5">
+
+                                    {% if banner %}
+                                        <i class="bi bi-check-circle"></i>
+                                        Update Banner
+                                    {% else %}
+                                        <i class="bi bi-plus-circle"></i>
+                                        Create Banner
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="col-lg-4">
+
+                <!-- Preview Card -->
+                <div class="banner-card mb-4">
+
+                    <div class="banner-card-header">
+
+                        <i class="bi bi-card-image"></i>
+
+                        <span>Banner Preview</span>
+
+                    </div>
+
+                    <div class="banner-card-body text-center">
+
+                        <div class="preview-box">
+
+                            {% if banner and banner.picture %}
+
+
+
+
+                                <img src="
+
+
+
+
+                                        {% if banner and banner.picture %}{{ banner.picture.url }}{% else %}{% static 'images/no-image.png' %}{% endif %}"
+                                     id="previewImage" class="preview-image preview-clickable" alt="Banner">
+
+
+
+                            {% else %}
+
+                                <img
+                                        src="{% static 'images/no-image.png' %}"
+                                        id="previewImage"
+                                        class="preview-image"
+                                        alt="Preview">
+
+                            {% endif %}
+
+                        </div>
+
+                        <h5 class="mt-4">
+
+                            {% if banner %}
+                                {{ banner.title }}
+                            {% else %}
+                                Banner Preview
+                            {% endif %}
+
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+
+                            Upload a beautiful banner for your homepage.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- END ROW -->
+        <!-- =========================
+         LATEST BANNERS
+    ========================== -->
+
+        <div class="banner-card mt-5">
+
+            <div class="banner-card-header d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <i class="bi bi-images"></i>
+
+                    <span>Latest Banners</span>
+
+                </div>
+
+                <span class="badge bg-success rounded-pill">
+
+            {{ banners|length }} Banner
+
+        </span>
+
+            </div>
+
+            <div class="banner-card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table banner-table align-middle mb-0">
+
+                        <thead>
+
+                        <tr>
+
+                            <th width="110">Preview</th>
+
+                            <th>Title</th>
+
+                            <th>Description</th>
+
+                            <th width="180" class="text-center">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {% for i in banners %}
+
+                            <tr>
+
+                                <td>
+
+                                    <img
+                                            src="{{ i.picture.url }}"
+                                            class="table-banner-image"
+                                            alt="{{ i.title }}">
+
+                                </td>
+
+                                <td>
+
+                                    <div class="fw-bold">
+
+                                        {{ i.title }}
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="table-description">
+
+                                        {{ i.description|truncatechars:80 }}
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <a
+                                                href="{% url 'banner_edit' i.id %}"
+                                                class="btn btn-edit">
+
+                                            <i class="bi bi-pencil-square"></i>
+
+                                        </a>
+
+                                        <a
+                                                href="{% url 'delete_banner' i.id %}"
+                                                class="btn btn-delete"
+                                                onclick="return confirm('Delete this banner?')">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="4">
+
+                                    <div class="empty-banner">
+
+                                        <i class="bi bi-image display-4"></i>
+
+                                        <h4 class="mt-3">
+
+                                            No Banner Found
+
+                                        </h4>
+
+                                        <p>
+
+                                            Create your first homepage banner.
+
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="image-preview-modal" id="imagePreviewModal">
+
+    <span class="close-preview">
+
+        <i class="bi bi-x-lg"></i>
+
+    </span>
+
+            <img
+                    id="previewModalImage"
+                    class="preview-modal-image"
+                    src="">
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+            <div class="d-flex justify-content-center">
+                <div class="pagination">
+                    <div class="page-item"><a class="page-link" href="#">Previous</a></div>
+                    <div class="page-item"><a class="page-link" href="#">1</a></div>
+                    <div class="page-item"><a class="page-link" href="#">2</a></div>
+                    <div class="page-item"><a class="page-link" href="#">3</a></div>
+                    <div class="page-item"><a class="page-link" href="#">Next</a></div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-footer -->
+    </div>
+    {% block custom_js %}
+        <script src="{% static 'js/dashboard/admin/new_banner_site.js' %}"></script>
+    {% endblock %}
+{% endblock %}
+

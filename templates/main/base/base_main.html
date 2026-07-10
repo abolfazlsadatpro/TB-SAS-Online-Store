@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/boot.css' %}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Font -->
+    <!--suppress JSUnresolvedLibraryURL -->
+    <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/dist/font-face.css" rel="stylesheet">
+
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- ICON -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon_tb_sas.ico' %}">
+
+
+    <!-- Page-specific CSS -->
+    {% block css %}{% endblock %}
+</head>
+
+
+<body>
+
+<header class="site-header">
+
+    <!-- TOP NAVBAR -->
+    <nav class="custom-navbar">
+        <div class="nav-top container">
+
+            <!-- LOGO -->
+            <a class="nav-logo" href="{% url 'home' %}">
+                <img src="{% static 'images/logo_tb_sas.png' %}" alt="TBSAS">
+            </a>
+
+            <!-- SEARCH -->
+            <div class="nav-search">
+                <i class="fa fa-search search-icon"></i>
+                <input type="text" placeholder="Search products...">
+            </div>
+
+            <!-- RIGHT BUTTONS -->
+            <div class="nav-actions">
+
+                <div class="auth-box">
+                    <a href="{% url 'show_login' %}">Login</a>
+                    <span class="divider"></span>
+                    <a href="{% url 'show_register' %}">Register</a>
+                </div>
+
+                <div class="nav-cart">
+                    <a href="{% url 'cart' %}" class="cart-link">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Cart</span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- CATEGORY BAR -->
+    <div class="category-bar">
+        <div class="container">
+            <div class="mega-category">
+
+                <div class="mega-btn">
+                    <i class="fa fa-bars"></i> Product Categories
+                </div>
+
+                <div class="mega-menu">
+                    <ul class="mega-main">
+
+                        <li class="has-sub">
+                            Mobile Phones
+                            <div class="mega-sub">
+                                <a href="#">Samsung</a>
+                                <a href="#">Apple</a>
+                                <a href="#">Xiaomi</a>
+                                <a href="#">Nokia</a>
+                            </div>
+                        </li>
+
+                        <li class="has-sub">
+                            Laptops
+                            <div class="mega-sub">
+                                <a href="#">Dell</a>
+                                <a href="#">HP</a>
+                                <a href="#">Asus</a>
+                            </div>
+                        </li>
+
+                        <li class="has-sub">
+                            Accessories
+                            <div class="mega-sub">
+                                <a href="#">Headphones</a>
+                                <a href="#">Chargers</a>
+                                <a href="#">Power Bank</a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</header>
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+
+<footer class="main-footer">
+
+    <!-- TOP BAR -->
+    <div class="footer-top">
+        <img src="{% static 'images/logo_tb_sas.png' %}" class="footer-logo" alt="TBSAS">
+
+        <a href="#" class="back-top">⬆ Back to Top</a>
+    </div>
+
+    <hr class="footer-line">
+
+    <!-- MAIN FOOTER LINKS -->
+    <div class="footer-links container">
+
+        <div class="footer-col">
+            <h3>Terms & Policies</h3>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Customer Reviews</a>
+            <a href="#">Why TBSAS?</a>
+        </div>
+
+        <div class="footer-col">
+            <h3>After Purchase</h3>
+            <a href="#">Registry Guarantee</a>
+            <a href="#">Return Policy</a>
+            <a href="#">Registry FAQ</a>
+            <a href="#">Order Tracking</a>
+            <a href="#">Return Guide</a>
+        </div>
+
+        <div class="footer-col">
+            <h3>Before Purchase</h3>
+            <a href="#">Buying Guide</a>
+            <a href="#">Purchase Methods</a>
+            <a href="#">7-Day Guarantee</a>
+            <a href="#">Shipping & Costs</a>
+        </div>
+
+        <div class="footer-col">
+            <a href="#">About US</a>
+            <a href="#">Our Goals & Commitments</a>
+            <a href="#">FAQ</a>
+            <a href="#">Physical Stores</a>
+            <a href="#">Contact Us</a>
+        </div>
+
+    </div>
+
+    <hr class="footer-line">
+
+    <!-- BOTTOM SECTION -->
+    <div class="footer-bottom container">
+
+        <!-- CONTACT -->
+        <div class="footer-contact">
+            <a><h3>Contact Us</h3></a>
+            <p>Phone: 09053295969</p>
+            <p>✉ Email: tb_sas@gmail.com</p>
+        </div>
+
+        <!-- SOCIAL -->
+        <div class="footer-social">
+            <h3>Social Media</h3>
+            <div class="social-icons">
+                <a href="#" class="insta"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="telegram"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- APP DOWNLOAD -->
+        <div class="footer-app">
+            <h4>Download Our App</h4>
+            <img src="{% static 'images/app-google_play.png' %}" alt="Google Play">
+            <img src="{% static 'images/app-store-logo.png' %}" alt="App Store">
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block custom_js %}
+
+{% endblock %}
+</body>

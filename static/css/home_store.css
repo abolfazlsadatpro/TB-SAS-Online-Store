@@ -1,0 +1,783 @@
+/* =========================
+   Slider
+========================= */
+body {
+    overflow-x: hidden;
+}
+
+#mainSlider {
+    margin-bottom: 4rem;
+    position: relative; /* خیلی مهم */
+    z-index: 1;
+}
+
+.py-5 {
+    padding-top: 8rem !important;
+    padding-bottom: 3rem !important;
+}
+
+.carousel-item img {
+    height: 600px;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.carousel-caption h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.carousel-caption p {
+    font-size: 1.1rem;
+    color: #eee;
+}
+
+.carousel-caption .btn {
+    background-color: var(--green-main);
+    border: none;
+}
+
+.carousel-caption .btn:hover {
+    background-color: var(--green-hover);
+}
+
+
+/* =========================
+   کارت محصولات
+========================= */
+.product-card {
+    border: none;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.35s ease;
+    border-right: 1px solid #0000004d;
+}
+
+#mainSlider {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+
+.product-card .card-title {
+    font-weight: 600;
+}
+
+.product-card .card-text {
+    color: var(--text-muted);
+}
+
+.text-primary {
+    color: var(--green-main) !important;
+}
+
+.product-card .btn {
+    background-color: var(--green-main);
+    border: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.product-card .btn:hover {
+    background-color: var(--green-hover);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   دسته‌بندی محصولات
+========================= */
+.product-categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.category-btn {
+    background-color: var(--green-main);
+    border: none;
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-btn:hover,
+.category-btn.active {
+    background-color: var(--green-hover);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   Special Offers Slider
+========================= */
+
+.special-offers-section {
+    background: linear-gradient(135deg, #198754, #16a34a);
+    padding: 20px 0;
+    border-radius: 15px;
+    margin: 30px 0;
+}
+
+.special-title {
+    color: white;
+    font-weight: bold;
+}
+
+
+.special-card {
+    background: white;
+    border-radius: 15px;
+    padding: 10px;
+    width: 220px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+    position: relative;
+}
+
+.special-img {
+    width: 100%;
+    height: 140px;
+    object-fit: contain;
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.product-title {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.price-box {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.new-price {
+    font-weight: bold;
+    color: #0f9d58;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.timer {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+}
+
+/* Scroll */
+.special-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+    scrollbar-width: none; /* Firefox */
+}
+
+.special-col {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    min-width: 220px;
+    max-width: 220px;
+}
+
+/* Slider Buttons */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 5; /* مهم */
+}
+
+.slider-btn.left {
+    left: 10px;
+}
+
+.slider-btn.right {
+    right: 10px;
+}
+
+/* =========================
+   Promo Section
+========================= */
+.promo-box {
+    position: relative;
+    width: 100%;
+    height: 200px; /* ارتفاع ثابت تبلیغ */
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .1);
+}
+
+.promo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.promo-box .promo-btn {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* =========================
+   View All Link
+========================= */
+.view-all {
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+/* =========================
+   Mobile Adjustments
+========================= */
+@media (max-width: 768px) {
+    .promo-scroll {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .promo-col {
+        min-width: 250px;
+    }
+
+    .promo-scroll::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+.promo-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.category-item {
+    width: 95px;
+    text-align: center;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 14px;
+    background: #f6f6f6;
+    transition: 0.3s;
+}
+
+.category-item i {
+    font-size: 34px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.category-item span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* hover effect */
+.category-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* رنگ دسته‌ها */
+.health i {
+    color: #e63946;
+}
+
+/* قرمز */
+.car i {
+    color: #1d3557;
+}
+
+/* آبی تیره */
+.market i {
+    color: #2a9d8f;
+}
+
+/* سبز */
+.phone i {
+    color: #4361ee;
+}
+
+/* آبی */
+.gold i {
+    color: #f4a261;
+}
+
+/* طلایی */
+.console i {
+    color: #7209b7;
+}
+
+/* بنفش */
+
+.laptop i {
+    color: #3a86ff;
+}
+
+.fashion i {
+    color: #ff006e;
+}
+
+.home i {
+    color: #06d6a0;
+}
+
+.book i {
+    color: #8338ec;
+}
+
+.sport i {
+    color: #ff9f1c;
+}
+
+.toy i {
+    color: #00b4d8;
+}
+
+
+/* فقط موبایل */
+@media (max-width: 768px) {
+
+    #slideLeftMobile,
+    #slideRightMobile {
+        display: block;
+        position: absolute;
+        top: 91%; /* وسط عمودی آیکن‌ها */
+        transform: translateY(-50%);
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 22px;
+        color: #333;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #slideLeftMobile {
+        left: 5px; /* کنار سمت چپ */
+    }
+
+    #slideRightMobile {
+        right: 5px; /* کنار سمت راست */
+    }
+}
+
+/* دسکتاپ مخفی باشند */
+@media (min-width: 769px) {
+    #slideLeftMobile,
+    #slideRightMobile {
+        display: none;
+    }
+}
+
+.best-phones-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding-top: 20px;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+}
+
+.phone-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.phone-item img {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.phone-item img:hover {
+    transform: scale(1.05);
+}
+
+.phone-item a {
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #333;
+}
+
+/* Desktop large images */
+@media (min-width: 992px) {
+    .phone-item img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .phone-item a {
+        font-size: 18px;
+    }
+}
+
+.product-slider-wrapper {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    overflow: visible; /* خیلی مهم */
+}
+
+.product-slider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.product-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.product-card {
+    min-width: 200px;
+    text-align: center;
+    border-right: 1px solid #0000004d;
+}
+
+.product-card img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+/* دکمه‌ها */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: 1px solid #ccc;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.slider-btn.left {
+    left: -10px;
+}
+
+.slider-btn.right {
+    right: -10px;
+}
+
+/* موبایل مخفی */
+@media (max-width: 768px) {
+    .slider-btn {
+        display: none;
+    }
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.slider-header a {
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--green-main);
+    font-weight: 500;
+}
+
+.slider-btn.left {
+    left: 10px;
+}
+
+.slider-btn.right {
+    right: 10px;
+}
+
+#mainSlider,
+.special-offers-section,
+.product-slider-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.brand-section {
+    display: flex;
+    align-items: stretch;
+    background: white;
+    border-radius: 18px;
+    border: 1px solid #0000004d;
+    overflow: hidden;
+    position: relative;
+    margin-top: 30px;
+}
+
+/* GREEN BOX */
+.brand-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #198754, #16a34a);
+    padding: 32px 42px 26px 42px;
+    color: #ffffff;
+    font-weight: bold;
+    border-radius: 18px 0 0 18px;
+    min-width: 220px;
+    justify-content: center;
+    text-align: center;
+    z-index: 2;
+}
+
+/* SLIDER WRAPPER */
+.brand-slider-wrapper {
+    position: relative;
+    flex: 1;
+    padding: 25px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* SLIDER */
+.brand-slider {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+}
+
+.brand-slider::-webkit-scrollbar {
+    display: none;
+}
+
+.brand-slider img {
+    height: 85px;
+    opacity: .8;
+    transition: .3s;
+    flex-shrink: 0;
+    border-right: 1px solid #0000004d; /* خط جداکننده */
+    padding: 0 25px;
+}
+
+.brand-slider img:last-child {
+    border-right: none;
+}
+
+.brand-slider img:hover {
+    opacity: 1;
+}
+
+/* BUTTONS */
+.brand-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, .2);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.brand-btn.left {
+    left: 10px;
+}
+
+.brand-btn.right {
+    right: 10px;
+}
+
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1624px;
+    }
+}
+
+/* WRAPPER */
+.accessory-slider-wrapper {
+    position: relative;
+    margin-top: 60px; /* فاصله از بالا */
+    border: 1px solid #0000004d;
+    padding: 20px;
+}
+
+/* HEADER */
+.accessory-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.accessory-slider-header h3 {
+    font-weight: bold;
+}
+
+.accessory-slider-header a {
+    text-decoration: none;
+    color: #198754;
+    font-weight: 500;
+}
+
+/* SLIDER */
+.accessory-slider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+}
+
+.accessory-slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* CARD */
+.accessory-card {
+    min-width: 220px;
+    background: white;
+    padding: 12px;
+    text-align: center;
+    transition: .3s;
+    border-right: 1px solid #0000004d;
+}
+
+.accessory-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+}
+
+/* BUTTONS */
+.accessory-btn {
+    position: absolute;
+    top: 55%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+    cursor: pointer;
+    z-index: 3;
+}
+
+.accessory-btn.left {
+    left: 10px;
+}
+
+.accessory-btn.right {
+    right: 10px;
+}
+
+.categories-slider {
+    position: relative;
+}
+
+/* دسکتاپ */
+.product-categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* موبایل = اسلایدر */
+@media (max-width: 768px) {
+
+    .product-categories {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 5px 0 10px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .product-categories::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-item {
+        flex: 0 0 auto;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+    .slider-btn,
+    .brand-btn,
+    .accessory-btn {
+        display: none !important;
+    }
+}
+
+
+/* TOOLS → حذف خط کارت آخر */
+.product-slider .product-card:last-child {
+    border-right: none !important;
+}
+
+/* SELECTED ACCESSORIES → حذف خط کارت آخر */
+.accessory-slider .accessory-card:last-child {
+    border-right: none !important;
+}

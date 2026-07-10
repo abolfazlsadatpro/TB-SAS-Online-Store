@@ -1,0 +1,243 @@
+/* =====================================
+   PRODUCT PAGE
+===================================== */
+
+.product-page {
+
+    padding: 30px;
+
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+.banner-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 32px;
+
+}
+
+.banner-title {
+
+    font-size: 34px;
+
+    font-weight: 700;
+
+    color: #222;
+
+    margin-bottom: 8px;
+
+}
+
+.banner-subtitle {
+
+    color: #777;
+
+    margin: 0;
+
+}
+
+/* =====================================
+   CARDS
+===================================== */
+
+.banner-card {
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    border: none;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
+
+    transition: .35s;
+
+}
+
+.banner-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 20px 45px rgba(0, 0, 0, .08);
+
+}
+
+.banner-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #eee;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+.banner-card-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+.banner-card-body {
+
+    padding: 28px;
+
+}
+
+/* =====================================
+   FORM
+===================================== */
+
+.form-label {
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+    color: #333;
+
+}
+
+.form-control,
+.form-select {
+
+    border-radius: 14px;
+
+    border: 1px solid #dfe3e8;
+
+    min-height: 52px;
+
+    box-shadow: none;
+
+    transition: .25s;
+
+}
+
+textarea.form-control {
+
+    min-height: 170px;
+
+    resize: vertical;
+
+}
+
+.form-control:focus,
+.form-select:focus {
+
+    border-color: #198754;
+
+    box-shadow: 0 0 0 .18rem rgba(25, 135, 84, .15);
+
+}
+
+/* =====================================
+   SUMMARY
+===================================== */
+
+.summary-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+.summary-item:last-child {
+
+    border: none;
+
+}
+
+.summary-item span {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    color: #666;
+
+    font-weight: 500;
+
+}
+
+.summary-item span i {
+
+    color: #198754;
+
+}
+
+.summary-item strong {
+
+    font-size: 15px;
+
+    color: #222;
+
+}
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+.btn-success {
+
+    border-radius: 14px;
+
+    padding: 12px 28px;
+
+    font-weight: 600;
+
+}
+
+.btn-light {
+
+    border-radius: 14px;
+
+    padding: 12px 28px;
+
+    border: 1px solid #ddd;
+
+}
+
+.btn-danger {
+
+    border-radius: 14px;
+
+    font-weight: 600;
+
+}
+
+.btn-light:hover {
+
+    border-color: #198754;
+
+    color: #198754;
+
+}

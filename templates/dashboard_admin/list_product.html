@@ -1,0 +1,294 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% load static %}
+
+{% block title %}
+    Product List
+{% endblock %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin"/>
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="card m-1">
+        <div class="card-footer">
+            <form method="get">
+                <div class="input-group gap-2">
+                    <input
+                            type="text"
+                            name="q"
+                            value="{{ request.GET.q }}"
+                            placeholder="Search Product Name, Slug ..."
+                            class="form-control">
+
+                    <span class="input-group-append">
+                    <button class="btn btn-primary">
+                        Search
+                    </button>
+                </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-header">
+
+            <h3 class="card-title">
+                Products
+            </h3>
+
+            <div class="card-tools">
+
+                <a href="{% url 'product_add' %}"
+                   class="btn btn-success btn-sm">
+
+                    Add Product
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Image</th>
+
+                        <th>Name</th>
+
+                        <th>Category</th>
+
+                        <th>Price</th>
+
+                        <th>Stock</th>
+
+                        <th>Colors</th>
+
+                        <th>Created</th>
+
+                        <th>Operate</th>
+
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for product in products %}
+
+                        <tr>
+
+                            <td>{{ product.id }}</td>
+
+                            <td>
+
+                                {% with product.colors.first as color %}
+
+                                    {% if color and color.image %}
+
+                                        <img src="{{ color.image.url }}"
+                                             width="60"
+                                             class="rounded">
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                        No Image
+                                    </span>
+
+                                    {% endif %}
+
+                                {% endwith %}
+
+                            </td>
+
+                            <td>
+
+                                <strong>{{ product.name }}</strong>
+
+                                <br>
+
+                                <small class="text-muted">
+                                    {{ product.slug }}
+                                </small>
+
+                            </td>
+
+                            <td>
+
+                                {{ product.category.name }}
+
+                            </td>
+
+                            <td>
+
+                                {{ product.price }}
+
+                            </td>
+
+                            <td>
+
+                                {{ product.stock }}
+
+                            </td>
+
+                            <td>
+
+                                {% for color in product.colors.all %}
+
+                                    <span
+                                            class="badge"
+                                            style="background:{{ color.color_code }}">
+
+                                    {{ color.name }}
+
+                                </span>
+
+                                {% empty %}
+
+                                    <span class="text-muted">
+                                    ---
+                                </span>
+
+                                {% endfor %}
+
+                            </td>
+
+                            <td>
+
+                                {{ product.created_at|date:"Y-m-d" }}
+
+                            </td>
+
+                            <td>
+
+                                <div class="d-flex gap-2">
+
+                                    <a href="{% url 'product_edit' product.id %}"
+                                       class="btn btn-primary btn-sm">
+
+                                        Edit
+
+                                    </a>
+
+                                    <a href="{% url 'product_delete' product.id %}"
+                                       class="btn btn-danger btn-sm">
+
+                                        Delete
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr>
+
+                            <td colspan="9" class="text-center">
+
+                                No Products Found
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-footer clearfix">
+
+            <div class="d-flex justify-content-center">
+
+                {% if is_paginated %}
+
+                    <ul class="pagination">
+
+                        {% if page_obj.has_previous %}
+
+                            <li class="page-item">
+
+                                <a class="page-link"
+                                   href="?page={{ page_obj.previous_page_number }}">
+
+                                    Previous
+
+                                </a>
+
+                            </li>
+
+                        {% endif %}
+
+                        {% for page in paginator.page_range %}
+
+                            <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+
+                                <a class="page-link"
+                                   href="?page={{ page }}">
+
+                                    {{ page }}
+
+                                </a>
+
+                            </li>
+
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+
+                            <li class="page-item">
+
+                                <a class="page-link"
+                                   href="?page={{ page_obj.next_page_number }}">
+
+                                    Next
+
+                                </a>
+
+                            </li>
+
+                        {% endif %}
+
+                    </ul>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'js/dashboard/admin/list_product.js' %}"></script>
+{% endblock %}

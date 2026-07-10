@@ -1,0 +1,176 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <section class="checkout-page">
+
+        <div class="container">
+
+            <div class="breadcrumb-box">
+                <a href="#">TB SAS Online Store</a>
+                <span>/</span>
+                <a href="{% url 'home' %}">Home</a>
+                <span>/</span>
+                <strong>Checkout</strong>
+            </div>
+
+            <div class="checkout-layout">
+
+                <!-- LEFT -->
+
+                <div class="checkout-form">
+
+                    <!-- Customer Info -->
+
+                    <div class="checkout-card">
+
+                        <h3>Customer Information</h3>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="address-selector">
+
+                        <button type="button" class="add-address-btn">
+
+                            <div class="address-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+
+                            <div class="address-text">
+                                <h4>Add Delivery Address</h4>
+                                <p>Select your delivery location on map</p>
+                            </div>
+
+                            <div class="address-arrow">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </div>
+
+                        </button>
+
+                    </div>
+
+                    <!-- Address -->
+
+                    <div class="checkout-card">
+
+                        <h3>Shipping Address</h3>
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label>Country</label>
+                                <input type="text">
+                            </div>
+
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text">
+                            </div>
+
+                            <div class="form-group full">
+                                <label>Address</label>
+                                <textarea rows="4"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Postal Code</label>
+                                <input type="text">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Payment -->
+
+                    <div class="checkout-card">
+
+                        <h3>Payment Method</h3>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" checked>
+                            Cash on Delivery
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment">
+                            Online Payment
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+
+                <aside class="checkout-summary">
+
+                    <h3>Order Summary</h3>
+
+                    <div class="summary-row">
+                        <span>Products</span>
+                        <span>3 Items</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>$5,451</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <span>-$100</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span>$5,351</span>
+                    </div>
+
+                    <button class="place-order-btn">
+                        Place Order
+                    </button>
+
+                </aside>
+
+            </div>
+
+        </div>
+
+    </section>
+
+{% endblock %}

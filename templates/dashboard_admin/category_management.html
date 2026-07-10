@@ -1,0 +1,327 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% load static %}
+
+{% block title %}
+    {% if category %}
+        Edit Category
+    {% else %}
+        Category Management
+    {% endif %}
+{% endblock %}
+
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin"/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+
+{% block custom_css %}
+
+    <link rel="stylesheet" href="{% static 'css/dashboard/new_banner_site.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard/categoty_management.css' %}">
+{% endblock %}
+
+{% block app_content %}
+    <div class="banner-page">
+        <!-- HEADER -->
+        <div class="banner-header">
+            <div>
+                <h2 class="banner-title">
+                    {% if category %}
+                        Edit Category
+                    {% else %}
+                        Category Management
+                    {% endif %}
+                </h2>
+                <p class="banner-subtitle">
+                    Manage product categories with a modern dashboard.
+                </p>
+            </div>
+        </div>
+        <div class="row g-4">
+
+            <!-- =========================
+                    LEFT
+            ========================== -->
+
+            <div class="col-lg-8">
+
+                <!-- FORM -->
+                <div class="banner-card">
+
+                    <div class="banner-card-header">
+
+                        <i class="bi bi-tags-fill"></i>
+
+                        <span>
+
+                    {% if category %}
+                        Update Category
+                    {% else %}
+                        Create New Category
+                    {% endif %}
+
+                </span>
+
+                    </div>
+
+                    <div class="banner-card-body">
+
+                        <form method="post">
+
+                            {% csrf_token %}
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Category Name
+                                </label>
+
+                                {{ forms.name }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Slug
+                                </label>
+
+                                {{ forms.slug }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Parent Category
+                                </label>
+
+                                {{ forms.parent }}
+
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+
+                                <a href="{% url 'category_management' %}" class="btn btn-light px-4">
+
+                                    Cancel
+
+                                </a>
+
+                                <button class="btn btn-success px-5">
+
+                                    {% if category %}
+
+                                        <i class="bi bi-check-circle"></i>
+                                        Update Category
+
+                                    {% else %}
+
+                                        <i class="bi bi-plus-circle"></i>
+                                        Create Category
+
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- SEARCH -->
+
+                <div class="banner-card mt-5">
+
+                    <div class="banner-card-body">
+
+                        <form method="get">
+
+                            <div class="input-group">
+
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        name="q"
+                                        value="{{ request.GET.q }}"
+                                        placeholder="Search category name, slug...">
+
+                                <button class="btn btn-success">
+
+                                    <i class="bi bi-search"></i>
+
+                                    Search
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- TABLE -->
+
+                <div class="banner-card mt-5">
+                    <div class="banner-card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-list-ul"></i>
+                            <span>Latest Categories</span>
+                        </div>
+                        <span class="badge bg-success rounded-pill">
+            {{ page_obj.paginator.count }} Categories
+        </span>
+                    </div>
+                    <div class="banner-card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table banner-table align-middle mb-0">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Slug</th>
+                                    <th>Parent</th>
+                                    <th class="text-center">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in categories %}
+                                    <tr class="category-row">
+                                        <td>{{ item.id }}</td>
+                                        <td>
+                                            <div class="fw-bold">
+                                                {{ item.name }}
+                                            </div>
+                                        </td>
+                                        <td>
+                            <span class="badge bg-success">
+                                {{ item.slug }}
+                            </span>
+                                        </td>
+                                        <td>
+                                            {% if item.parent %}
+                                                {{ item.parent.name }}
+                                            {% else %}
+                                                No Parent
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <a href="{% url 'category_edit' item.id %}" class="btn btn-edit">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <a href="javascript:void(0)"
+                                                   class="btn btn-delete delete-category"
+                                                   data-url="{% url 'category_delete' item.id %}">
+                                                    <i class="bi bi-trash3"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="5">
+                                            <div class="empty-banner">
+                                                <i class="bi bi-tags display-4"></i>
+                                                <h4 class="mt-3">
+                                                    No Category Found
+                                                </h4>
+                                                <p>
+                                                    Create your first category.
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- PAGINATION -->
+
+                <div class="card-footer clearfix">
+                    <div class="pagination-wrapper">
+                        <ul class="pagination justify-content-center mb-0">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page=
+                                               {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                        Previous
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% for num in page_obj.paginator.page_range %}
+                                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                                    <a class="page-link"
+                                       href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                        {{ num }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page=
+
+                                               {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                        Next
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                    RIGHT
+            ========================== -->
+
+            <div class="col-lg-4">
+
+                <div class="banner-card sticky-tree">
+
+                    <div class="banner-card-header">
+
+                        <i class="bi bi-diagram-3-fill"></i>
+
+                        <span>
+
+                    Category Tree
+
+                </span>
+
+                    </div>
+
+                    <div class="banner-card-body">
+
+                        {% include "dashboard_admin/includes/category_tree.html" %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% block custom_js %}
+            <script src="{% static 'js/dashboard/admin/cateogry_managenmet.js' %}"></script>
+        {% endblock %}
+{% endblock %}

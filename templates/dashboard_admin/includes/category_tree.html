@@ -1,0 +1,13 @@
+<ul class="category-tree">
+
+    {% for node in tree %}
+
+        {% include "dashboard_admin/includes/category_tree_children.html" %}
+
+    {% empty %}
+
+        <li>No Category</li>
+
+    {% endfor %}
+
+</ul>

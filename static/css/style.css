@@ -1,0 +1,362 @@
+/* ================= BASE LAYOUT ================= */
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Vazirmatn, sans-serif;
+}
+
+main {
+    flex: 1;
+}
+
+/* ================= VARIABLES ================= */
+
+:root {
+    --green-main: #198754;
+    --green-hover: #157347;
+    --dark-footer: #212529;
+    --text-light: #f8f9fa;
+    --text-muted: #adb5bd;
+}
+
+/* ================= NAVBAR TOP ================= */
+
+.custom-navbar {
+    background: white;
+    padding: 10px 0;
+}
+
+.nav-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* LOGO */
+.nav-logo img {
+    height: 60px;
+}
+
+/* SEARCH */
+.nav-search {
+    flex: 1;
+    max-width: 600px;
+    position: relative;
+}
+
+.nav-search input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+    background: #f5f5f5;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
+}
+
+/* RIGHT ACTIONS */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: auto;
+}
+
+/* LOGIN / REGISTER BOX */
+.auth-box {
+    border: 1px solid black;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-box a {
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-box .divider {
+    width: 1px;
+    height: 18px;
+    background: black;
+}
+
+/* CART */
+.nav-cart {
+    position: relative;
+    font-size: 22px;
+    color: black;
+    cursor: pointer;
+}
+
+.nav-cart .cart-text {
+    position: absolute;
+    bottom: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: black;
+    color: white;
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: .2s;
+}
+
+.nav-cart:hover .cart-text {
+    opacity: 1;
+}
+
+.cart-link {
+    color: #000;
+    text-decoration: none;
+}
+
+.cart-link:hover {
+    color: #000;
+}
+
+/* ================= CATEGORY BAR ================= */
+
+.category-bar {
+    background: white;
+    padding: 6px 0;
+}
+
+.category-bar .container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* CATEGORY BUTTON */
+.mega-category {
+    position: relative;
+}
+
+.mega-btn {
+    background: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* MEGA MENU */
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 650px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+    padding: 15px;
+    display: none;
+    z-index: 9999;
+}
+
+.mega-category:hover .mega-menu {
+    display: block;
+}
+
+/* MAIN LIST */
+.mega-main {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mega-main li {
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    position: relative;
+}
+
+.mega-main li:hover {
+    background: #f5f5f5;
+    border-radius: 6px;
+}
+
+/* SUB MENU */
+.mega-sub {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 220px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .1);
+    padding: 10px;
+    display: none;
+}
+
+.has-sub:hover .mega-sub {
+    display: block;
+}
+
+.mega-sub a {
+    display: block;
+    padding: 6px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.mega-sub a:hover {
+    color: var(--green-main);
+}
+
+/* ================= FOOTER ================= */
+
+.main-footer {
+    background: linear-gradient(135deg, #198754, #16a34a);
+    color: white;
+    padding: 25px 0;
+    border-radius: 20px;
+    margin: 15px;
+}
+
+/* TOP FOOTER */
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+}
+
+.footer-logo {
+    height: 90px;
+}
+
+.back-top {
+    background: white;
+    color: #16a34a;
+    border: 1px solid #16a34a;
+    padding: 6px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+/* DIVIDER */
+.footer-line {
+    border-color: rgba(255, 255, 255, .3);
+    margin: 15px 0;
+}
+
+/* LINKS */
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footer-col h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footer-col a {
+    display: block;
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 6px;
+}
+
+/* BOTTOM */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-contact p {
+    font-size: 14px;
+}
+
+/* SOCIAL ICONS */
+.social-icons a {
+    font-size: 22px;
+    color: white;
+    margin-left: 12px;
+    transition: .2s;
+}
+
+.social-icons .insta:hover {
+    color: #e440df;
+}
+
+.social-icons .telegram:hover {
+    color: #0088cc;
+}
+
+.social-icons .twitter:hover {
+    color: #1DA1F2;
+}
+
+.social-icons .youtube:hover {
+    color: #FF0000;
+}
+
+/* APP STORE */
+.footer-app img {
+    height: 40px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+/* ===== FIXED NAVBAR ===== */
+
+.custom-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: white;
+}
+
+/* بخش دسته‌بندی */
+.category-bar {
+    position: fixed;
+    top: 70px; /* ارتفاع نوبار اصلی */
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: #fff;
+    transition: transform .3s ease;
+}
+
+/* حالت مخفی کامل */
+.category-bar.hide {
+    transform: translateY(-100%);
+}
+
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1624px;
+    }
+}

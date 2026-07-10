@@ -1,0 +1,279 @@
+/* =========================
+   PRODUCTS PAGE SPACING
+========================= */
+.products-page {
+    padding-top: 140px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+.products-layout {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+/* =========================
+   BREADCRUMB
+========================= */
+.breadcrumb-box {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #777;
+}
+
+.breadcrumb-box a {
+    text-decoration: none;
+    color: #198754;
+    font-weight: 500;
+}
+
+.breadcrumb-box span {
+    margin: 0 6px;
+}
+
+/* =========================
+   FILTER SIDEBAR
+========================= */
+.filters {
+    width: 250px;
+    min-width: 250px;
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+}
+
+/* ⭐⭐⭐ STICKY FILTER FIX ⭐⭐⭐ */
+.sticky-filter {
+    position: sticky;
+    top: 150px; /* فاصله از نوبار ثابت */
+    align-self: flex-start;
+}
+
+.filters h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.filter-item {
+    display: block;
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.filter-group {
+    margin-top: 20px;
+}
+
+.filter-group h4 {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   PRODUCTS CONTENT
+========================= */
+.products-content {
+    flex: 1;
+}
+
+/* =========================
+   SORT BAR
+========================= */
+.sort-bar {
+    background: white;
+    padding: 15px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sort-bar span {
+    font-weight: 600;
+}
+
+.sort-bar button {
+    border: none;
+    background: #f3f4f6;
+    padding: 7px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 13px;
+}
+
+.sort-bar button:hover {
+    background: #198754;
+    color: white;
+}
+
+.product-count {
+    margin-left: auto;
+    color: #777;
+    font-size: 14px;
+}
+
+/* =========================
+   PRODUCTS GRID
+========================= */
+.products-grid {
+    display: grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* =========================
+   PRODUCT CARD
+========================= */
+.product-card {
+    background: white;
+    border-radius: 16px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+}
+
+.product-card h4 {
+    font-size: 15px;
+    margin: 10px 0;
+    min-height: 40px;
+}
+
+.rating {
+    color: gold;
+    font-size: 14px;
+}
+
+.price {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #198754;
+    font-size: 16px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 992px) {
+
+    .products-layout {
+        flex-direction: column;
+    }
+
+    .sticky-filter {
+        position: static;
+        top: auto;
+    }
+
+    .filters {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .product-count {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .products-page {
+        padding-top: 120px;
+    }
+
+    .products-grid {
+        grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+    }
+
+    .product-card img {
+        height: 140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 1624px;
+    }
+}
+
+/* =========================
+   FILTER COLORS
+========================= */
+.filters input[type="checkbox"] {
+    accent-color: #198754;
+}
+
+/* PRICE RANGE */
+.price-range {
+    margin-top: 10px;
+}
+
+.price-range input {
+    width: 100%;
+    cursor: pointer;
+    accent-color: #198754;
+}
+
+.price-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-top: 6px;
+    color: #666;
+}
+
+/* COLLAPSIBLE */
+.filter-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 8px 0;
+}
+
+.filter-toggle i {
+    transition: .3s;
+}
+
+.filter-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-content label {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.filter-group.open .filter-content {
+    max-height: 220px;
+}
+
+.filter-group.open .filter-toggle i {
+    transform: rotate(180deg);
+}

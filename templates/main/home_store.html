@@ -1,0 +1,609 @@
+{% extends 'main/base/base_main.html' %}
+
+{% block title %}
+    TB SAS Online Store
+{% endblock %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/home_store.css' %}">
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container">
+            <!-- Slider -->
+            <div id="mainSlider" class="carousel slide" data-bs-ride="carousel">
+
+                <!-- indicators -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="2"></button>
+                </div>
+
+                <!-- slides -->
+                <div class="carousel-inner">
+
+                    <div class="carousel-item active">
+                        <img src="{% static 'images/slider1.jpeg' %}" class="d-block w-100" alt="Slide 1">
+                        <div class="carousel-caption">
+                            <h2>Big Sale</h2>
+                            <p>Up to 50% off</p>
+                            <a href="#" class="btn btn-primary">Shop Now</a>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{% static 'images/slider2.jpeg' %}" class="d-block w-100" alt="Slide 2">
+                        <div class="carousel-caption">
+                            <h2>New Products</h2>
+                            <p>Check our latest items</p>
+                            <a href="#" class="btn btn-primary">View Products</a>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="{% static 'images/slider3.jpeg' %}" class="d-block w-100" alt="Slide 3">
+                        <div class="carousel-caption">
+                            <h2>Best Quality</h2>
+                            <p>Only original products</p>
+                            <a href="#" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+
+            </div>
+
+            <div class="categories-slider">
+
+                <div class="product-categories">
+
+                    <div class="category-item health">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <span>Health Tools</span>
+                    </div>
+                    <div class="category-item car">
+                        <i class="fa-solid fa-car"></i>
+                        <span>Car Accessories</span>
+                    </div>
+                    <div class="category-item market">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span>Supermarket</span>
+                    </div>
+                    <div class="category-item phone">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <span>Mobile Phones</span>
+                    </div>
+                    <div class="category-item gold">
+                        <i class="fa-solid fa-gem"></i>
+                        <span>Gold & Jewelry</span>
+                    </div>
+                    <div class="category-item console">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>Game Consoles</span>
+                    </div>
+                    <div class="category-item fashion">
+                        <i class="fa-solid fa-shirt"></i>
+                        <span>Fashion</span>
+                    </div>
+                    <div class="category-item home">
+                        <i class="fa-solid fa-house">
+                        </i><span>Home & Kitchen</span>
+                    </div>
+                    <div class="category-item book">
+                        <i class="fa-solid fa-book"></i>
+                        <span>Books</span>
+                    </div>
+                    <div class="category-item sport">
+                        <i class="fa-solid fa-dumbbell">
+                        </i><span>Sports</span>
+                    </div>
+                    <div class="category-item toy">
+                        <i class="fa-solid fa-puzzle-piece"></i>
+                        <span>Toys</span>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- اسلایدر تخفیف -->
+            <section class="special-offers-section position-relative">
+                <div class="container-fluid">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="special-title">🔥 Special Discounts</h3>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+
+                    <!-- Buttons با id جدید -->
+                    <button class="slider-btn left" id="slideLeftSpecial">&#10094;</button>
+                    <button class="slider-btn right" id="slideRightSpecial">&#10095;</button>
+
+                    <!-- Slider -->
+                    <div class="row flex-nowrap overflow-auto special-scroll" id="specialSlider">
+
+                        <!-- محصولات -->
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/4.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+
+                        <!-- بقیه محصولات ... -->
+
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/6.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/7.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/12.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/8.jpg' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/9.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/10.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+                        <div class="col-auto special-col">
+                            <div class="special-card">
+                                <span class="discount-badge">-40%</span>
+                                <img src="{% static 'images/11.webp' %}" class="special-img" alt="">
+                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
+                                <div class="price-box">
+                                    <span class="new-price">$19.99</span>
+                                    <span class="old-price">$33.00</span>
+                                </div>
+                                <div class="timer" data-time="7200"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- promo-section بدون متن پایین عکس -->
+            <section class="promo-section my-4">
+                <div class="">
+
+                    <div class="row g-3 promo-wrapper">
+
+                        <div class="col-lg-4 col-md-4 col-12">
+                            <div class="promo-box">
+                                <img src="{% static 'images/Advertisemenet 1.png' %}" class="promo-img" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-12">
+                            <div class="promo-box">
+                                <img src="{% static 'images/Advertisemenet 2.png' %}" class="promo-img" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-12">
+                            <div class="promo-box">
+                                <img src="{% static 'images/Advertisemenet 3.png' %}" class="promo-img" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <h2 class="text-center my-4">Mobile Bests</h2>
+
+            <ul id="best_phones" class="best-phones-list">
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Sumsung.webp' %}" alt="Samsung"
+                         title="Samsung" width="180" height="180">
+                    <a href="/product/list/samsung">Samsung</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Poco.webp' %}" alt="Poco" title="Poco"
+                         width="180" height="180">
+                    <a href="/product/list/poco">Poco</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Apple.webp' %}" alt="iPhone" title="iPhone"
+                         width="180" height="180">
+                    <a href="/product/list/apple">Apple (iPhone)</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Honer.webp' %}" alt="Honor" title="Honor"
+                         width="180" height="180">
+                    <a href="/product/list/honor">Honor</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Xiaomi.webp' %}" alt="Xiaomi" title="Xiaomi"
+                         width="180" height="180">
+                    <a href="/product/list/xiaomi">Xiaomi</a>
+                </li>
+
+            </ul>
+
+            <section class="promo-section my-4">
+                <div class="">
+
+                    <div class="row g-3 promo-wrapper">
+
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="promo-box">
+                                <img src="{% static 'images/Advertisemenet 2.png' %}" class="promo-img" alt="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="promo-box">
+                                <img src="{% static 'images/Advertisemenet 3.png' %}" class="promo-img" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <div class="product-slider-wrapper">
+
+                <div class="slider-header">
+                    <h3>Tools</h3>
+                    <a href="#">View All</a>
+                </div>
+
+                <button class="slider-btn left" id="slideLeft">❮</button>
+                <button class="slider-btn right" id="slideRight">❯</button>
+
+                <div class="product-slider" id="productSlider">
+
+                    <!-- product card -->
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools1.webp' %}" alt="">
+                        <p class="title">Double Sink Steel Model 164SP</p>
+
+                        <div class="price-box">
+                            <span class="price">$560.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools2.webp' %}" alt="">
+                        <p class="title">Adjustable Wrench 10 inch</p>
+                        <div class="price-box">
+                            <span class="price">$85.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools3.webp' %}" alt="">
+                        <p class="title">Mixer Faucet Set Italy</p>
+                        <div class="price-box">
+                            <span class="price">$180.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools4.webp' %}" alt="">
+                        <p class="title">Mini Grinder 3165</p>
+                        <div class="price-box">
+                            <span class="price">$55.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools5.webp' %}" alt="">
+                        <p class="title">Double Sink Steel Model 164SP</p>
+
+                        <div class="price-box">
+                            <span class="price">$560.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools6.webp' %}" alt="">
+                        <p class="title">Double Sink Steel Model 164SP</p>
+
+                        <div class="price-box">
+                            <span class="price">$560.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools7.webp' %}" alt="">
+                        <p class="title">Double Sink Steel Model 164SP</p>
+
+                        <div class="price-box">
+                            <span class="price">$560.00</span>
+                        </div>
+                    </div>
+
+                    <div class="product-card">
+                        <img src="{% static 'images/Tools8.webp' %}" alt="">
+                        <p class="title">Double Sink Steel Model 164SP</p>
+
+                        <div class="price-box">
+                            <span class="price">$560.00</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <section class="promo-section my-4">
+                <div class="">
+
+                    <div class="row g-3 promo-wrapper">
+
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <div class="promo-box">
+                                <img src="{% static 'images/Advertisemenet 2.png' %}" class="promo-img" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <h2 class="text-center my-4">The best laptops</h2>
+
+            <ul id="best_phones" class="best-phones-list">
+
+                <li class="phone-item">
+                    <img src="{% static 'images/MSI.webp' %}" alt="MSI"
+                         title="MSI" width="180" height="180">
+                    <a href="/product/list/MSI">MSI</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Acer.webp' %}" alt="Acer" title="Acer"
+                         width="180" height="180">
+                    <a href="/product/list/Acer">Acer</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/Lenovo.webp' %}" alt="Lenovo" title="Lenovo"
+                         width="180" height="180">
+                    <a href="/product/list/Lenovo">Lenovo</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/MacBook.webp' %}" alt="MacBook" title="MacBook"
+                         width="180" height="180">
+                    <a href="/product/list/MacBook">MacBook</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/ASUS.webp' %}" alt="ASUS" title="ASUS"
+                         width="180" height="180">
+                    <a href="/product/list/ASUS">ASUS</a>
+                </li>
+
+                <li class="phone-item">
+                    <img src="{% static 'images/HP.webp' %}" alt="HP" title="HP"
+                         width="180" height="180">
+                    <a href="/product/list/HP">HP</a>
+                </li>
+
+            </ul>
+
+            <div class="brand-section">
+
+                <div class="brand-title">
+                    <i class="fa fa-check-circle text-4xl"></i>
+                    <h3>Top Brands</h3>
+                </div>
+
+                <div class="brand-slider-wrapper">
+
+                    <button id="brandLeft" class="brand-btn left">❮</button>
+                    <button id="brandRight" class="brand-btn right">❯</button>
+
+                    <!-- Slider -->
+                    <div class="brand-slider" id="brandSlider">
+                        <img src="{% static 'images/Logo_NOKIA.webp' %}" alt="NOKIA">
+                        <img src="{% static 'images/Logo_SAMSUNG.webp' %}" alt="SAMSUNG">
+                        <img src="{% static 'images/Logo_Apple.webp' %}" alt="Apple">
+                        <img src="{% static 'images/Logo_Xiaomi.webp' %}" alt="Xiaomi">
+                        <img src="{% static 'images/Logo_AUSU.webp' %}" alt="AUSU">
+                        <img src="{% static 'images/Logo_JBL.webp' %}" alt="JBL">
+                        <img src="{% static 'images/Logo_HUAWEl.webp' %}" alt="HUAWEl">
+                        <img src="{% static 'images/Logo_ADATA.webp' %}" alt="ADATA">
+                        <img src="{% static 'images/Logo_SONY.webp' %}" alt="SONY">
+                        <img src="{% static 'images/Logo_LG.webp' %}" alt="LG">
+                        <img src="{% static 'images/Logo_TP-LINK.webp' %}" alt="TP-LINK">
+                        <img src="{% static 'images/Logo_SP.webp' %}" alt="SP">
+                        <img src="{% static 'images/Logo_BEEN.webp' %}" alt="BEEN">
+                        <img src="{% static 'images/Logo_TSCO.webp' %}" alt="TSCO">
+                        <img src="{% static 'images/Logo_PHILIPS.webp' %}" alt="PHILIPS">
+                    </div>
+                </div>
+            </div>
+
+            <div class="accessory-slider-wrapper">
+
+                <div class="accessory-slider-header">
+                    <h3>Selected Accessories</h3>
+                    <a href="#">View All</a>
+                </div>
+
+                <!-- Buttons -->
+                <button class="accessory-btn left" id="accessoryLeft">❮</button>
+                <button class="accessory-btn right" id="accessoryRight">❯</button>
+
+                <!-- Slider -->
+                <div class="accessory-slider" id="accessorySlider">
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories1.webp' %}" alt="">
+                        <p class="title">Wireless Mouse Pro</p>
+                        <div class="price-box">
+                            <span class="price">$45.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories2.webp' %}" alt="">
+                        <p class="title">Mechanical Keyboard RGB</p>
+                        <div class="price-box">
+                            <span class="price">$120.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories3.webp' %}" alt="">
+                        <p class="title">Gaming Headset 7.1</p>
+                        <div class="price-box">
+                            <span class="price">$89.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories4.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories5.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories6.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories7.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories8.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories11.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+                    <div class="accessory-card">
+                        <img src="{% static 'images/Selected Accessories10.webp' %}" alt="">
+                        <p class="title">USB Hub 7 Ports</p>
+                        <div class="price-box">
+                            <span class="price">$25.00</span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'js/home_store.js' %}"></script>
+{% endblock %}

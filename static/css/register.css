@@ -1,0 +1,256 @@
+body {
+    overflow: hidden;
+    margin: 0;
+    background: #f8f9fa;
+}
+
+/* PAGE */
+
+.register-page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+}
+
+/* CONTAINER */
+
+.register-container {
+    width: 100%;
+    max-width: 1400px;
+    height: auto;
+    min-height: 850px;
+    background: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.4fr 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+}
+
+/* LEFT SIDE */
+
+.register-banner {
+    background: #198754;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 60px;
+}
+
+.register-banner img {
+    width: 120%;
+    max-width: none;
+    transform: scale(1.15);
+    margin-left: 100px;
+    margin-top: -148px;
+}
+
+.banner-content {
+    margin-top: -110px;
+}
+
+.banner-content h1 {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.4;
+    margin-bottom: 25px;
+}
+
+.banner-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.banner-content li {
+    margin-bottom: 15px;
+    font-size: 17px;
+}
+
+.banner-content li::before {
+    content: "✓";
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* RIGHT SIDE */
+
+.register-card {
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 12px;
+}
+
+.register-logo {
+    width: 120px;
+    margin-bottom: 5px;
+    margin-top: -15px;
+}
+
+.register-card h2 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 13px;
+    margin-top: -4px;
+}
+
+/* FORM */
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 0 15px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #198754;
+}
+
+/* TERMS */
+
+.terms-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0 20px;
+}
+
+.terms-box input {
+    accent-color: #198754;
+}
+
+.terms-box label {
+    font-size: 14px;
+}
+
+/* BUTTON */
+
+.register-btn {
+    width: 100%;
+    height: 55px;
+
+    border: none;
+    border-radius: 12px;
+    background: #198754;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.register-btn:hover {
+    background: #146c43;
+}
+
+/* LOGIN LINK */
+
+.login-link {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.login-link a {
+    color: #198754;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* MOBILE */
+
+@media (max-width: 991px) {
+
+    .register-container {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .register-banner {
+        display: none;
+    }
+
+    .register-card {
+        padding: 40px 25px;
+    }
+}
+
+#message-box {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.custom-message {
+    min-width: 380px;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 22px;
+    border-radius: 14px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+    animation: slideUp .35s ease;
+}
+
+/* ERROR */
+.custom-message.error {
+    background: linear-gradient(135deg, #dc3545, #b02a37);
+}
+
+/* SUCCESS */
+.custom-message.success {
+    background: linear-gradient(135deg, #198754, #157347);
+}
+
+/* WARNING */
+.custom-message.warning {
+    background: linear-gradient(135deg, #ffc107, #ffca2c);
+    color: #222;
+}
+
+/* INFO */
+.custom-message.info {
+    background: linear-gradient(135deg, #0dcaf0, #31d2f2);
+    color: #222;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

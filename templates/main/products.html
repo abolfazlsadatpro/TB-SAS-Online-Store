@@ -1,0 +1,271 @@
+{% extends 'main/base/base_main.html' %}
+
+{% block title %}
+    Products
+{% endblock %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/products.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <section class="products-page">
+
+        <div class="container">
+
+            <!-- BREADCRUMB -->
+            <div class="breadcrumb-box">
+                <a href="#">TB SAS Online Store</a>
+                <span>/</span>
+                <a href="{% url 'home' %}">Home</a>
+                <span>/</span>
+                <a href="#">Digital</a>
+                <span>/</span>
+                <strong>Mobile Phones</strong>
+            </div>
+
+            <div class="products-layout">
+
+                <!-- FILTER SIDEBAR -->
+                <aside class="filters sticky-filter">
+
+                    <h3>Filters</h3>
+
+                    <!-- PRICE -->
+                    <div class="filter-group">
+                        <h4>Price</h4>
+
+                        <div class="price-range">
+                            <input type="range" min="100" max="2000" value="2000" id="priceRange">
+                            <div class="price-values">
+                                <span>$100</span>
+                                <span id="priceValue">$2000</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- BRAND (COLLAPSIBLE) -->
+                    <div class="filter-group">
+
+                        <div class="filter-toggle" onclick="toggleFilter(this)">
+                            <span>Brand</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+
+                        <div class="filter-content">
+                            <label><input type="checkbox"> Apple</label>
+                            <label><input type="checkbox"> Samsung</label>
+                            <label><input type="checkbox"> Xiaomi</label>
+                            <label><input type="checkbox"> Huawei</label>
+                        </div>
+
+                    </div>
+
+                </aside>
+
+                <!-- PRODUCTS AREA -->
+                <div class="products-content">
+
+                    <!-- SORT BAR -->
+                    <div class="sort-bar">
+
+                        <span>Sort by:</span>
+
+                        <button>Most Popular</button>
+                        <button>Newest</button>
+                        <button>Cheapest</button>
+                        <button>Most Expensive</button>
+                        <button>Most Discount</button>
+                        <button>Best Selling</button>
+
+                        <div class="product-count">
+                            248 Products
+                        </div>
+
+                    </div>
+
+                    <!-- PRODUCTS GRID -->
+                    <div class="products-grid">
+
+                        <!-- CARD -->
+                        <div class="product-card">
+                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
+                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">520.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">2000.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
+                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">1800.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
+                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">$700.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
+                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">520.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">2000.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
+                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">1800.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
+                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">$700.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
+                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">520.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">2000.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
+                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">1800.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
+                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">$700.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
+                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">520.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">2000.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
+                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">1800.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
+                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">$700.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
+                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">520.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">2000.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
+                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
+
+                            <div class="rating">★★★★★</div>
+
+                            <div class="price">1800.00</div>
+                        </div>
+                        <div class="product-card">
+                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
+                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
+
+                            <div class="rating">★★★★☆</div>
+
+                            <div class="price">$700.00</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'js/products.js' %}"></script>
+{% endblock %}

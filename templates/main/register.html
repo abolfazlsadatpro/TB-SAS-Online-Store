@@ -1,0 +1,136 @@
+<title>Register</title>
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon_tb_sas.ico' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <section class="register-page">
+
+        <div class="register-container">
+
+            <!-- LEFT SIDE -->
+
+            <div class="register-banner">
+
+                <img src="{% static 'images/TB_SAS.png' %}" alt="TB SAS">
+
+                <div class="banner-content">
+
+                    <h1>
+                        Join TB SAS Today
+                    </h1>
+
+                    <ul>
+                        <li>Fast Checkout Experience</li>
+                        <li>Track Your Orders Anytime</li>
+                        <li>Save Multiple Addresses</li>
+                        <li>Access Exclusive Offers</li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+
+            <div class="register-card">
+
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo_tb_sas.png' %}" alt="TB SAS" class="register-logo">
+                </a>
+
+                <h2>Create Your Account</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <input name="first_name" id="first_name" type="text" placeholder="Enter your first name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <input name="last_name" id="last_name" type="text" placeholder="Enter your last name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input name="email" id="email" type="email" placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number</label>
+                        <input name="phone_number" id="phone_number" type="text" placeholder="Enter your phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input name="password" id="password" type="password" placeholder="Enter your password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirm">Confirm Password</label>
+                        <input name="password_confirm" id="password_confirm" type="password"
+                               placeholder="Confirm your password">
+                    </div>
+
+                    <div class="terms-box">
+
+                        <input type="checkbox" id="terms">
+
+                        <label for="terms">
+                            I agree to the Terms & Conditions
+                        </label>
+
+                    </div>
+
+                    <button type="submit" class="register-btn">
+                        Create Account
+                    </button>
+
+                </form>
+                {% if messages %}
+                    <div id="message-box">
+                        {% for message in messages %}
+                            <div class="custom-message {{ message.tags }}">
+                                {% if message.tags == 'error' %}
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                {% elif message.tags == 'success' %}
+                                    <i class="fa-solid fa-circle-check"></i>
+                                {% elif message.tags == 'warning' %}
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                {% endif %}
+
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="login-link">
+
+                    Already have an account?
+
+                    <a href="{% url 'show_login' %}">
+                        Sign In
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'js/register.js' %}"></script>
+{% endblock %}

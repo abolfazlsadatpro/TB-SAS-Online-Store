@@ -1,0 +1,195 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block css %}
+
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <section class="cart-page">
+        <div class="container">
+
+            <!-- Breadcrumb -->
+            <div class="breadcrumb-box">
+                <a href="#">TB SAS Online Store</a>
+                <span>/</span>
+                <a href="{% url 'home' %}">Home</a>
+                <span>/</span>
+                <strong>Shopping Cart</strong>
+            </div>
+
+            <p class="cart-subtitle">3 products in your cart</p>
+
+            <div class="cart-layout">
+
+                <!-- LEFT SIDE -->
+                <div class="cart-items">
+
+                    <!-- Product 1 -->
+                    <div class="cart-card">
+
+                        <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+
+                        <div class="cart-info">
+                            <h4>Apple iPhone 17 Pro Max</h4>
+                            <div class="cart-color">
+                                <span>Color:</span>
+                                <div class="color-dot orange"></div>
+                                <span>Orange</span>
+                            </div>
+                            <p class="cart-warranty">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                18 Months Warranty
+                            </p>
+                        </div>
+
+                        <div class="cart-quantity">
+                            <button>-</button>
+                            <span>1</span>
+                            <button>+</button>
+                        </div>
+
+                        <div class="cart-price">
+                            $2,951
+                        </div>
+
+                        <button class="remove-btn">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="cart-card">
+
+                        <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
+
+                        <div class="cart-info">
+                            <h4>Samsung Galaxy S25 Ultra</h4>
+                            <div class="cart-color">
+                                <span>Color:</span>
+                                <div class="color-dot black"></div>
+                                <span>Black</span>
+                            </div>
+                            <p class="cart-warranty">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                18 Months Warranty
+                            </p>
+                        </div>
+
+                        <div class="cart-quantity">
+                            <button>-</button>
+                            <span>1</span>
+                            <button>+</button>
+                        </div>
+
+                        <div class="cart-price">
+                            $1,800
+                        </div>
+
+                        <button class="remove-btn">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="cart-card">
+
+                        <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
+
+                        <div class="cart-info">
+                            <h4>Xiaomi 15T</h4>
+                            <div class="cart-color">
+                                <span>Color:</span>
+                                <div class="color-dot silver"></div>
+                                <span>ُُُُSilver</span>
+                            </div>
+                            <p class="cart-warranty">
+                                <i class="fa-solid fa-shield-halved"></i>
+                                18 Months Warranty
+                            </p>
+                        </div>
+
+                        <div class="cart-quantity">
+                            <button>-</button>
+                            <span>2</span>
+                            <button>+</button>
+                        </div>
+
+                        <div class="cart-price">
+                            $700
+                        </div>
+
+                        <button class="remove-btn">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                    <!-- Coupon -->
+                    <div class="coupon-box">
+
+                        <input type="text" placeholder="Coupon Code">
+
+                        <button>
+                            Apply Coupon
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT SIDE -->
+                <aside class="cart-summary">
+
+                    <h3>Order Summary</h3>
+
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>$5,451</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Discount</span>
+                        <span>-$100</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span>$5,351</span>
+                    </div>
+
+                    <button class="checkout-btn">
+                        Proceed to Checkout
+                    </button>
+
+                    <a href="{% url 'products' %}" class="continue-shopping">
+                        Continue Shopping
+                    </a>
+
+                </aside>
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block custom_js %}
+
+    <script src="{% static 'js/cart.js' %}"></script>
+
+{% endblock %}

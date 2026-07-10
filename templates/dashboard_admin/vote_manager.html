@@ -1,0 +1,139 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% block title %}
+    Vote Manager
+{% endblock %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="card m-1">
+        <div class="card-footer">
+            <form action="#" method="post">
+                <div class="input-group gap-2">
+                    <input type="text" name="message" placeholder="Type Mobile,Username,name,Email ..."
+                           class="form-control" aria-label="Type Message ...">
+                    <span class="input-group-append">
+                          <button type="button" class="btn btn-primary">Search</button>
+                        </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Latest Users</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table m-0" role="table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Product</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Operate</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for item in votes %}
+                        <tr>
+                            <td>
+                                {{ item.user.first_name }} {{ item.user.last_name }}
+                            </td>
+                            <td>
+                                {{ item.user.email }}
+                            </td>
+                            <td>
+                                {{ item.product.name }}
+                            </td>
+                            <td>
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= item.rating %}
+                                        <i class="fa-solid fa-star text-warning"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-star text-secondary"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                ({{ item.rating }}/5)
+                            </td>
+                            <td style="max-width:350px;">
+                                {{ item.description }}
+                            </td>
+                            <td>
+                                {% if item.status %}
+                                    <span class="badge text-bg-success">
+                                        Approved
+                                    </span>
+                                {% else %}
+                                    <span class="badge text-bg-warning">
+                                        Pending
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ item.created_at|date:"Y-m-d" }}
+                            </td>
+                            <td>
+                                <a href="{% url 'change_publish_vote' item.id %}" class="btn btn-primary">
+                                    {% if item.status %}
+                                        Unpublish
+                                    {% else %}
+                                        Publish
+                                    {% endif %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                No comments found
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+            <div class="d-flex justify-content-center">
+                <div class="pagination">
+                    <div class="page-item"><a class="page-link" href="#">Previous</a></div>
+                    <div class="page-item"><a class="page-link" href="#">1</a></div>
+                    <div class="page-item"><a class="page-link" href="#">2</a></div>
+                    <div class="page-item"><a class="page-link" href="#">3</a></div>
+                    <div class="page-item"><a class="page-link" href="#">Next</a></div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-footer -->
+    </div>
+{% endblock %}

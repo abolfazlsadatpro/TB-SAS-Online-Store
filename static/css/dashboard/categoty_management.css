@@ -1,0 +1,582 @@
+/* ==========================
+   PAGINATION
+========================== */
+
+/* ==========================
+   PAGINATION
+========================== */
+
+.pagination {
+    margin: 0;
+}
+
+.pagination .page-item {
+    margin: 0;
+}
+
+.pagination .page-link {
+
+    color: #198754;
+
+    background: #fff;
+
+    border: 1px solid #dee2e6;
+
+    padding: .6rem .95rem;
+
+    transition: .25s;
+
+    box-shadow: none;
+
+}
+
+.pagination .page-link:hover {
+
+    color: #198754;
+
+    background: #f8fff9;
+
+    border-color: #198754;
+
+}
+
+.pagination .page-item.active .page-link {
+
+    background: #fff;
+
+    color: #198754;
+
+    border-color: #198754;
+
+    font-weight: 700;
+
+    z-index: 3;
+
+}
+
+.pagination .page-item.disabled .page-link {
+
+    color: #adb5bd;
+
+    background: #fff;
+
+}
+
+/* ==========================
+   PAGINATION
+========================== */
+
+.pagination-wrapper {
+
+    background: #ecf9ec;
+
+    padding: 12px 0;
+
+    border-radius: 0 0 20px 20px;
+
+    border-top: 1px solid #ece7df;
+
+}
+
+.pagination {
+
+    margin: 0;
+
+}
+
+.pagination .page-item {
+
+    margin: 0 2px;
+
+}
+
+.pagination .page-link {
+
+    color: #198754;
+
+    background: #fff;
+
+    border: 1px solid #dee2e6;
+
+    padding: .65rem 1rem;
+
+    transition: .25s;
+
+    box-shadow: none;
+
+}
+
+.pagination .page-link:hover {
+
+    color: #fff;
+
+    background: #198754;
+
+    border-color: #198754;
+
+}
+
+.pagination .page-item.active .page-link {
+
+    background: #fff;
+
+    color: #198754;
+
+    border-color: #198754;
+
+    font-weight: 700;
+
+}
+
+.pagination .page-item.disabled .page-link {
+
+    background: #fff;
+
+    color: #b4b4b4;
+
+}
+
+.category-row {
+
+    transition: all .45s ease;
+
+}
+
+.category-row.removing {
+
+    opacity: 0;
+
+    transform: translateX(60px);
+
+}
+
+/* ===========================
+      CATEGORY TREE
+===========================*/
+
+.category-tree,
+.tree-children {
+
+    list-style: none;
+
+    padding-left: 18px;
+
+    margin: 0;
+
+}
+
+.tree-children {
+
+    display: none;
+
+    margin-top: 6px;
+
+}
+
+.tree-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.tree-item:hover {
+
+    background: #f5fbf6;
+
+}
+
+.tree-folder {
+
+    color: #198754;
+
+    font-size: 18px;
+
+}
+
+.tree-name {
+
+    flex: 1;
+
+    font-weight: 600;
+
+}
+
+.tree-badge {
+
+    background: #198754;
+
+    color: #fff;
+
+    border-radius: 20px;
+
+    padding: 3px 10px;
+
+    font-size: 12px;
+
+}
+
+.tree-toggle {
+
+    width: 18px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+}
+
+.tree-toggle i {
+
+    transition: .25s;
+
+}
+
+.tree-item.open > .tree-toggle i {
+
+    transform: rotate(90deg);
+
+}
+
+
+.sticky-tree {
+
+    position: sticky;
+
+    top: 25px;
+
+
+}
+
+.category-tree {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.category-tree li {
+    list-style: none;
+}
+
+.tree-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.tree-item:hover {
+    background: #eefaf2;
+}
+
+.tree-folder {
+    color: #28a745;
+    font-size: 18px;
+}
+
+.tree-toggle {
+    cursor: pointer;
+    width: 18px;
+    color: #777;
+}
+
+.tree-space {
+    width: 18px;
+}
+
+.tree-link {
+    color: #333;
+    text-decoration: none;
+    flex: 1;
+    font-weight: 500;
+}
+
+.tree-link:hover {
+    color: #198754;
+}
+
+.tree-link.active {
+    color: #198754;
+    font-weight: 700;
+}
+
+.tree-children {
+    list-style: none;
+    padding-left: 28px;
+    margin-top: 4px;
+}
+
+.tree-children {
+
+    display: none;
+
+    margin-left: 22px;
+
+    padding-left: 14px;
+
+    border-left: 1px dashed #d7d7d7;
+
+}
+
+.tree-children.open {
+
+    display: block;
+
+    animation: fadeTree .25s ease;
+
+}
+
+.tree-toggle {
+
+    cursor: pointer;
+
+    width: 20px;
+
+    display: inline-flex;
+
+    justify-content: center;
+
+    transition: .25s;
+
+}
+
+.tree-toggle.open {
+
+    transform: rotate(90deg);
+
+}
+
+@keyframes fadeTree {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-6px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: none;
+
+    }
+
+}
+
+/*=============================
+        CATEGORY TREE
+=============================*/
+
+.category-tree,
+.category-tree ul {
+
+    list-style: none;
+    margin: 0;
+    padding-left: 18px;
+
+}
+
+.category-tree li {
+
+    position: relative;
+
+}
+
+.category-tree li::before {
+
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: -14px;
+    width: 1px;
+    height: 100%;
+    background: #d8d8d8;
+
+}
+
+.category-tree li:last-child::before {
+
+    height: 28px;
+
+}
+
+.category-tree li::after {
+
+    content: "";
+    position: absolute;
+    left: -10px;
+    top: 18px;
+    width: 12px;
+    height: 1px;
+    background: #d8d8d8;
+
+}
+
+.tree-item {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 9px 12px;
+
+    border-radius: 12px;
+
+    transition: .25s;
+
+    cursor: pointer;
+
+    position: relative;
+
+}
+
+.tree-item:hover {
+
+    background: #f7fdf8;
+
+}
+
+.tree-folder {
+
+    color: #ffc107;
+    font-size: 19px;
+
+}
+
+.tree-name {
+
+    flex: 1;
+    font-weight: 600;
+    color: #444;
+
+}
+
+.tree-toggle {
+
+    width: 20px;
+    text-align: center;
+    cursor: pointer;
+
+    transition: .25s;
+
+}
+
+.tree-toggle.open {
+
+    transform: rotate(90deg);
+
+}
+
+.tree-children {
+
+    display: none;
+
+    margin-left: 15px;
+
+}
+
+.tree-children.open {
+
+    display: block;
+
+    animation: fadeTree .25s ease;
+
+}
+
+@keyframes fadeTree {
+
+    from {
+
+        opacity: 0;
+        transform: translateY(-6px);
+
+    }
+
+    to {
+
+        opacity: 1;
+        transform: none;
+
+    }
+
+}
+
+.tree-actions {
+
+    opacity: 0;
+
+    display: flex;
+
+    gap: 6px;
+
+    transition: .25s;
+
+}
+
+.tree-item:hover .tree-actions {
+
+    opacity: 1;
+
+}
+
+.tree-btn {
+
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    transition: .25s;
+
+}
+
+.tree-btn-edit {
+
+    background: #eefaf2;
+    color: #198754;
+
+}
+
+.tree-btn-delete {
+
+    background: #fff1f1;
+    color: #dc3545;
+
+}
+
+.tree-btn:hover {
+
+    transform: scale(1.08);
+
+}
+
+.tree-children {
+    display: none !important;
+}
+
+.tree-children.open {
+    display: block !important;
+}

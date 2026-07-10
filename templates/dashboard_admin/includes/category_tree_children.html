@@ -1,0 +1,48 @@
+<li>
+
+    <div class="tree-item">
+
+        {% if node.children %}
+
+            <span class="tree-toggle">
+                <i class="bi bi-chevron-right"></i>
+            </span>
+
+        {% else %}
+
+            <span class="tree-space"></span>
+
+        {% endif %}
+
+
+        <i class="bi bi-folder-fill tree-folder"></i>
+
+
+        <a href="{% url 'category_edit' node.item.id %}"
+           class="tree-link">
+
+            {{ node.item.name }}
+
+        </a>
+
+
+    </div>
+
+
+
+    {% if node.children %}
+
+        <ul class="tree-children">
+
+            {% for child in node.children %}
+
+                {% include "dashboard_admin/includes/category_tree_children.html" with node=child %}
+
+            {% endfor %}
+
+        </ul>
+
+    {% endif %}
+
+
+</li>

@@ -1,0 +1,117 @@
+ {% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+{% load static %}
+{% block title %}
+    New Orders
+{% endblock %}
+
+{% block custom_css %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="wrapper">
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Create New Order</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Order Details</h3>
+                        </div>
+                        <!-- Form Start -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="orders_items">
+                                    <div class="form-group">
+                                        <label for="customer-name">Customer Name</label>
+                                        <select class="form-control" id="customer-name" name="customer">
+                                        </select>
+
+                                    </div>
+                                    <hr>
+                                </div>
+
+                                <div class="form-group">
+                                    <hr>
+                                    <label for="order-notes">Order Notes</label>
+                                    <textarea class="form-control" id="order-notes" name="note"
+                                              placeholder="Additional notes"></textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="status_order">Status Order</label>
+                                            <select class="form-control" id="status_order" name="status">
+                                                {% for key,value in statuses.items %}
+                                                    <option value="{{ key }}">{{ value }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="is_paid">Is Paid</label>
+                                            <select class="form-control" id="is_paid" name="is_paid">
+                                                <option>
+                                                    Yes
+                                                </option>
+                                                <option>
+                                                    No
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Submit Order</button>
+
+                                    <button type="button" class="btn btn-secondary" onclick="addOrderItem()">
+                                        Add Another Item
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block custom_js %}
+    <script type="text/javascript">
+        var searchProductUrl = "{% url 'search_product_item' %}";
+        var searchCustomerUrl = "{% url 'search_customers' %}"
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script src="{% static 'js/dashboard/admin/new_order.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+{% load custom_filters_stor %}
+
+{% block title %}
+    Latest Order
+{% endblock %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="card m-1">
+        <div class="card-footer">
+            <form action="#" method="post">
+                <div class="input-group gap-2">
+                    <input type="text" name="message" placeholder="Type OrderID,MobileUser,EmailUser ..."
+                           class="form-control" aria-label="Type Message ...">
+                    <span class="input-group-append">
+                          <button type="button" class="btn btn-primary">Search</button>
+                        </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Latest Orders</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table m-0" role="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Order ID</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">IsPaid</th>
+                        <th scope="col">TotalPrice</th>
+                        <th scope="col">CreatedAt</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>
+                                {{ order.id }}
+                            </td>
+                            <td>
+                                <p>
+                                    {{ order.customer.user.first_name }} {{ order.customer.user.last_name }}
+                                </p>
+                            </td>
+
+                            <td>
+                                {{ order.customer.user.phone_number }}
+                            </td>
+
+                            <td>
+                                {% if order.is_paid %}
+                                    <span class="badge text-bg-success"> Success Paid </span>
+                                {% else %}
+                                    <span class="badge text-bg-danger"> Fail Paid </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {{ order.total_price }}
+                            </td>
+
+                            <td>
+                                {{ order.created_at }}
+                            </td>
+                            <td>
+                                {{ order.status|show_status_order }}
+                            </td>
+
+                            <td>
+                                <a href="{% url 'detail_order_show' order.id %}"
+                                   class="btn btn-outline-primary">
+                                    Detail Order
+                                </a>
+                            </td>
+
+                            <td>
+                                <div>
+                                    <form action="{% url 'order_status_update' %}" method="POST" class="gap-2">
+                                        {% csrf_token %}
+                                        <label>
+                                            <select class="form-control" name="status">
+                                                {% for key,value in choices %}
+                                                    <option value="{{ key }}">{{ value }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <input type="hidden" value="{{ order.id }}" name="order_id">
+                                            <button type="submit" class="btn btn-info m-1">
+                                                Update Status Order
+                                            </button>
+                                        </label>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+            <div class="d-flex justify-content-center">
+                <div class="pagination">
+                    <div class="page-item"><a class="page-link" href="#">Previous</a></div>
+                    <div class="page-item"><a class="page-link" href="#">1</a></div>
+                    <div class="page-item"><a class="page-link" href="#">2</a></div>
+                    <div class="page-item"><a class="page-link" href="#">3</a></div>
+                    <div class="page-item"><a class="page-link" href="#">Next</a></div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-footer -->
+    </div>
+{% endblock %}

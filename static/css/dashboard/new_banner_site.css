@@ -1,0 +1,588 @@
+/* =====================================
+   Banner Management Premium
+===================================== */
+
+.banner-page {
+    padding: 30px;
+}
+
+/* HEADER */
+
+.banner-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.banner-title {
+    font-size: 34px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.banner-subtitle {
+    color: #777;
+    margin: 0;
+}
+
+
+/* ==========================
+   CARD
+========================== */
+
+.banner-card {
+
+    background: #fff;
+
+    border-radius: 20px;
+
+    border: none;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
+
+    transition: .35s;
+
+}
+
+.banner-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 20px 45px rgba(0, 0, 0, .08);
+
+}
+
+.banner-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #eee;
+
+    font-weight: 700;
+
+    font-size: 18px;
+
+}
+
+.banner-card-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+.banner-card-body {
+
+    padding: 28px;
+
+}
+
+
+/* ==========================
+   INPUTS
+========================== */
+
+.form-label {
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+}
+
+.form-control {
+
+    border-radius: 14px;
+
+    border: 1px solid #dfe3e8;
+
+    min-height: 52px;
+
+    transition: .25s;
+
+    box-shadow: none;
+
+}
+
+textarea.form-control {
+
+    min-height: 140px;
+
+}
+
+.form-control:focus {
+
+    border-color: #198754;
+
+    box-shadow: 0 0 0 .18rem rgba(25, 135, 84, .15);
+
+}
+
+
+/* ==========================
+   BUTTONS
+========================== */
+
+.btn-success {
+
+    border-radius: 14px;
+
+    padding: 12px 30px;
+
+    font-weight: 600;
+
+}
+
+.btn-light {
+
+    border-radius: 14px;
+
+    padding: 12px 30px;
+
+}
+
+
+/* ==========================
+   PREVIEW
+========================== */
+
+.preview-box {
+
+    height: 270px;
+
+    border: 2px dashed #d9d9d9;
+
+    border-radius: 18px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #fafafa;
+
+}
+
+.preview-image {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 16px;
+
+}
+
+
+/* ==========================
+   TIPS
+========================== */
+
+.tips-list {
+
+    list-style: none;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+.tips-list li {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+.tips-list li:last-child {
+
+    border: none;
+
+}
+
+.tips-list i {
+
+    color: #198754;
+
+    font-size: 18px;
+
+}
+
+
+/* ==========================
+   TABLE
+========================== */
+
+.banner-table {
+
+    margin: 0;
+
+}
+
+.banner-table thead {
+
+    background: #f8f9fa;
+
+}
+
+.banner-table thead th {
+
+    border: none;
+
+    padding: 18px;
+
+    font-weight: 700;
+
+}
+
+.banner-table td {
+
+    padding: 18px;
+
+    vertical-align: middle;
+
+}
+
+.banner-table tbody tr {
+
+    transition: .25s;
+
+}
+
+.banner-table tbody tr:hover {
+
+    background: #f8fff9;
+
+}
+
+
+/* ==========================
+   IMAGE
+========================== */
+
+.table-banner-image {
+
+    width: 90px;
+
+    height: 65px;
+
+    border-radius: 12px;
+
+    object-fit: cover;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, .12);
+
+}
+
+
+/* ==========================
+   DESCRIPTION
+========================== */
+
+.table-description {
+
+    color: #666;
+
+    max-width: 420px;
+
+}
+
+
+/* ==========================
+   ACTIONS
+========================== */
+
+.btn-edit {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #198754;
+
+    color: #fff;
+
+    transition: .25s;
+
+}
+
+.btn-edit:hover {
+
+    background: #157347;
+
+    color: #fff;
+
+    transform: translateY(-2px);
+
+}
+
+.btn-delete {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #dc3545;
+
+    color: #fff;
+
+    transition: .25s;
+
+}
+
+.btn-delete:hover {
+
+    background: #bb2d3b;
+
+    color: #fff;
+
+    transform: translateY(-2px);
+
+}
+
+
+/* ==========================
+   EMPTY
+========================== */
+
+.empty-banner {
+
+    text-align: center;
+
+    padding: 70px 30px;
+
+}
+
+.empty-banner i {
+
+    color: #198754;
+
+    opacity: .35;
+
+}
+
+.empty-banner h4 {
+
+    margin-top: 20px;
+
+    font-weight: 700;
+
+}
+
+.empty-banner p {
+
+    color: #777;
+
+}
+
+
+/* ==========================
+   BADGE
+========================== */
+
+.badge {
+
+    padding: 10px 16px;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 992px) {
+
+    .banner-page {
+
+        padding: 15px;
+
+    }
+
+    .banner-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+    .preview-box {
+
+        height: 220px;
+
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .banner-title {
+
+        font-size: 28px;
+
+    }
+
+    .table-banner-image {
+
+        width: 70px;
+
+        height: 55px;
+
+    }
+
+    .banner-card-body {
+
+        padding: 18px;
+
+    }
+
+}
+
+/* ==========================
+   IMAGE PREVIEW MODAL
+========================== */
+
+.preview-clickable {
+
+    cursor: pointer;
+
+    transition: .35s;
+
+}
+
+.preview-clickable:hover {
+
+    transform: scale(1.02);
+
+}
+
+.image-preview-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, .88);
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: .35s;
+
+    z-index: 999999;
+
+}
+
+.image-preview-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+.preview-modal-image {
+
+    max-width: 90%;
+
+    max-height: 88%;
+
+    border-radius: 18px;
+
+    box-shadow: 0 20px 70px rgba(0, 0, 0, .45);
+
+    animation: zoomIn .25s ease;
+
+}
+
+.close-preview {
+
+    position: absolute;
+
+    top: 30px;
+
+    right: 40px;
+
+    font-size: 32px;
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
+.close-preview:hover {
+
+    color: #198754;
+
+}
+
+@keyframes zoomIn {
+
+    from {
+
+        transform: scale(.8);
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        transform: scale(1);
+
+        opacity: 1;
+
+    }
+
+}

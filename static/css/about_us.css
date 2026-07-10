@@ -1,0 +1,46 @@
+/* About Us Page */
+
+.about-hero {
+    background: linear-gradient(135deg, #111, #1e1e1e);
+    color: #fff;
+    padding: 5.5rem 0;
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--green-main);
+}
+
+.about-hero p {
+    max-width: 600px;
+    margin: 1rem auto 0;
+    color: #ddd;
+}
+
+.about-content {
+    padding: 4rem 0;
+}
+
+.about-content h2 {
+    color: #111;
+    margin-bottom: 1rem;
+}
+
+.about-content ul {
+    padding-left: 1.2rem;
+}
+
+.about-content li {
+    margin-bottom: 0.6rem;
+}
+
+.about-stats {
+    background-color: #f5f6f7;
+    padding: 3rem 0;
+}
+
+.about-stats h3 {
+    color: var(--green-main);
+    font-weight: bold;
+}

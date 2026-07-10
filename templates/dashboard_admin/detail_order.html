@@ -1,0 +1,136 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+{% load static %}
+
+{% block title %}
+    Invoice
+{% endblock %}
+
+{% block custom_css %}
+    <link href="{% static 'css/dashboard/detail_order.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="invoice-wrapper">
+
+        <div class="invoice-card">
+
+            <div class="invoice-header">
+
+                <div class="invoice-logo">
+                    <img src="{% static 'images/logo_tb_sas.png' %}" alt="">
+                </div>
+
+                <div class="invoice-info">
+
+                    <h1>Invoice</h1>
+
+                    <p>
+                        {{ order.created_at|date:"d M Y" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="customer-box">
+                <div>
+                    <p><strong> invoice Number : </strong>{{ order.id }}</p>
+
+                    <p><strong> Billed To
+                        : </strong>{{ order.customer.user.first_name }} {{ order.customer.user.last_name }}</p>
+
+                    <p><strong> Email : </strong>{{ order.customer.user.email }}</p>
+
+
+                    <p><strong> Customer Phone Number : </strong>{{ order.customer.phone }}</p>
+
+                    <p><strong> Customer Address : </strong>{{ order.customer.address }}</p>
+
+                </div>
+
+                <div>
+
+                    <h4>Payment Status</h4>
+
+                    {% if order.is_paid %}
+                        <span class="badge bg-success">
+                    Paid
+                </span>
+                    {% else %}
+                        <span class="badge bg-danger">
+                    Un Paid
+                </span>
+                    {% endif %}
+
+                </div>
+            </div>
+
+            <div class="table-responsive mt-5">
+
+                <table class="table invoice-table">
+
+                    <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for item in order_items %}
+
+                        <tr>
+
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td>
+                                {{ item.product.name }}
+                            </td>
+
+                            <td>
+                                ${{ item.product.price }}
+                            </td>
+
+                            <td>
+                                {{ item.quantity }}
+                            </td>
+
+                            <td>
+                                {% widthratio item.product.price 1 item.quantity %}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="invoice-footer">
+
+                <button onclick="window.print()"
+                        class="btn btn-success">
+                    Print Invoice
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

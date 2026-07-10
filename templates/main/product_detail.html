@@ -1,0 +1,624 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+
+{% block title %}Product Detail{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home_store.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- COMMENT MODAL -->
+    <div class="comment-modal-overlay" id="commentModal">
+
+        <div class="comment-modal">
+
+            <div class="modal-header">
+
+                <h3> Add Comment</h3>
+
+                <button type="button" class="close-modal" id="closeCommentModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <form method="post" action="{% url 'submit_review' product.id %}">
+                {% csrf_token %}
+
+                <div class="rating-select">
+
+                    <label>Rate Product :</label>
+
+                    <div class="star-rating">
+                        <i class="fa-regular fa-star star" data-value="1"></i>
+
+                        <i class="fa-regular fa-star star" data-value="2"></i>
+
+                        <i class="fa-regular fa-star star" data-value="3"></i>
+
+                        <i class="fa-regular fa-star star" data-value="4"></i>
+
+                        <i class="fa-regular fa-star star" data-value="5"></i>
+                    </div>
+
+                    <input type="hidden" name="rating" id="ratingValue" value="0">
+                </div>
+
+                <div class="form-group">
+
+                    <label>Your Comment :</label>
+                    <textarea name="description" rows="5" placeholder="Write your opinion..." class="comment-textarea"
+                              required></textarea>
+                </div>
+
+                <button type="submit" class="submit-comment-btn">
+                    Submit Comment
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <main>
+
+        <section class="product-page">
+            <div class="container">
+
+                <!-- BREADCRUMB -->
+                <div class="breadcrumb-box">
+                    <a href="#">TB SAS Online Store</a> /
+                    <a href="{% url 'home' %}">Home</a>
+                    <span>/</span>
+                    <a href="#">Mobile</a> /
+                    <strong>iPhone 17 Pro Max</strong>
+                </div>
+
+
+                <div class="product-layout">
+
+                    <!-- LEFT : GALLERY -->
+                    <div class="gallery-box">
+
+                        <img id="mainImage" src="{% static 'images/iPhone 17 Pro Max.webp' %}" class="main-image"
+                             alt="">
+
+                        <div class="thumbs">
+                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}"
+                                 data-color="Orange"
+                                 onclick="changeImage(this)">
+
+                            <img src="{% static 'images/iphone 17 pro max Dark Blue.webp' %}"
+                                 data-color="Dark blue"
+                                 onclick="changeImage(this)">
+
+                            <img src="{% static 'images/iphone 17 pro Max Silver.webp' %}"
+                                 data-color="Silver"
+                                 onclick="changeImage(this)">
+                            <div class="more-thumb">+5</div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- MIDDLE : INFO -->
+                    <div class="product-info-box">
+
+                        <h1 class="product-title">
+                            Apple iPhone 17 Pro Max CH Dual SIM 1TB 12GB RAM
+                        </h1>
+
+                        <button class="review-btn" onclick="scrollToReviews()">
+                            <i class="fa-regular fa-comments"></i>
+                            View Reviews (23)
+                        </button>
+
+                        <!-- COLOR -->
+                        <div class="color-section">
+
+                            <div class="selected-color">
+                                Color: <span id="colorName">Orange</span>
+                            </div>
+
+                            <div class="colors">
+
+                                <div class="color-item active"
+                                     data-name="Orange"
+                                     data-image="{% static 'images/iPhone 17 Pro Max.webp' %}"
+                                     style="background:#ffa600"
+                                     onclick="selectColor(this)">
+                                </div>
+
+                                <div class="color-item"
+                                     data-name="Dark blue"
+                                     data-image="{% static 'images/iphone 17 pro max Dark Blue.webp' %}"
+                                     style="background:#253873"
+                                     onclick="selectColor(this)">
+                                </div>
+
+                                <div class="color-item"
+                                     data-name="Silver"
+                                     data-image="{% static 'images/iphone 17 pro Max Silver.webp' %}"
+                                     style="background:#f0f0f0"
+                                     onclick="selectColor(this)">
+                                </div>
+
+                            </div>
+
+                            <div class="color-underline"></div>
+
+                        </div>
+
+                        <!-- FEATURES -->
+                        <div class="features">
+
+                            <div><span>CPU</span><b>Apple A19 Pro</b></div>
+                            <div><span>Internal Storage</span><b>1 TB</b></div>
+                            <div><span>Display Size</span><b>6.9 inch</b></div>
+                            <div><span>Rear Camera</span><b>48MP + 48MP + 12MP</b></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RIGHT : BUY BOX -->
+                    <div class="buy-box">
+
+                        <div class="satisfaction">
+                            <i class="fa-solid fa-face-smile"></i>
+                            <b>89%</b> Customer Satisfaction
+                        </div>
+
+                        <div class="performance">
+                            <i class="fa-solid fa-chart-line"></i>
+                            Excellent Performance
+                        </div>
+
+                        <div class="guarantee">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            18 Months Official Warranty
+                        </div>
+
+                        <div class="price">$2,951.09</div>
+
+                        <button class="mini-cart-btn">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            Add to Cart
+                        </button>
+
+                        <div class="delivery">
+                            <i class="fa-solid fa-store"></i>
+                            In-store pickup at TB SAS branches
+                        </div>
+
+                        <div class="return">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            Return policy & conditions
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SHOP FEATURES -->
+                <div class="shop-features">
+
+                    <div class="feature-item">
+                        <i class="fa-solid fa-headset"></i>
+                        <span>24/7 Support</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                        <span>Cash on Delivery Available</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>7-Day Return Guarantee</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <i class="fa-solid fa-award"></i>
+                        <span>Authenticity Guarantee</span>
+                    </div>
+
+                </div>
+
+
+                <!-- SIMILAR GOODS SLIDER -->
+                <div class="product-slider-wrapper">
+
+                    <div class="slider-header">
+                        <h3>Similar Goods</h3>
+                        <a href="#">View All</a>
+                    </div>
+
+                    <button class="slider-btn left" id="slideLeft">❮</button>
+                    <button class="slider-btn right" id="slideRight">❯</button>
+
+                    <div class="product-slider" id="productSlider">
+
+                        <!-- همه محصولاتت بدون حذف -->
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 16 Pro Max mobile phone.webp' %}" alt="">
+                            <p class="title">Apple iPhone 16 Pro Max Dual SIM 1TB 8GB RAM</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$2,343.75</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 16 CH Dual SIM 128GB 8GB RAM.webp' %}" alt="">
+                            <p class="title">Apple iPhone 16 CH Dual SIM 128GB 8GB RAM</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$974.00</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 17 CH Dual SIM 256GB 8GB RAM.webp' %}" alt="">
+                            <p class="title">Apple iPhone 17 CH Dual SIM 256GB 8GB RAM</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$1,143.74</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 14 CH Dual SIM 128GB 6GB RAM.webp' %}" alt="">
+                            <p class="title">Apple iPhone 14 CH Dual SIM 128GB 6GB RAM</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$834.37</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 15 Ch Dual SIM 128GB 6GB RAM.webp' %}" alt="">
+                            <p class="title">Apple iPhone 15 Ch Dual SIM 128GB 6GB RAM</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$874.93</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 16 Pro Max CH Dual SIM 256GB 8GB RAM.webp' %}"
+                                 alt="">
+                            <p class="title">Apple iPhone 16 Pro Max CH Dual SIM 256GB 8GB RAM</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$1,812.31</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone Air 1TB 12GB RAM - Not Active.webp' %}" alt="">
+                            <p class="title">Apple iPhone Air 1TB 12GB RAM - Not Active</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$1399.00</span></div>
+                        </div>
+
+                        <div class="product-card">
+                            <img src="{% static 'images/Apple iPhone 16e HN Single SIM 128GB Not Active.webp' %}"
+                                 alt="">
+                            <p class="title">Apple iPhone 16e HN Single SIM 128GB Not Active</p>
+                            <div class="price-box"><span class="price_Similar-Goods">$780.00</span></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <section class="details-section">
+
+            <div class="details-container">
+
+                <!-- LEFT CONTENT -->
+                <div class="details-left">
+
+                    <!-- TABS -->
+                    <div class="tabs">
+                        <div class="tab active" onclick="scrollToSection('specs',this)">Specifications</div>
+                        <div class="tab" onclick="scrollToSection('review-section',this)">Review</div>
+                        <div class="tab" onclick="scrollToSection('comments-section',this)">User Comments</div>
+                    </div>
+
+
+                    <!-- TAB 1 -->
+                    <div id="specs" class="tab-content active">
+
+                        <div class="specs-box">
+
+                            <div class="spec-item"><span>CPU :</span><b>Apple A19 Pro</b></div>
+                            <div class="spec-item"><span>Processor Cores :</span><b>Six-core</b></div>
+                            <div class="spec-item"><span>GPU :</span><b>Apple GPU (6-core)</b></div>
+                            <div class="spec-item"><span>OS at launch :</span><b>iOS 26</b></div>
+                            <div class="spec-item"><span>Operating System :</span><b>iOS</b></div>
+
+                            <div id="moreSpecs" class="more-specs">
+
+                                <div class="spec-item"><span>Front glass :</span><b>Corning glass, Aluminum unibody
+                                    frame</b></div>
+                                <div class="spec-item"><span>Dimensions / Weight :</span><b>163.4×78×8.8 mm / 233 g</b>
+                                </div>
+                                <div class="spec-item"><span>Category :</span><b>Flagship</b></div>
+                                <div class="spec-item"><span>In the box :</span><b>USB-C to USB-C cable</b></div>
+
+                            </div>
+
+                            <div class="show-more" onclick="toggleSpecs()">Show more</div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REVIEW -->
+                    <div id="review-section" class="review-header">
+                        <div class="lines"><span></span></div>
+                        <div class="lines"><span></span></div>
+                        <ul class="Review">
+                            <li><h2>Review</h2></li>
+                        </ul>
+                    </div>
+
+                    <h3 class="review-title">
+                        Buy iPhone 17 Pro 256GB Storage 12GB RAM
+                    </h3>
+
+                    <p class="review-text">
+                        This company believes that with modern design, powerful hardware,
+                        and advanced features, it delivers a different mobile experience.
+                        This phone has significant upgrades not only in design and display,
+                        but also in cameras, processor, battery, and software features.
+                        If you're looking for a powerful smartphone suitable for both daily
+                        tasks and professional use, the iPhone 17 Pro can truly surprise you.
+                    </p>
+
+
+                    <!-- pros cons -->
+                    <div class="pros-cons">
+
+                        <div class="card cons">
+                            <h4>Cons</h4>
+                            <ul>
+                                <li>No memory card support</li>
+                                <li>Premium price</li>
+                                <li>No charger in the box</li>
+                            </ul>
+                        </div>
+
+                        <div class="card pros">
+                            <h4>Pros</h4>
+                            <ul>
+                                <li>Apple A19 Pro powerful chip</li>
+                                <li>Premium titanium build</li>
+                                <li>Advanced triple camera system</li>
+                                <li>120Hz LTPO OLED display</li>
+                                <li>Fast and smooth iOS experience</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+
+                    <h3 class="review-subtitle">
+                        Apple iPhone 17 Pro Design & Build Quality
+                    </h3>
+
+                    <p class="review-text">
+                        The iPhone 17 Pro measures 149.6 × 71.5 × 8.3 mm and weighs 199g,
+                        making it comfortable to hold while still feeling durable.
+                        The body uses reinforced Corning glass on the front and back,
+                        while the frame is made of Grade-5 titanium for strength and a
+                        premium look. Its 6.3-inch display covers nearly 90% of the front,
+                        delivering a cinematic viewing experience with a 19.5:9 ratio.
+                    </p>
+
+
+                    <!-- toggle -->
+                    <div class="intro-box">
+
+                        <button class="intro-toggle">
+                            Show Product Introduction
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+
+                        <div class="intro-content">
+
+                            <h4>Operating System & Processor</h4>
+                            <p>
+                                The device ships with iOS 26 featuring enhanced security,
+                                smarter Siri AI capabilities, and deeper integration with
+                                Apple devices. Powered by the 3nm Apple A19 Pro six-core
+                                processor and a six-core Apple GPU, performance remains
+                                extremely smooth in apps, gaming, and heavy workloads.
+                                With 12GB RAM and 256GB NVMe storage, multitasking and
+                                storage feel effortless.
+                            </p>
+
+                            <h4>Camera System</h4>
+                            <p>
+                                Apple once again raises the mobile photography standard.
+                                The triple-camera system includes a 48MP wide camera,
+                                48MP ultra-wide camera, and 48MP periscope telephoto lens,
+                                enabling detailed shots and 5× optical zoom. Video features
+                                include 4K recording up to 120fps, Dolby Vision HDR,
+                                Cinematic Mode, and spatial video capture.
+                                A 12MP front camera with SL-3D depth sensor ensures
+                                secure Face ID and high-quality selfies.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- COMMENTS SECTION -->
+                    <div id="comments-section">
+
+                        <div class="comments-header">
+
+                            <div class="comments-title">
+                                <h2>User Comments</h2>
+                                <div class="divider-lines">
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+
+                            <div class="comments-summary">
+
+                                <div class="rating-info">
+
+                                    <div class="rating-avg">
+                                        {{ average_rating|default:"0"|floatformat:1 }}
+                                    </div>
+
+                                    <div class="stars-wrapper">
+
+                                        <div class="rating-count">
+                                            {{ comments_count }} Reviews
+                                        </div>
+
+                                        <div class="rating-stars">
+
+                                            {% for i in full_stars %}
+                                                <i class="fa-solid fa-star"></i>
+                                            {% endfor %}
+
+                                            {% if half_star %}
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                            {% endif %}
+
+                                            {% for i in empty_stars %}
+                                                <i class="fa-regular fa-star"></i>
+                                            {% endfor %}
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <button class="add-comment-btn">
+                                    <i class="fa-solid fa-plus"></i>
+                                    Add Comment
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="reviews-list">
+
+                            {% for comment in comments %}
+
+                                <div class="comment-card">
+
+                                    <div class="comment-top">
+
+                                        <div class="comment-user">
+                                            <span class="name">
+                                                {{ comment.user.first_name }}
+                                                {{ comment.user.last_name }}
+                                            </span>
+                                            <span class="date">
+                                                {{ comment.created_at|date:"Y-m-d" }}
+                                            </span>
+                                        </div>
+
+                                        <div class="comment-rating">
+
+                                            {% for i in "12345" %}
+
+                                                {% if forloop.counter <= comment.rating %}
+                                                    <i class="fa-solid fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa-regular fa-star"></i>
+                                                {% endif %}
+
+                                            {% endfor %}
+
+                                        </div>
+
+                                    </div>
+
+                                    <p class="comment-text">
+                                        {{ comment.description }}
+                                    </p>
+
+                                    <div class="comment-actions">
+                                        <button class="like {% if user_votes.comment.id == 1 %}active{% endif %}"
+                                                data-id="{{ comment.id }}">
+                                            <i class="fa-regular fa-thumbs-up"></i> {{ comment.likes }}
+                                        </button>
+
+                                        <button class="dislike {% if user_votes.comment.id == -1 %}active{% endif %}"
+                                                data-id="{{ comment.id }}">
+                                            <i class="fa-regular fa-thumbs-down"></i> {{ comment.dislikes }}
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            {% empty %}
+
+                                <div class="comment-card">
+                                    <p class="comment-text">
+                                        No comments yet
+                                    </p>
+                                </div>
+
+                            {% endfor %}
+                            {% if comments|length > 5 %}
+                                <div class="text-center mt-4">
+                                    <button id="loadMoreComments" class="btn btn-outline-success">
+
+                                        <i class="fa-solid fa-chevron-down me-2"></i>
+
+                                        <span>Show More Comments</span>
+
+                                    </button>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT CARD -->
+                <div class="details-right">
+
+                    <div class="mini-product-card">
+
+                        <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
+                        <h4>iPhone 17 Pro Max</h4>
+                        <div class="mini-color">Color: Orange</div>
+
+                        <div class="mini-warranty">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            18 Months Company Warranty
+                        </div>
+
+                        <div class="mini-price">$2,951.09</div>
+
+                        <button class="mini-cart-btn">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            Add to Cart
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'js/product_detail.js' %}"></script>
+{% endblock %}
