@@ -34,6 +34,21 @@ class LastUsers(ListView):
     paginate_by = 10
     context_object_name = 'users'
 
+    def get_queryset(self):
+        queryset = PersonUser.objects.all().order_by('-id')
+
+        query = self.request.GET.get('q')
+
+        if query:
+            queryset = queryset.filter(
+                Q(first_name__icontains=query) |
+                Q(last_name__icontains=query) |
+                Q(email__icontains=query) |
+                Q(phone_number__icontains=query)
+            )
+
+        return queryset
+
 
 class ListOrders(ListView):
     model = Order
