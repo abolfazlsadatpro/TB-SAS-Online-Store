@@ -1,35 +1,151 @@
-const preview = document.getElementById("previewImage");
+document.addEventListener("DOMContentLoaded", () => {
 
-const modal = document.getElementById("imagePreviewModal");
+    /*=====================================
+        IMAGE PREVIEW
+    =====================================*/
 
-const modalImage = document.getElementById("previewModalImage");
+    const imageInput = document.querySelector('input[type="file"]');
+    const previewImage = document.getElementById("previewImage");
 
-const closePreview = document.querySelector(".close-preview");
+    if (imageInput && previewImage) {
 
-if (preview) {
+        imageInput.addEventListener("change", function () {
 
-    preview.addEventListener("click", function () {
+            const file = this.files[0];
 
-        modal.classList.add("show");
+            if (!file) return;
 
-        modalImage.src = this.src;
+            const reader = new FileReader();
 
-    });
+            reader.onload = function (e) {
 
-}
+                previewImage.src = e.target.result;
 
-closePreview.addEventListener("click", function () {
+                previewImage.classList.add("preview-clickable");
 
-    modal.classList.remove("show");
+            };
 
-});
+            reader.readAsDataURL(file);
 
-modal.addEventListener("click", function (e) {
-
-    if (e.target === modal) {
-
-        modal.classList.remove("show");
+        });
 
     }
 
+
+    /*=====================================
+        IMAGE MODAL
+    =====================================*/
+
+    const modal = document.getElementById("imagePreviewModal");
+    const modalImage = document.getElementById("previewModalImage");
+    const closeBtn = document.querySelector(".close-preview");
+
+    function openPreview(src) {
+
+        if (!modal) return;
+
+        modalImage.src = src;
+
+        modal.classList.add("show");
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+    function closePreview() {
+
+        if (!modal) return;
+
+        modal.classList.remove("show");
+
+        document.body.style.overflow = "";
+
+    }
+
+    if (previewImage) {
+
+        previewImage.addEventListener("click", () => {
+
+            openPreview(previewImage.src);
+
+        });
+
+    }
+
+    document.querySelectorAll(".banner-table-image").forEach(img => {
+
+        img.addEventListener("click", () => {
+
+            openPreview(img.src);
+
+        });
+
+    });
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener("click", closePreview);
+
+    }
+
+    if (modal) {
+
+        modal.addEventListener("click", e => {
+
+            if (e.target === modal) {
+
+                closePreview();
+
+            }
+
+        });
+
+    }
+
+    document.addEventListener("keydown", e => {
+
+        if (e.key === "Escape") {
+
+            closePreview();
+
+        }
+
+    });
+
+
+    /*=====================================
+        DELETE ANIMATION
+    =====================================*/
+
+    document.querySelectorAll(".delete-banner").forEach(btn => {
+
+        btn.addEventListener("click", function (e) {
+
+            e.preventDefault();
+
+            if (!confirm("Delete this banner ?")) {
+
+                return;
+
+            }
+
+            const row = this.closest("tr");
+
+            row.style.transition = ".35s";
+
+            row.style.opacity = "0";
+
+            row.style.transform = "translateX(40px)";
+
+            setTimeout(() => {
+
+                window.location = this.href;
+
+            }, 350);
+
+        });
+
+    });
+
 });
+

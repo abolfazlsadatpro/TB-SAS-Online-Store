@@ -1,0 +1,556 @@
+/*==================================================
+                LAST USERS PAGE
+==================================================*/
+
+
+.last-users-page {
+
+    padding: 30px;
+
+}
+
+
+/*==================================================
+                    PAGE HEADER
+==================================================*/
+
+
+.page-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 28px;
+
+}
+
+
+.page-title {
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    color: #1f2937;
+
+    margin-bottom: 6px;
+
+}
+
+
+.page-subtitle {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+
+}
+
+
+/*==================================================
+                    SEARCH CARD
+==================================================*/
+
+
+.search-card {
+
+    border: none;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
+
+}
+
+
+.search-card .card-body {
+
+    padding: 24px;
+
+}
+
+
+.search-icon {
+
+    background: #198754;
+
+    color: #fff;
+
+    border: none;
+
+    border-radius: 14px 0 0 14px;
+
+    padding: 0 18px;
+
+}
+
+
+.user-search {
+
+    border-left: none;
+
+    border-right: none;
+
+    min-height: 50px;
+
+    box-shadow: none !important;
+
+}
+
+
+.user-search:focus {
+
+    border-color: #198754;
+
+    outline: none;
+
+    box-shadow: 0 0 0 .25rem rgba(25, 135, 84, .15) !important;
+
+}
+
+
+.search-btn {
+
+    min-width: 140px;
+
+    border-radius: 0 14px 14px 0;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+}
+
+
+.search-btn:hover {
+
+    transform: translateY(-2px);
+
+}
+
+
+/*==================================================
+                    TABLE CARD
+==================================================*/
+
+
+.table-card {
+
+    border: none;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
+
+}
+
+
+/*==================================================
+                    TABLE HEADER
+==================================================*/
+
+
+.table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    background: #fff;
+
+    border-bottom: 1px solid #edf2f7;
+
+}
+
+
+.table-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    margin: 0;
+
+    color: #212529;
+
+}
+
+
+.table-title i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+
+.table-count {
+
+    background: #edf8f1;
+
+    color: #198754;
+
+    font-weight: 700;
+
+    padding: 10px 22px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+}
+
+
+/*==================================================
+                    USER TABLE
+==================================================*/
+
+
+.user-table {
+
+    margin: 0;
+
+}
+
+
+.user-table thead th {
+
+    background: #f8f9fa;
+
+    border: none;
+
+    padding: 18px 20px;
+
+    color: #495057;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.user-table tbody td {
+
+    padding: 18px 20px;
+
+    vertical-align: middle;
+
+    border-top: 1px solid #eef2f6;
+
+}
+
+
+.user-table tbody tr {
+
+    transition: .25s;
+
+    animation: fadeUser .35s ease;
+
+}
+
+
+.user-table tbody tr:hover {
+
+    background: #f8fffb;
+
+}
+
+
+/*==================================================
+                    USER INFO
+==================================================*/
+
+
+.user-id {
+
+    color: #198754;
+
+    font-weight: 700;
+
+}
+
+
+.user-name {
+
+    font-weight: 700;
+
+    color: #212529;
+
+}
+
+
+/*==================================================
+                    STATUS
+==================================================*/
+
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+.status-badge.active {
+
+    background: #edf9f1;
+
+    color: #198754;
+
+}
+
+
+.status-badge.disabled {
+
+    background: #fff2f2;
+
+    color: #dc3545;
+
+}
+
+
+/*==================================================
+                    ROLE
+==================================================*/
+
+
+.role-admin,
+.role-user {
+
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+
+}
+
+
+.role-admin {
+
+    background: #fff8e1;
+
+    color: #d39e00;
+
+}
+
+
+.role-user {
+
+    background: #f1f3f5;
+
+    color: #495057;
+
+}
+
+
+/*==================================================
+                    EMPTY STATE
+==================================================*/
+
+
+.empty-users {
+
+    padding: 70px 20px;
+
+    text-align: center;
+
+    color: #6c757d;
+
+}
+
+
+.empty-users i {
+
+    color: #198754;
+
+}
+
+
+/*==================================================
+                    PAGINATION
+==================================================*/
+
+
+.table-footer {
+
+    background: #fff;
+
+    border-top: 1px solid #eef2f6;
+
+    padding: 22px;
+
+}
+
+
+.pagination {
+
+    gap: 8px;
+
+}
+
+
+.page-link {
+
+    border: none;
+
+    border-radius: 12px !important;
+
+    color: #198754;
+
+    font-weight: 600;
+
+    min-width: 44px;
+
+    height: 44px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    transition: .25s;
+
+    box-shadow: none !important;
+
+}
+
+
+.page-link:hover {
+
+    background: #198754;
+
+    color: #fff;
+
+    transform: translateY(-2px);
+
+}
+
+
+.page-item.active .page-link {
+
+    background: #198754;
+
+    color: #fff;
+
+}
+
+
+/*==================================================
+                    ANIMATION
+==================================================*/
+
+
+@keyframes fadeUser {
+
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(12px);
+
+    }
+
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+
+}
+
+
+/*==================================================
+                    RESPONSIVE
+==================================================*/
+
+
+@media (max-width: 992px) {
+
+
+    .page-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+}
+
+
+@media (max-width: 768px) {
+
+
+    .last-users-page {
+
+        padding: 18px;
+
+    }
+
+
+    .table-title {
+
+        font-size: 18px;
+
+    }
+
+
+    .search-btn {
+
+        min-width: 100px;
+
+    }
+
+
+}

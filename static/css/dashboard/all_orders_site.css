@@ -1,0 +1,566 @@
+/*==================================================
+                ALL ORDERS PAGE
+==================================================*/
+
+
+.orders-page {
+
+    padding: 30px;
+
+}
+
+
+
+/*==================================================
+                    HEADER
+==================================================*/
+
+
+.orders-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 28px;
+
+}
+
+
+
+.orders-title {
+
+    font-size: 32px;
+
+    font-weight: 700;
+
+    color: #1f2937;
+
+    margin-bottom: 6px;
+
+}
+
+
+
+.orders-subtitle {
+
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 15px;
+
+}
+
+
+
+/*==================================================
+                    SEARCH CARD
+==================================================*/
+
+
+.orders-card {
+
+    border: none;
+
+    border-radius: 20px;
+
+    background: #fff;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 35px rgba(0,0,0,.05);
+
+}
+
+
+
+.orders-card-body {
+
+    padding: 24px;
+
+}
+
+
+
+.orders-search {
+
+    min-height: 50px;
+
+    border-left: none;
+
+    border-right: none;
+
+    box-shadow: none !important;
+
+}
+
+
+
+.orders-search:focus {
+
+    border-color: #198754;
+
+    box-shadow: 0 0 0 .25rem rgba(25,135,84,.15) !important;
+
+}
+
+
+
+.search-btn {
+
+    min-width: 140px;
+
+    border-radius: 0 14px 14px 0;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+}
+
+.search-icon {
+
+    background: #198754;
+
+    color: #fff;
+
+    border: none;
+
+    border-radius: 14px 0 0 14px;
+
+    padding: 0 18px;
+
+}
+
+
+
+/*==================================================
+                    TABLE HEADER
+==================================================*/
+
+
+.orders-card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    background: #fff;
+
+    border-bottom: 1px solid #edf2f7;
+
+}
+
+
+
+.orders-card-header > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #212529;
+
+}
+
+
+
+.orders-card-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+
+
+.orders-count {
+
+    background: #edf8f1;
+
+    color: #198754;
+
+    font-weight: 700;
+
+    padding: 10px 22px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+
+}
+
+
+
+/*==================================================
+                    TABLE
+==================================================*/
+
+
+.orders-table {
+
+    margin: 0;
+
+}
+
+
+
+.orders-table thead th {
+
+    background: #f8f9fa;
+
+    border: none;
+
+    padding: 18px 20px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #495057;
+
+    white-space: nowrap;
+
+}
+
+
+
+.orders-table tbody td {
+
+    padding: 18px 20px;
+
+    vertical-align: middle;
+
+    border-top: 1px solid #eef2f6;
+
+}
+
+
+
+.orders-table tbody tr {
+
+    transition: .25s;
+
+    animation: fadeOrder .35s ease;
+
+}
+
+
+
+.orders-table tbody tr:hover {
+
+    background: #f8fffb;
+
+}
+
+
+
+/*==================================================
+                    ORDER ID
+==================================================*/
+
+
+.orders-table tbody td:first-child {
+
+    color: #198754;
+
+    font-weight: 700;
+
+}
+
+
+
+/*==================================================
+                    PAYMENT BADGES
+==================================================*/
+
+
+.paid-badge,
+.unpaid-badge {
+
+
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+
+}
+
+
+
+.paid-badge {
+
+    background: #edf9f1;
+
+    color: #198754;
+
+}
+
+
+
+.unpaid-badge {
+
+    background: #fff2f2;
+
+    color: #dc3545;
+
+}
+
+
+
+/*==================================================
+                    STATUS
+==================================================*/
+
+
+.orders-table .badge {
+
+    padding: 8px 15px;
+
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+}
+
+
+
+/*==================================================
+                    DETAIL BUTTON
+==================================================*/
+
+
+.orders-table .btn-outline-success {
+
+    border-radius: 12px;
+
+    padding: 8px 15px;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+}
+
+
+
+.orders-table .btn-outline-success:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 8px 20px rgba(25,135,84,.15);
+
+}
+
+
+
+/*==================================================
+                    EMPTY STATE
+==================================================*/
+
+
+.orders-table td.text-center {
+
+    padding: 70px 20px !important;
+
+    color: #6c757d;
+
+    font-size: 15px;
+
+}
+
+
+
+/*==================================================
+                    PAGINATION
+==================================================*/
+
+
+.pagination-wrapper {
+
+    background: #fff;
+
+    border-top: 1px solid #eef2f6;
+
+    padding: 22px;
+
+}
+
+
+
+.pagination {
+
+    gap: 8px;
+
+}
+
+
+
+.page-link {
+
+    border: none;
+
+    border-radius: 12px !important;
+
+    color: #198754;
+
+    font-weight: 600;
+
+    min-width: 44px;
+
+    height: 44px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition: .25s;
+
+    box-shadow: none !important;
+
+}
+
+
+
+.page-link:hover {
+
+    background: #198754;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+}
+
+
+
+.page-item.active .page-link {
+
+    background: #198754;
+
+    color: #fff;
+
+}
+
+
+
+/*==================================================
+                    ANIMATION
+==================================================*/
+
+
+@keyframes fadeOrder {
+
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(12px);
+
+    }
+
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+
+}
+
+
+
+/*==================================================
+                    RESPONSIVE
+==================================================*/
+
+
+@media(max-width:992px){
+
+
+    .orders-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+
+    }
+
+
+}
+
+
+
+@media(max-width:768px){
+
+
+    .orders-page {
+
+        padding: 18px;
+
+    }
+
+
+    .orders-title {
+
+        font-size: 26px;
+
+    }
+
+
+    .orders-card-header {
+
+        padding: 18px;
+
+    }
+
+
+    .orders-card-header > div {
+
+        font-size: 18px;
+
+    }
+
+
+    .orders-count {
+
+        padding: 8px 15px;
+
+    }
+
+
+}

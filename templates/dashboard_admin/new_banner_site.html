@@ -21,10 +21,15 @@
 
     <div class="banner-page">
 
-        <div class="banner-header">
+        <!-- =========================
+             PAGE HEADER
+        ========================== -->
+
+        <div class="banner-page-header">
 
             <div>
-                <h2 class="banner-title">
+
+                <h1 class="banner-page-title">
 
                     {% if banner %}
                         Edit Banner
@@ -32,106 +37,123 @@
                         Banner Management
                     {% endif %}
 
-                </h2>
+                </h1>
 
-                <p class="banner-subtitle">
-                    Manage homepage banners with a modern dashboard.
+                <p class="banner-page-subtitle">
+
+                    Manage homepage banners with a clean and modern dashboard.
+
                 </p>
+
             </div>
 
         </div>
 
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
         <div class="row g-4">
 
-            <!-- LEFT -->
+            <!-- =========================
+                 FORM
+            ========================== -->
+
             <div class="col-lg-8">
 
-                <div class="banner-card">
+                <div class="banner-form-card">
 
-                    <div class="banner-card-header">
+                    <div class="banner-form-header">
 
-                        <i class="bi bi-image-fill"></i>
+                        <div class="d-flex align-items-center">
 
-                        <span>
+                            <i class="bi bi-image-fill me-2"></i>
 
-                        {% if banner %}
-                            Update Banner
-                        {% else %}
-                            Create New Banner
-                        {% endif %}
+                            <span>
 
-                    </span>
+                            {% if banner %}
+                                Edit Banner
+                            {% else %}
+                                Create New Banner
+                            {% endif %}
+
+                        </span>
+
+                        </div>
 
                     </div>
 
-                    <div class="banner-card-body">
+                    <div class="banner-form-body">
 
-                        <form method="post" enctype="multipart/form-data">
+                        <form
+                                method="post"
+                                enctype="multipart/form-data"
+                                id="bannerForm">
 
                             {% csrf_token %}
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="banner-label">
+
                                     Banner Title
+
                                 </label>
 
                                 {{ forms.title }}
 
-                                {% if forms.title.errors %}
-                                    <small class="text-danger">
-                                        {{ forms.title.errors }}
-                                    </small>
-                                {% endif %}
-
                             </div>
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="banner-label">
+
                                     Description
+
                                 </label>
 
                                 {{ forms.description }}
 
-                                {% if forms.description.errors %}
-                                    <small class="text-danger">
-                                        {{ forms.description.errors }}
-                                    </small>
-                                {% endif %}
-
                             </div>
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="banner-label">
+
                                     Banner Image
+
                                 </label>
 
                                 {{ forms.picture }}
 
-                                {% if forms.picture.errors %}
-                                    <small class="text-danger">
-                                        {{ forms.picture.errors }}
-                                    </small>
-                                {% endif %}
-
                             </div>
 
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="banner-form-footer">
 
-                                <a href="{% url 'banner_management' %}" class="btn btn-light px-4">
+                                <a
+                                        href="{% url 'banner_management' %}"
+                                        class="btn btn-outline-danger cancel">
+
+                                    <i class="bi bi-x-circle"></i>
+
                                     Cancel
+
                                 </a>
 
-                                <button class="btn btn-success px-5">
+                                <button
+                                        type="submit"
+                                        class="btn btn-success banner-save-btn">
+
+                                    <i class="bi bi-check-circle-fill"></i>
 
                                     {% if banner %}
-                                        <i class="bi bi-check-circle"></i>
+
                                         Update Banner
+
                                     {% else %}
-                                        <i class="bi bi-plus-circle"></i>
+
                                         Create Banner
+
                                     {% endif %}
 
                                 </button>
@@ -146,62 +168,69 @@
 
             </div>
 
-            <!-- RIGHT -->
+            <!-- =========================
+         PREVIEW
+    ========================== -->
+
             <div class="col-lg-4">
 
-                <!-- Preview Card -->
-                <div class="banner-card mb-4">
+                <div class="banner-preview-card">
 
-                    <div class="banner-card-header">
+                    <div class="banner-preview-header">
 
-                        <i class="bi bi-card-image"></i>
+                        <div class="d-flex align-items-center">
 
-                        <span>Banner Preview</span>
+                            <i class="bi bi-card-image me-2"></i>
+
+                            <span>
+
+                            Banner Preview
+
+                        </span>
+
+                        </div>
 
                     </div>
 
-                    <div class="banner-card-body text-center">
+                    <div class="banner-preview-body">
 
-                        <div class="preview-box">
+                        <div class="banner-preview-wrapper">
 
                             {% if banner and banner.picture %}
 
-
-
-
-                                <img src="
-
-
-
-
-                                        {% if banner and banner.picture %}{{ banner.picture.url }}{% else %}{% static 'images/no-image.png' %}{% endif %}"
-                                     id="previewImage" class="preview-image preview-clickable" alt="Banner">
-
-
+                                <img
+                                        src="{{ banner.picture.url }}"
+                                        id="previewImage"
+                                        class="preview-image preview-clickable"
+                                        alt="Banner">
 
                             {% else %}
 
                                 <img
                                         src="{% static 'images/no-image.png' %}"
                                         id="previewImage"
-                                        class="preview-image"
+                                        class="banner-preview-image"
                                         alt="Preview">
 
                             {% endif %}
 
                         </div>
 
-                        <h5 class="mt-4">
+                        <h5 class="banner-preview-title">
 
                             {% if banner %}
+
                                 {{ banner.title }}
+
                             {% else %}
+
                                 Banner Preview
+
                             {% endif %}
 
                         </h5>
 
-                        <p class="text-muted small mb-0">
+                        <p class="banner-preview-text">
 
                             Upload a beautiful banner for your homepage.
 
@@ -215,32 +244,41 @@
 
         </div>
 
-        <!-- END ROW -->
         <!-- =========================
-         LATEST BANNERS
-    ========================== -->
+             TABLE
+        ========================== -->
 
-        <div class="banner-card mt-5">
+        <div class="banner-table-card mt-5">
 
-            <div class="banner-card-header d-flex justify-content-between align-items-center">
+            <div class="banner-table-header">
 
                 <div>
 
-                    <i class="bi bi-images"></i>
+                    <h3 class="banner-table-title">
 
-                    <span>Latest Banners</span>
+                        <i class="bi bi-images me-2"></i>
+
+                        Latest Banners
+
+                    </h3>
+
+                    <p class="banner-table-subtitle">
+
+                        Manage your homepage banners.
+
+                    </p>
 
                 </div>
 
-                <span class="badge bg-success rounded-pill">
+                <div class="banner-table-count">
 
-            {{ banners|length }} Banner
+                    {{ paginator.count }} Banner{{ paginator.count|pluralize }}
 
-        </span>
+                </div>
 
             </div>
 
-            <div class="banner-card-body p-0">
+            <div class="banner-table-body">
 
                 <div class="table-responsive">
 
@@ -250,14 +288,29 @@
 
                         <tr>
 
-                            <th width="110">Preview</th>
+                            <th width="130">
 
-                            <th>Title</th>
+                                Preview
 
-                            <th>Description</th>
+                            </th>
 
-                            <th width="180" class="text-center">
+                            <th>
+
+                                Title
+
+                            </th>
+
+                            <th>
+
+                                Description
+
+                            </th>
+
+                            <th width="170"
+                                class="text-center">
+
                                 Actions
+
                             </th>
 
                         </tr>
@@ -266,24 +319,24 @@
 
                         <tbody>
 
-                        {% for i in banners %}
+                        {% for banner_item in banners %}
 
                             <tr>
 
                                 <td>
 
                                     <img
-                                            src="{{ i.picture.url }}"
-                                            class="table-banner-image"
-                                            alt="{{ i.title }}">
+                                            src="{{ banner_item.picture.url }}"
+                                            class="banner-table-image preview-clickable"
+                                            alt="{{ banner_item.title }}">
 
                                 </td>
 
                                 <td>
 
-                                    <div class="fw-bold">
+                                    <div class="banner-name">
 
-                                        {{ i.title }}
+                                        {{ banner_item.title }}
 
                                     </div>
 
@@ -291,9 +344,9 @@
 
                                 <td>
 
-                                    <div class="table-description">
+                                    <div class="banner-description">
 
-                                        {{ i.description|truncatechars:80 }}
+                                        {{ banner_item.description|truncatechars:90 }}
 
                                     </div>
 
@@ -301,20 +354,19 @@
 
                                 <td>
 
-                                    <div class="d-flex justify-content-center gap-2">
+                                    <div class="banner-actions">
 
                                         <a
-                                                href="{% url 'banner_edit' i.id %}"
-                                                class="btn btn-edit">
+                                                href="{% url 'banner_edit' banner_item.id %}"
+                                                class="btn btn-outline-success banner-action-btn">
 
                                             <i class="bi bi-pencil-square"></i>
 
                                         </a>
 
                                         <a
-                                                href="{% url 'delete_banner' i.id %}"
-                                                class="btn btn-delete"
-                                                onclick="return confirm('Delete this banner?')">
+                                                href="{% url 'delete_banner' banner_item.id %}"
+                                                class="btn btn-outline-danger banner-btn-action delete-banner">
 
                                             <i class="bi bi-trash3"></i>
 
@@ -332,11 +384,11 @@
 
                                 <td colspan="4">
 
-                                    <div class="empty-banner">
+                                    <div class="banner-empty">
 
-                                        <i class="bi bi-image display-4"></i>
+                                        <i class="bi bi-images"></i>
 
-                                        <h4 class="mt-3">
+                                        <h4>
 
                                             No Banner Found
 
@@ -359,12 +411,75 @@
                         </tbody>
 
                     </table>
-
                 </div>
 
             </div>
 
         </div>
+
+        <!-- =========================
+             PAGINATION
+        ========================== -->
+
+        {% if is_paginated %}
+
+            <nav class="banner-pagination">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if page_obj.has_previous %}
+
+                        <li class="page-item">
+
+                            <a
+                                    class="page-link"
+                                    href="?page={{ page_obj.previous_page_number }}">
+
+                                Previous
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                    {% for page in paginator.page_range %}
+
+                        <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+
+                            <a
+                                    class="page-link"
+                                    href="?page={{ page }}">
+
+                                {{ page }}
+
+                            </a>
+
+                        </li>
+
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+
+                        <li class="page-item">
+
+                            <a
+                                    class="page-link"
+                                    href="?page={{ page_obj.next_page_number }}">
+
+                                Next
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        {% endif %}
 
         <div class="image-preview-modal" id="imagePreviewModal">
 
@@ -380,22 +495,13 @@
                     src="">
 
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer clearfix">
-            <div class="d-flex justify-content-center">
-                <div class="pagination">
-                    <div class="page-item"><a class="page-link" href="#">Previous</a></div>
-                    <div class="page-item"><a class="page-link" href="#">1</a></div>
-                    <div class="page-item"><a class="page-link" href="#">2</a></div>
-                    <div class="page-item"><a class="page-link" href="#">3</a></div>
-                    <div class="page-item"><a class="page-link" href="#">Next</a></div>
-                </div>
-            </div>
-        </div>
-        <!-- /.card-footer -->
     </div>
-    {% block custom_js %}
-        <script src="{% static 'js/dashboard/admin/new_banner_site.js' %}"></script>
-    {% endblock %}
+
+{% endblock %}
+
+{% block custom_js %}
+
+    <script src="{% static 'js/dashboard/admin/new_banner_site.js' %}"></script>
+
 {% endblock %}
 

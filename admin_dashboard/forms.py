@@ -53,15 +53,101 @@ class CategoryForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["category", "name", "slug", "description", "price", "stock", ]
-        widgets = {"description": forms.Textarea(attrs={"rows": 5})}
+
+        fields = [
+            "category",
+            "name",
+            "slug",
+            "description",
+            "price",
+            "stock",
+        ]
+
+        widgets = {
+
+            "category": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Product Name"
+                }
+            ),
+
+            "slug": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "product-slug"
+                }
+            ),
+
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 6,
+                    "placeholder": "Product Description"
+                }
+            ),
+
+            "price": forms.NumberInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+            "stock": forms.NumberInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+        }
 
 
 class ProductColorForm(forms.ModelForm):
     class Meta:
         model = ProductColor
-        fields = ["name", "color_code", "image", "stock", ]
-        widgets = {"color_code": forms.TextInput(attrs={"type": "color"})}
+
+        fields = [
+            "name",
+            "color_code",
+            "image",
+            "stock",
+        ]
+
+        widgets = {
+
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Color Name"
+                }
+            ),
+
+            "color_code": forms.TextInput(
+                attrs={
+                    "class": "form-control form-control-color",
+                    "type": "color"
+                }
+            ),
+
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+            "stock": forms.NumberInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+        }
 
 
 ProductColorFormSet = inlineformset_factory(
@@ -84,27 +170,33 @@ ProductColorEditFormSet = inlineformset_factory(
 class BannerForm(forms.ModelForm):
     class Meta:
         model = BannerMain
-        fields = ["title", "description", "picture"]
+
+        fields = "__all__"
 
         widgets = {
-            "title": forms.TextInput(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Banner Title"
-                }
-            ),
 
-            "description": forms.Textarea(
-                attrs={
-                    "class": "form-control",
-                    "rows": 4,
-                    "placeholder": "Banner Description"
-                }
-            ),
+            "title": forms.TextInput(attrs={
 
-            "picture": forms.ClearableFileInput(
-                attrs={
-                    "class": "form-control"
-                }
-            )
+                "class": "form-control banner-input",
+
+                "placeholder": "Enter banner title"
+
+            }),
+
+            "description": forms.Textarea(attrs={
+
+                "class": "form-control banner-textarea",
+
+                "rows": 5,
+
+                "placeholder": "Write banner description..."
+
+            }),
+
+            "picture": forms.ClearableFileInput(attrs={
+
+                "class": "form-control banner-file"
+
+            }),
+
         }

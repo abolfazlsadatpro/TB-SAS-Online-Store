@@ -1,144 +1,406 @@
 {% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
 {% load custom_filters_stor %}
+{% load static %}
+
 
 {% block title %}
-    Latest Order
+    All Orders
 {% endblock %}
+
 
 {% block meta_data %}
     <meta name="title" content="Dashboard Admin"/>
     <meta name="author" content="Abolfazl"/>
-    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="description" content="All Orders Management"/>
     <meta name="keywords" content="dashboard,adminlte"/>
 {% endblock %}
 
+
+
+{% block custom_css %}
+
+    <link rel="stylesheet" href="{% static 'css/dashboard/all_orders_site.css' %}">
+
+{% endblock %}
+
+
+
+
 {% block app_content %}
 
-    <div class="card m-1">
-        <div class="card-footer">
-            <form action="#" method="post">
-                <div class="input-group gap-2">
-                    <input type="text" name="message" placeholder="Type OrderID,MobileUser,EmailUser ..."
-                           class="form-control" aria-label="Type Message ...">
-                    <span class="input-group-append">
-                          <button type="button" class="btn btn-primary">Search</button>
-                        </span>
-                </div>
-            </form>
-        </div>
-    </div>
+
+    <div class="orders-page">
 
 
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Latest Orders</h3>
+        <!-- HEADER -->
 
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+        <div class="orders-header">
+
+            <div>
+
+                <h2 class="orders-title">
+                    All Orders
+                </h2>
+
+
+                <p class="orders-subtitle">
+                    Manage and track all customer orders from dashboard.
+                </p>
+
+
             </div>
+
+
         </div>
-        <!-- /.card-header -->
-        <div class="card-body p-0">
+
+
+        <!-- SEARCH -->
+
+
+        <div class="orders-card mt-4">
+
+
+            <div class="orders-card-body">
+
+
+                <form method="get">
+
+
+                    <div class="input-group">
+
+
+                        <input
+                                type="text"
+                                name="q"
+                                value="{{ request.GET.q }}"
+                                class="form-control orders-search"
+                                placeholder="Search Order ID, Customer, Mobile, Email..."
+                        >
+
+
+                        <button class="btn btn-success px-4">
+
+                            <i class="bi bi-search"></i>
+                            Search
+
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TABLE -->
+
+
+        <div class="orders-card mt-4">
+
+
+            <div class="orders-card-header">
+
+
+                <div>
+
+                    <i class="bi bi-cart-check-fill"></i>
+
+                    <span>
+                    Orders List
+                </span>
+
+
+                </div>
+
+
+                <span class="orders-count">
+
+                {{ orders.paginator.count|default:0 }} Orders
+
+            </span>
+
+
+            </div>
+
+
             <div class="table-responsive">
-                <table class="table m-0" role="table">
+
+
+                <table class="table orders-table">
+
+
                     <thead>
+
                     <tr>
-                        <th scope="col">Order ID</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Mobile</th>
-                        <th scope="col">IsPaid</th>
-                        <th scope="col">TotalPrice</th>
-                        <th scope="col">CreatedAt</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
+
+                        <th>
+                            Order ID
+                        </th>
+
+
+                        <th>
+                            Customer
+                        </th>
+
+
+                        <th>
+                            Mobile
+                        </th>
+
+
+                        <th>
+                            Payment
+                        </th>
+
+
+                        <th>
+                            Total Price
+                        </th>
+
+
+                        <th>
+                            Created At
+                        </th>
+
+
+                        <th>
+                            Status
+                        </th>
+
+
+                        <th>
+                            Action
+                        </th>
+
+
                     </tr>
+
+
                     </thead>
+
+
                     <tbody>
+
+
                     {% for order in orders %}
+
+
                         <tr>
-                            <td>
-                                {{ order.id }}
-                            </td>
-                            <td>
-                                <p>
-                                    {{ order.customer.user.first_name }} {{ order.customer.user.last_name }}
-                                </p>
-                            </td>
+
 
                             <td>
-                                {{ order.customer.user.phone_number }}
+
+                                #{{ order.id }}
+
                             </td>
 
+
                             <td>
+
+                                {{ order.customer.user.first_name }}
+
+                                {{ order.customer.user.last_name }}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ order.customer.phone }}
+
+                            </td>
+
+
+                            <td>
+
+
                                 {% if order.is_paid %}
-                                    <span class="badge text-bg-success"> Success Paid </span>
+
+                                    <span class="badge paid-badge">
+
+                            Success Paid
+
+                        </span>
+
+
                                 {% else %}
-                                    <span class="badge text-bg-danger"> Fail Paid </span>
+
+
+                                    <span class="badge unpaid-badge">
+
+                            Fail Paid
+
+                        </span>
+
+
                                 {% endif %}
+
+
                             </td>
 
+
                             <td>
+
                                 {{ order.total_price }}
+
                             </td>
 
+
                             <td>
+
                                 {{ order.created_at }}
+
                             </td>
+
+
                             <td>
+
                                 {{ order.status|show_status_order }}
+
                             </td>
 
+
                             <td>
+
+
                                 <a href="{% url 'detail_order_show' order.id %}"
-                                   class="btn btn-outline-primary">
-                                    Detail Order
+                                   class="btn btn-outline-success btn-sm">
+
+                                    <i class="bi bi-eye"></i>
+
+                                    Detail
+
                                 </a>
+
+
                             </td>
 
-                            <td>
-                                <div>
-                                    <form action="{% url 'order_status_update' %}" method="POST" class="gap-2">
-                                        {% csrf_token %}
-                                        <label>
-                                            <select class="form-control" name="status">
-                                                {% for key,value in choices %}
-                                                    <option value="{{ key }}">{{ value }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <input type="hidden" value="{{ order.id }}" name="order_id">
-                                            <button type="submit" class="btn btn-info m-1">
-                                                Update Status Order
-                                            </button>
-                                        </label>
-                                    </form>
-                                </div>
-                            </td>
+
                         </tr>
 
+
+
+                    {% empty %}
+
+
+                        <tr>
+
+                            <td colspan="8" class="text-center py-5">
+
+                                No orders found.
+
+                            </td>
+
+
+                        </tr>
+
+
                     {% endfor %}
+
+
                     </tbody>
+
+
                 </table>
+
+
             </div>
-            <!-- /.table-responsive -->
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer clearfix">
-            <div class="d-flex justify-content-center">
-                <div class="pagination">
-                    <div class="page-item"><a class="page-link" href="#">Previous</a></div>
-                    <div class="page-item"><a class="page-link" href="#">1</a></div>
-                    <div class="page-item"><a class="page-link" href="#">2</a></div>
-                    <div class="page-item"><a class="page-link" href="#">3</a></div>
-                    <div class="page-item"><a class="page-link" href="#">Next</a></div>
+
+
+            <!-- PAGINATION -->
+
+
+            {% if orders.has_other_pages %}
+
+                <div class="pagination-wrapper">
+
+                    <nav>
+
+                        <ul class="pagination justify-content-center">
+
+
+                            {% if orders.has_previous %}
+
+                                <li class="page-item">
+
+                                    <a class="page-link"
+                                       href="?page={{ orders.previous_page_number }}&q={{ request.GET.q }}">
+
+                                        Previous
+
+                                    </a>
+
+                                </li>
+
+                            {% endif %}
+
+
+
+
+                            {% for num in orders.paginator.page_range %}
+
+
+                                <li class="page-item
+{% if orders.number == num %}active{% endif %}">
+
+
+                                    <a class="page-link"
+                                       href="?page={{ num }}&q={{ request.GET.q }}">
+
+                                        {{ num }}
+
+                                    </a>
+
+
+                                </li>
+
+
+                            {% endfor %}
+
+
+
+
+                            {% if orders.has_next %}
+
+
+                                <li class="page-item">
+
+
+                                    <a class="page-link"
+                                       href="?page={{ orders.next_page_number }}&q={{ request.GET.q }}">
+
+                                        Next
+
+                                    </a>
+
+
+                                </li>
+
+
+                            {% endif %}
+
+
+                        </ul>
+
+
+                    </nav>
+
+
                 </div>
-            </div>
+
+            {% endif %}
+
+
         </div>
-        <!-- /.card-footer -->
+
+
     </div>
+
+
 {% endblock %}

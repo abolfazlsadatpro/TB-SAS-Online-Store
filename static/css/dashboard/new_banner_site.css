@@ -1,80 +1,98 @@
-/* =====================================
-   Banner Management Premium
-===================================== */
+/*==================================================
+                BANNER PAGE
+==================================================*/
 
 .banner-page {
+
     padding: 30px;
+
 }
 
-/* HEADER */
+/*==================================================
+                PAGE HEADER
+==================================================*/
 
-.banner-header {
+.banner-page-header {
+
     display: flex;
+
     justify-content: space-between;
+
     align-items: center;
-    margin-bottom: 30px;
+
+    margin-bottom: 32px;
+
 }
 
-.banner-title {
-    font-size: 34px;
+.banner-page-title {
+
+    font-size: 32px;
+
     font-weight: 700;
-    color: #222;
+
+    color: #212529;
+
     margin-bottom: 8px;
+
 }
 
-.banner-subtitle {
-    color: #777;
+.banner-page-subtitle {
+
     margin: 0;
+
+    color: #6c757d;
+
+    font-size: 15px;
+
 }
 
+/*==================================================
+                FORM CARD
+==================================================*/
 
-/* ==========================
-   CARD
-========================== */
-
-.banner-card {
+.banner-form-card {
 
     background: #fff;
 
-    border-radius: 20px;
-
-    border: none;
+    border-radius: 22px;
 
     overflow: hidden;
 
-    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
 
-    transition: .35s;
-
-}
-
-.banner-card:hover {
-
-    transform: translateY(-4px);
-
-    box-shadow: 0 20px 45px rgba(0, 0, 0, .08);
+    transition: .3s;
 
 }
 
-.banner-card-header {
+.banner-form-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
+
+}
+
+.banner-form-header {
 
     display: flex;
 
-    align-items: center;
+    justify-content: space-between;
 
-    gap: 12px;
+    align-items: center;
 
     padding: 22px 28px;
 
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #edf0f2;
 
-    font-weight: 700;
+    background: #fff;
 
     font-size: 18px;
 
+    font-weight: 700;
+
 }
 
-.banner-card-header i {
+.banner-form-header i {
 
     color: #198754;
 
@@ -82,88 +100,415 @@
 
 }
 
-.banner-card-body {
+.banner-form-body {
 
     padding: 28px;
 
 }
 
+/*==================================================
+                LABELS
+==================================================*/
 
-/* ==========================
-   INPUTS
-========================== */
+.banner-label {
 
-.form-label {
-
-    font-weight: 700;
+    display: block;
 
     margin-bottom: 10px;
 
+    font-weight: 600;
+
+    color: #343a40;
+
 }
 
-.form-control {
+/*==================================================
+                INPUTS
+==================================================*/
 
-    border-radius: 14px;
+.banner-form-body input[type=text],
+.banner-form-body textarea,
+.banner-form-body input[type=file],
+.banner-form-body select {
 
-    border: 1px solid #dfe3e8;
+    width: 100%;
 
     min-height: 52px;
 
+    border: 1px solid #dee2e6;
+
+    border-radius: 14px;
+
+    padding: 12px 16px;
+
     transition: .25s;
+
+    background: #fff;
 
     box-shadow: none;
 
 }
 
-textarea.form-control {
+.banner-form-body textarea {
 
-    min-height: 140px;
+    min-height: 150px;
+
+    resize: vertical;
 
 }
 
-.form-control:focus {
+.banner-form-body input:focus,
+.banner-form-body textarea:focus,
+.banner-form-body select:focus {
 
     border-color: #198754;
 
-    box-shadow: 0 0 0 .18rem rgba(25, 135, 84, .15);
+    box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .15);
+
+    outline: none;
 
 }
 
+/*==================================================
+                FOOTER
+==================================================*/
 
-/* ==========================
-   BUTTONS
-========================== */
+.banner-form-footer {
 
-.btn-success {
+    display: flex;
 
-    border-radius: 14px;
+    justify-content: flex-end;
 
-    padding: 12px 30px;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 30px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #eef2f6;
+
+}
+
+.banner-cancel-btn {
+
+    border-radius: 12px;
+
+    padding: 10px 22px;
+
+}
+
+.banner-save-btn {
+
+    border-radius: 12px;
+
+    padding: 11px 28px;
 
     font-weight: 600;
 
-}
-
-.btn-light {
-
-    border-radius: 14px;
-
-    padding: 12px 30px;
+    transition: .25s;
 
 }
 
+.banner-save-btn:hover {
 
-/* ==========================
-   PREVIEW
-========================== */
+    transform: translateY(-2px);
 
-.preview-box {
+}
 
-    height: 270px;
+/*==================================================
+                PREVIEW CARD
+==================================================*/
 
-    border: 2px dashed #d9d9d9;
+.banner-preview-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+
+    position: sticky;
+
+    top: 25px;
+
+}
+
+.banner-preview-header {
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    background: #fff;
+
+}
+
+.banner-preview-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+.banner-preview-body {
+
+    padding: 25px;
+
+    text-align: center;
+
+}
+
+.banner-preview-wrapper {
+
+    border: 2px dashed #dee2e6;
 
     border-radius: 18px;
+
+    overflow: hidden;
+
+    background: #fafafa;
+
+}
+
+.banner-preview-image {
+
+    width: 100%;
+
+    height: 260px;
+
+    object-fit: cover;
+
+    transition: .3s;
+
+}
+
+.banner-preview-image:hover {
+
+    transform: scale(1.02);
+
+}
+
+.banner-preview-title {
+
+    margin-top: 24px;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: #212529;
+
+}
+
+.banner-preview-text {
+
+    margin-top: 10px;
+
+    color: #6c757d;
+
+    line-height: 1.7;
+
+}
+
+/*=====================================
+        BANNER TABLE
+=====================================*/
+
+.banner-table {
+    margin: 0;
+}
+
+.banner-table thead th {
+    padding: 18px 22px;
+    border: none;
+    background: #f8fafc;
+    font-weight: 700;
+    color: #495057;
+    white-space: nowrap;
+}
+
+.banner-table tbody td {
+    padding: 18px 22px;
+    vertical-align: middle;
+    border-top: 1px solid #edf2f7;
+}
+
+.banner-table tbody tr {
+    transition: .25s;
+}
+
+.banner-table tbody tr:hover {
+    background: #fbfdfc;
+}
+
+
+/*=====================================
+        TABLE IMAGE
+=====================================*/
+
+.banner-table-image {
+    width: 95px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+    cursor: pointer;
+    transition: .25s;
+}
+
+.banner-table-image:hover {
+    transform: scale(1.05);
+}
+
+
+/*=====================================
+        TITLE
+=====================================*/
+
+.banner-item-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #212529;
+}
+
+.banner-item-desc {
+    color: #6c757d;
+    line-height: 1.7;
+    max-width: 500px;
+}
+
+
+/*=====================================
+        ACTION BUTTONS
+=====================================*/
+
+.banner-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.banner-btn-action {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .25s;
+}
+
+.banner-btn-action:hover {
+    transform: translateY(-2px);
+}
+
+
+/*=====================================
+        EMPTY
+=====================================*/
+
+.banner-empty {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.banner-empty i {
+    color: #198754;
+    opacity: .35;
+}
+
+.banner-empty h5 {
+    margin-top: 18px;
+    font-weight: 700;
+}
+
+
+/*=====================================
+        PAGINATION
+=====================================*/
+
+.banner-pagination {
+    padding: 30px 0 10px;
+}
+
+.banner-pagination .pagination {
+    gap: 8px;
+}
+
+.banner-pagination .page-link {
+    border: none;
+    border-radius: 12px;
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #198754;
+    background: #fff;
+
+    font-weight: 600;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
+
+    transition: .25s;
+}
+
+.banner-pagination .page-link:hover {
+    background: #198754;
+    color: #fff;
+}
+
+.banner-pagination .page-item.active .page-link {
+    background: #198754;
+    color: #fff;
+}
+
+
+/*=====================================
+        IMAGE PREVIEW
+=====================================*/
+
+.preview-clickable {
+    cursor: pointer;
+}
+
+.image-preview-modal {
+
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, .88);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .3s;
+
+    z-index: 99999;
+}
+
+.image-preview-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.preview-wrapper {
+
+    height: 320px;
 
     display: flex;
 
@@ -171,69 +516,272 @@ textarea.form-control {
 
     align-items: center;
 
+    border: 2px dashed #e3e7eb;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
     background: #fafafa;
 
 }
 
 .preview-image {
 
+    max-width: 100%;
+
+    max-height: 280px;
+
+    width: auto;
+
+    height: auto;
+
+    object-fit: contain;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+.preview-image:hover {
+
+    transform: scale(1.03);
+
+}
+
+.close-preview:hover {
+    color: #198754;
+}
+
+@keyframes bannerZoom {
+
+    from {
+        opacity: 0;
+        transform: scale(.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+
+/*=====================================
+        RESPONSIVE
+=====================================*/
+
+@media (max-width: 991px) {
+
+    .banner-page {
+        padding: 18px;
+    }
+
+    .banner-preview-card {
+        margin-top: 20px;
+        position: static !important;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .banner-table-image {
+
+        width: 70px;
+        height: 52px;
+
+    }
+
+    .banner-card-body {
+        padding: 20px;
+    }
+
+    .banner-form-footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .banner-form-footer .btn {
+        width: 100%;
+    }
+
+}
+
+.banner-input,
+.banner-textarea,
+.banner-file {
+
     width: 100%;
 
-    height: 100%;
+    border: 1px solid #d8dee6;
 
-    object-fit: cover;
+    border-radius: 14px;
 
-    border-radius: 16px;
+    padding: 12px 16px;
+
+    font-size: 15px;
+
+    transition: .25s;
+
+    background: #fff;
 
 }
 
+.banner-textarea {
 
-/* ==========================
-   TIPS
-========================== */
+    min-height: 140px;
 
-.tips-list {
+    resize: vertical;
 
-    list-style: none;
+}
+
+.banner-input:focus,
+.banner-textarea:focus,
+.banner-file:focus {
+
+    border-color: #198754;
+
+    box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .15);
+
+    outline: none;
+
+}
+
+.banner-card input.form-control,
+.banner-card textarea.form-control,
+.banner-card select.form-control,
+.banner-card select.form-select {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 12px 16px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    color: #212529;
+
+    background: #fff;
+
+    border: 1px solid #d9dee5;
+
+    border-radius: 14px;
+
+    min-height: 52px;
+
+    box-shadow: none;
+
+}
+
+.banner-card textarea.form-control {
+
+    min-height: 150px;
+
+    resize: vertical;
+
+}
+
+.banner-card input:focus,
+.banner-card textarea:focus,
+.banner-card select:focus {
+
+    border-color: #198754;
+
+    box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .15);
+
+}
+
+/*=====================================
+        BANNER TABLE
+=====================================*/
+
+.banner-table-card {
+
+    margin-top: 40px;
+
+    background: #fff;
+
+    border: none;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .05);
+
+}
+
+.banner-table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px 25px;
+
+    background: #fff;
+
+    border-bottom: 1px solid #edf2f7;
+
+}
+
+.banner-table-title {
 
     margin: 0;
-
-    padding: 0;
-
-}
-
-.tips-list li {
 
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
 
-    padding: 12px 0;
+    font-size: 20px;
 
-    border-bottom: 1px solid #eee;
+    font-weight: 700;
 
-}
-
-.tips-list li:last-child {
-
-    border: none;
+    color: #212529;
 
 }
 
-.tips-list i {
+.banner-table-title i {
 
     color: #198754;
 
-    font-size: 18px;
+}
+
+.banner-table-subtitle {
+
+    margin: 4px 0 0;
+
+    color: #6c757d;
+
+    font-size: 14px;
 
 }
 
+.banner-table-count {
 
-/* ==========================
-   TABLE
-========================== */
+    background: #edf8f1;
+
+    color: #198754;
+
+    padding: 8px 18px;
+
+    border-radius: 40px;
+
+    font-weight: 700;
+
+    font-size: 14px;
+
+}
 
 .banner-table {
 
@@ -241,13 +789,9 @@ textarea.form-control {
 
 }
 
-.banner-table thead {
+.banner-table thead th {
 
     background: #f8f9fa;
-
-}
-
-.banner-table thead th {
 
     border: none;
 
@@ -255,13 +799,19 @@ textarea.form-control {
 
     font-weight: 700;
 
+    color: #495057;
+
+    white-space: nowrap;
+
 }
 
-.banner-table td {
+.banner-table tbody td {
 
     padding: 18px;
 
     vertical-align: middle;
+
+    border-top: 1px solid #eef2f6;
 
 }
 
@@ -273,316 +823,19 @@ textarea.form-control {
 
 .banner-table tbody tr:hover {
 
-    background: #f8fff9;
+    background: #f8fffb;
 
 }
 
-
-/* ==========================
-   IMAGE
-========================== */
-
-.table-banner-image {
-
-    width: 90px;
-
-    height: 65px;
-
+.cancel .btn-outline-danger {
+    min-width: 145px;
     border-radius: 12px;
-
-    object-fit: cover;
-
-    box-shadow: 0 5px 18px rgba(0, 0, 0, .12);
-
+    padding: 13px;
 }
 
-
-/* ==========================
-   DESCRIPTION
-========================== */
-
-.table-description {
-
-    color: #666;
-
-    max-width: 420px;
-
-}
-
-
-/* ==========================
-   ACTIONS
-========================== */
-
-.btn-edit {
-
-    width: 44px;
-
-    height: 44px;
-
+.btn-success .banner-save-btn {
+    min-width: 145px;
     border-radius: 12px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background: #198754;
-
-    color: #fff;
-
-    transition: .25s;
-
+    padding: 13px;
 }
 
-.btn-edit:hover {
-
-    background: #157347;
-
-    color: #fff;
-
-    transform: translateY(-2px);
-
-}
-
-.btn-delete {
-
-    width: 44px;
-
-    height: 44px;
-
-    border-radius: 12px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background: #dc3545;
-
-    color: #fff;
-
-    transition: .25s;
-
-}
-
-.btn-delete:hover {
-
-    background: #bb2d3b;
-
-    color: #fff;
-
-    transform: translateY(-2px);
-
-}
-
-
-/* ==========================
-   EMPTY
-========================== */
-
-.empty-banner {
-
-    text-align: center;
-
-    padding: 70px 30px;
-
-}
-
-.empty-banner i {
-
-    color: #198754;
-
-    opacity: .35;
-
-}
-
-.empty-banner h4 {
-
-    margin-top: 20px;
-
-    font-weight: 700;
-
-}
-
-.empty-banner p {
-
-    color: #777;
-
-}
-
-
-/* ==========================
-   BADGE
-========================== */
-
-.badge {
-
-    padding: 10px 16px;
-
-    font-size: 13px;
-
-}
-
-
-/* ==========================
-   RESPONSIVE
-========================== */
-
-@media (max-width: 992px) {
-
-    .banner-page {
-
-        padding: 15px;
-
-    }
-
-    .banner-header {
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 15px;
-
-    }
-
-    .preview-box {
-
-        height: 220px;
-
-    }
-
-}
-
-@media (max-width: 768px) {
-
-    .banner-title {
-
-        font-size: 28px;
-
-    }
-
-    .table-banner-image {
-
-        width: 70px;
-
-        height: 55px;
-
-    }
-
-    .banner-card-body {
-
-        padding: 18px;
-
-    }
-
-}
-
-/* ==========================
-   IMAGE PREVIEW MODAL
-========================== */
-
-.preview-clickable {
-
-    cursor: pointer;
-
-    transition: .35s;
-
-}
-
-.preview-clickable:hover {
-
-    transform: scale(1.02);
-
-}
-
-.image-preview-modal {
-
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(0, 0, 0, .88);
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transition: .35s;
-
-    z-index: 999999;
-
-}
-
-.image-preview-modal.show {
-
-    opacity: 1;
-
-    visibility: visible;
-
-}
-
-.preview-modal-image {
-
-    max-width: 90%;
-
-    max-height: 88%;
-
-    border-radius: 18px;
-
-    box-shadow: 0 20px 70px rgba(0, 0, 0, .45);
-
-    animation: zoomIn .25s ease;
-
-}
-
-.close-preview {
-
-    position: absolute;
-
-    top: 30px;
-
-    right: 40px;
-
-    font-size: 32px;
-
-    color: white;
-
-    cursor: pointer;
-
-}
-
-.close-preview:hover {
-
-    color: #198754;
-
-}
-
-@keyframes zoomIn {
-
-    from {
-
-        transform: scale(.8);
-
-        opacity: 0;
-
-    }
-
-    to {
-
-        transform: scale(1);
-
-        opacity: 1;
-
-    }
-
-}

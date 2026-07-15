@@ -1,81 +1,453 @@
 {% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
 
+{% load static %}
+
+
 {% block title %}
-    Inbox Show
+    Inbox Manager
 {% endblock %}
 
-{% block meta_data %}
-    <meta name="title" content="Dashboard Admin"/>
-    <meta name="author" content="Abolfazl"/>
-    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
-    <meta name="keywords" content="dashboard,adminlte"/>
+
+
+{% block custom_css %}
+
+    <link rel="stylesheet" href="{% static 'css/dashboard/inbox_manager.css' %}">
+
 {% endblock %}
+
+
+
 
 {% block app_content %}
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <h3 class="card-title">Inbox Manager</h3>
 
-            <div class="card-tools">
-                <ul class="pagination pagination-sm float-end">
-                    <li class="page-item">
-                        <a class="page-link" href="#">«</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">»</a>
-                    </li>
-                </ul>
+
+    <div class="inbox-page">
+
+
+        <div class="inbox-header">
+
+            <div>
+
+
+                <h2 class="inbox-title">
+                    Inbox Manager
+                </h2>
+
+
+                <p class="inbox-subtitle">
+                    Manage customer messages and requests.
+                </p>
+
+
             </div>
+
+
         </div>
-        <!-- /.card-header -->
-        <div class="card-body p-0">
-            <table class="table" role="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Operate</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in inboxes %}
-                <tr class="align-middle">
-                    <td>
-                        <div class="accordion-item">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ item.id }}" aria-expanded="false" aria-controls="collapseOne">
-                            {{ item.name }} - {{ item.email }} - {{ item.created_at }}
-                          </button>
-                        </h2>
-                        <div id="collapseOne{{ item.id }}"  class="accordion-collapse collapse" data-bs-parent="#accordionExample" style="">
-                          <div class="accordion-body">
-                            <strong>
-                                {{ item.message }}
-                            </strong>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                        <button class="btn btn-secondary">
-                            Seen
+
+
+        <div class="inbox-card mt-4">
+
+
+            <div class="inbox-card-body">
+
+
+                <form method="get">
+
+
+                    <div class="input-group">
+
+
+                        <input
+
+                                type="text"
+
+                                name="q"
+
+                                value="{{ request.GET.q }}"
+
+                                class="form-control inbox-search"
+
+                                placeholder="Search Name, Email, Subject..."
+
+                        >
+
+
+                        <button class="btn btn-success px-4">
+
+
+                            <i class="bi bi-search"></i>
+
+                            Search
+
+
                         </button>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
         </div>
-        <!-- /.card-body -->
+
+
+        <div class="inbox-card mt-4">
+
+
+            <div class="inbox-card-header">
+
+
+                <div>
+
+                    <i class="bi bi-envelope-fill"></i>
+
+                    Messages List
+
+                </div>
+
+
+                <span class="inbox-count">
+
+{{ inboxes.paginator.count|default:0 }} Messages
+
+</span>
+
+
+            </div>
+
+
+            <div class="table-responsive">
+
+
+                <table class="table inbox-table">
+
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Message
+                        </th>
+
+
+                        <th>
+                            Status
+                        </th>
+
+
+                        <th>
+                            Action
+                        </th>
+
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for item in inboxes %}
+
+
+                        <tr>
+
+
+                            <td>
+
+
+                                <div class="accordion">
+
+
+                                    <div class="accordion-item">
+
+
+                                        <h2 class="accordion-header">
+
+
+                                            <button
+
+                                                    class="accordion-button collapsed"
+
+                                                    type="button"
+
+                                                    data-bs-toggle="collapse"
+
+                                                    data-bs-target="#message{{ item.id }}"
+
+                                            >
+
+
+                                                {{ item.name }}
+
+                                                -
+                                                {{ item.email }}
+
+                                                -
+                                                {{ item.created_at|date:"Y-m-d" }}
+
+
+                                            </button>
+
+
+                                        </h2>
+
+
+                                        <div
+
+                                                id="message{{ item.id }}"
+
+                                                class="accordion-collapse collapse"
+
+                                        >
+
+
+                                            <div class="accordion-body">
+
+
+                                                <strong>
+
+                                                    Subject:
+
+                                                </strong>
+
+                                                {{ item.subject }}
+
+
+                                                <br><br>
+
+
+                                                {{ item.message }}
+
+
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </td>
+
+
+                            <td>
+
+
+                                {% if item.is_read %}
+
+
+                                    <span class="badge read-badge">
+
+Read
+
+</span>
+
+
+
+                                {% else %}
+
+
+                                    <span class="badge unread-badge">
+
+Unread
+
+</span>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+                            <td>
+
+
+                                {% if not item.is_read %}
+
+
+                                    <a
+
+                                            href="{% url 'inbox_seen' item.id %}"
+
+                                            class="btn btn-outline-success btn-sm"
+
+                                    >
+
+
+                                        <i class="bi bi-check2"></i>
+
+                                        Seen
+
+
+                                    </a>
+
+
+
+                                {% else %}
+
+
+                                    <button class="btn btn-secondary btn-sm" disabled>
+
+                                        Seen
+
+                                    </button>
+
+
+                                {% endif %}
+
+
+                            </td>
+
+
+                        </tr>
+
+
+
+                    {% empty %}
+
+
+                        <tr>
+
+
+                            <td colspan="3" class="text-center py-5">
+
+                                No messages found.
+
+                            </td>
+
+
+                        </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            {% if inboxes.has_other_pages %}
+
+
+                <div class="pagination-wrapper">
+
+
+                    <nav>
+
+
+                        <ul class="pagination justify-content-center">
+
+
+                            {% if inboxes.has_previous %}
+
+
+                                <li class="page-item">
+
+
+                                    <a class="page-link"
+
+                                       href="?page={{ inboxes.previous_page_number }}&q={{ request.GET.q }}">
+
+                                        Previous
+
+                                    </a>
+
+
+                                </li>
+
+
+                            {% endif %}
+
+
+
+
+                            {% for num in inboxes.paginator.page_range %}
+
+
+                                <li class="page-item {% if inboxes.number == num %}active{% endif %}">
+
+
+                                    <a class="page-link"
+
+                                       href="?page={{ num }}&q={{ request.GET.q }}">
+
+                                        {{ num }}
+
+                                    </a>
+
+
+                                </li>
+
+
+
+                            {% endfor %}
+
+
+
+
+                            {% if inboxes.has_next %}
+
+
+                                <li class="page-item">
+
+
+                                    <a class="page-link"
+
+                                       href="?page={{ inboxes.next_page_number }}&q={{ request.GET.q }}">
+
+                                        Next
+
+                                    </a>
+
+
+                                </li>
+
+
+                            {% endif %}
+
+
+                        </ul>
+
+
+                    </nav>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
     </div>
+
+
 
 {% endblock %}

@@ -56,9 +56,32 @@ class ListOrders(ListView):
     paginate_by = 10
     context_object_name = 'orders'
 
+    def get_queryset(self):
+        qs = Order.objects.select_related(
+            "customer",
+            "customer__user"
+        ).order_by("-id")
+
+        q = self.request.GET.get("q")
+
+        if q:
+            qs = qs.filter(
+                Q(id__icontains=q) |
+                Q(customer__user__first_name__icontains=q) |
+                Q(customer__user__last_name__icontains=q) |
+                Q(customer__user__email__icontains=q) |
+                Q(customer__user__phone_number__icontains=q)
+            )
+
+        return qs
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['choices'] = get_tuple_status()
+
+        context["choices"] = get_tuple_status()
+
+        context["orders"] = context["page_obj"]
+
         return context
 
 
@@ -105,6 +128,29 @@ def search_customers_item(request):
         return JsonResponse(result, safe=False)
 
 
+def search_product_item(request):
+    if request.method == 'GET':
+        query = request.GET.get('q', '')
+
+        products = Product.objects.filter(
+            Q(name__icontains=query) |
+            Q(slug__icontains=query)
+        )[:10]
+
+        result = [
+
+            {
+                'id': product.id,
+                'text': product.name
+            }
+
+            for product in products
+
+        ]
+
+        return JsonResponse(result, safe=False)
+
+
 @never_cache
 @login_required(login_url='/')
 def new_order_site(request):
@@ -141,10 +187,42 @@ def new_order_site(request):
 
 
 class InboxManager(ListView):
-    paginate_by = 10
-    context_object_name = 'inboxes'
     model = ContactMessage
     template_name = 'dashboard_admin/inbox_manager.html'
+    context_object_name = 'inboxes'
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = ContactMessage.objects.order_by("-created_at")
+
+        q = self.request.GET.get("q")
+
+        if q:
+            qs = qs.filter(
+                Q(name__icontains=q) |
+                Q(email__icontains=q) |
+                Q(subject__icontains=q) |
+                Q(message__icontains=q)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["inboxes"] = context["page_obj"]
+
+        return context
+
+
+def inbox_seen(request, pk):
+    inbox = get_object_or_404(ContactMessage, id=pk)
+
+    inbox.is_read = True
+
+    inbox.save()
+
+    return redirect("inbox_manager")
 
 
 class VoteManager(ListView):
@@ -152,6 +230,32 @@ class VoteManager(ListView):
     template_name = 'dashboard_admin/vote_manager.html'
     context_object_name = 'votes'
     paginate_by = 10
+
+    def get_queryset(self):
+        qs = VoteProduct.objects.select_related(
+            "user",
+            "product"
+        ).order_by("-created_at")
+
+        q = self.request.GET.get("q")
+
+        if q:
+            qs = qs.filter(
+                Q(user__first_name__icontains=q) |
+                Q(user__last_name__icontains=q) |
+                Q(user__email__icontains=q) |
+                Q(product__name__icontains=q) |
+                Q(description__icontains=q)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["votes"] = context["page_obj"]
+
+        return context
 
 
 def change_publish_vote(request, pk):
@@ -313,28 +417,81 @@ class BannerManagement(ListView):
     model = BannerMain
     template_name = "dashboard_admin/new_banner_site.html"
     context_object_name = "banners"
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = BannerMain.objects.all().order_by("-id")
+
+        q = self.request.GET.get("q")
+
+        if q:
+            qs = qs.filter(
+                Q(title__icontains=q) |
+                Q(description__icontains=q)
+            )
+
+        return qs
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
 
-        category = None
+        banner = None
 
         if "id" in self.kwargs:
-            category = get_object_or_404(
-                Category,
+            banner = get_object_or_404(
+                BannerMain,
                 id=self.kwargs["id"]
             )
 
-        context["forms"] = CategoryForm(instance=category)
-        context["category"] = category
+        context["banner"] = banner
 
-        # لیست جدول
-        context["categories"] = context["page_obj"]
+        context["forms"] = BannerForm(instance=banner)
 
-        # درخت
-        context["tree"] = build_category_tree()
+        context["banners"] = context["page_obj"]
 
         return context
+
+    def post(self, request, *args, **kwargs):
+
+        banner = None
+
+        if "id" in self.kwargs:
+            banner = get_object_or_404(
+                BannerMain,
+                id=self.kwargs["id"]
+            )
+
+        form = BannerForm(
+            request.POST,
+            request.FILES,
+            instance=banner
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            if banner:
+                messages.success(
+                    request,
+                    "Banner updated successfully."
+                )
+            else:
+                messages.success(
+                    request,
+                    "Banner created successfully."
+                )
+
+            return redirect("banner_management")
+
+        self.object_list = self.get_queryset()
+
+        context = self.get_context_data()
+
+        context["forms"] = form
+
+        return self.render_to_response(context)
 
 
 def build_category_tree(parent=None):

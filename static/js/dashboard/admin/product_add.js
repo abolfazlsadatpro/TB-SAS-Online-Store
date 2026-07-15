@@ -5,13 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const template = document.getElementById("emptyFormTemplate");
     const totalForms = document.getElementById("id_colors-TOTAL_FORMS");
 
-    // ===========================
-    // Add Color Card
-    // ===========================
+    // ===========================================
+    // Add New Color Card
+    // ===========================================
 
     addButton.addEventListener("click", () => {
 
-        let index = parseInt(totalForms.value);
+        const index = parseInt(totalForms.value);
 
         let html = template.innerHTML.replace(/__prefix__/g, index);
 
@@ -19,71 +19,103 @@ document.addEventListener("DOMContentLoaded", () => {
 
         totalForms.value = index + 1;
 
-        const card = container.lastElementChild;
+        const newCard = container.lastElementChild;
 
-        card.style.opacity = 0;
-        card.style.transform = "translateY(25px)";
+        newCard.style.opacity = "0";
+        newCard.style.transform = "translateY(25px)";
 
-        setTimeout(() => {
+        requestAnimationFrame(() => {
 
-            card.style.transition = ".35s";
-            card.style.opacity = 1;
-            card.style.transform = "translateY(0px)";
+            newCard.style.transition = ".35s ease";
 
-        }, 50);
+            newCard.style.opacity = "1";
+            newCard.style.transform = "translateY(0)";
+
+        });
+
+        refreshColorNumbers();
 
     });
 
-    // ===========================
+    // ===========================================
     // Remove Color Card
-    // ===========================
+    // ===========================================
 
-    container.addEventListener("click", e => {
+    container.addEventListener("click", function (e) {
 
-        if (!e.target.closest(".remove-color"))
-            return;
+        const btn = e.target.closest(".remove-color");
 
-        const card = e.target.closest(".color-card");
+        if (!btn) return;
+
+        const card = btn.closest(".color-card");
 
         const deleteInput = card.querySelector("input[name$='-DELETE']");
 
-        if (deleteInput) {
+        card.classList.add("removing");
 
-            deleteInput.checked = true;
+        setTimeout(() => {
 
-            card.style.transition = ".3s";
-            card.style.opacity = 0;
-            card.style.transform = "scale(.95)";
+            if (deleteInput) {
 
-            setTimeout(() => {
+                deleteInput.checked = true;
 
                 card.style.display = "none";
 
-            }, 300);
-
-        } else {
-
-            card.style.transition = ".3s";
-            card.style.opacity = 0;
-            card.style.transform = "scale(.95)";
-
-            setTimeout(() => {
+            } else {
 
                 card.remove();
 
-            }, 300);
+            }
 
-        }
+            refreshColorNumbers();
+
+        }, 450);
 
     });
 
-    // ===========================
-    // Image Preview
-    // ===========================
+    // ===========================================
+    // Refresh Color Numbers
+    // ===========================================
 
-    container.addEventListener("change", function (e) {
+    function refreshColorNumbers() {
 
-        if (!e.target.type.includes("file"))
+        const cards = container.querySelectorAll(".color-card");
+
+        let counter = 1;
+
+        cards.forEach(card => {
+
+            if (card.style.display === "none")
+                return;
+
+            const title = card.querySelector(".color-card-title");
+
+            if (title) {
+
+                title.innerHTML =
+                    `<i class="bi bi-droplet-half"></i> Color ${counter}`;
+
+            }
+
+            counter++;
+
+        });
+
+    }
+
+    refreshColorNumbers();
+
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ===========================================
+    // Live Image Preview
+    // ===========================================
+
+    document.addEventListener("change", function (e) {
+
+        if (!e.target.matches('input[type="file"]'))
             return;
 
         const file = e.target.files[0];
@@ -91,19 +123,24 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!file)
             return;
 
-        let preview = e.target.parentNode.querySelector(".preview-image");
+        const card = e.target.closest(".color-card");
+
+        let preview = card.querySelector(".color-preview-image");
 
         if (!preview) {
 
+            const wrapper = document.createElement("div");
+
+            wrapper.className = "color-image-preview";
+
             preview = document.createElement("img");
 
-            preview.className = "preview-image mt-3 rounded border shadow-sm";
+            preview.className =
+                "table-banner-image preview-clickable color-preview-image";
 
-            preview.style.width = "130px";
+            wrapper.appendChild(preview);
 
-            preview.style.objectFit = "cover";
-
-            e.target.parentNode.appendChild(preview);
+            card.querySelector(".banner-card-body").appendChild(wrapper);
 
         }
 
@@ -111,34 +148,132 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-    // ===========================
+    // ===========================================
     // Live Color Preview
-    // ===========================
+    // ===========================================
 
-    container.addEventListener("input", function (e) {
+    document.addEventListener("input", function (e) {
 
         if (!e.target.name.includes("color_code"))
             return;
 
-        let badge = e.target.parentNode.querySelector(".live-color");
+        const parent = e.target.parentElement;
+
+        let badge = parent.querySelector(".live-color");
 
         if (!badge) {
 
             badge = document.createElement("div");
 
-            badge.className = "live-color mt-2 rounded";
+            badge.className = "live-color";
 
-            badge.style.width = "40px";
-            badge.style.height = "40px";
-            badge.style.border = "2px solid #ddd";
+            badge.style.width = "42px";
+            badge.style.height = "42px";
+            badge.style.borderRadius = "10px";
+            badge.style.marginTop = "12px";
+            badge.style.border = "2px solid #e9ecef";
+            badge.style.transition = ".25s";
 
-            e.target.parentNode.appendChild(badge);
+            parent.appendChild(badge);
 
         }
 
-        badge.style.background = e.target.value;
+        badge.style.backgroundColor = e.target.value;
+
+    });
+
+    // ===========================================
+    // Image Preview Modal
+    // ===========================================
+
+    const modal = document.querySelector(".image-preview-modal");
+
+    const modalImage = document.querySelector(".preview-modal-image");
+
+    const closeButton = document.querySelector(".close-preview");
+
+    document.addEventListener("click", function (e) {
+
+        const image = e.target.closest(".preview-clickable");
+
+        if (!image)
+            return;
+
+        modal.classList.add("show");
+
+        modalImage.src = image.src;
+
+    });
+
+    // ===========================================
+    // Close Modal
+    // ===========================================
+
+    closeButton?.addEventListener("click", () => {
+
+        modal.classList.remove("show");
+
+    });
+
+    modal?.addEventListener("click", function (e) {
+
+        if (e.target === modal) {
+
+            modal.classList.remove("show");
+
+        }
+
+    });
+
+    // ===========================================
+    // ESC Close
+    // ===========================================
+
+    document.addEventListener("keydown", function (e) {
+
+        if (e.key === "Escape") {
+
+            modal.classList.remove("show");
+
+        }
 
     });
 
 });
 
+// ===========================================
+// Cancel Button
+// ===========================================
+
+const cancelButton = document.getElementById("cancelProduct");
+
+if (cancelButton) {
+
+    cancelButton.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        const isEdit =
+            document.getElementById("isEditMode").value === "1";
+
+        if (isEdit) {
+
+            window.location.href = "/dashboard-admin/add-product/";
+
+        } else {
+
+            document.querySelector("form").reset();
+
+            document
+                .querySelectorAll(".color-preview-image")
+                .forEach(img => img.remove());
+
+            document
+                .querySelectorAll(".live-color")
+                .forEach(item => item.remove());
+
+        }
+
+    });
+
+}

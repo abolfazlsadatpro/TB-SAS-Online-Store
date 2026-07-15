@@ -1,70 +1,28 @@
-/* ==========================
-   PAGINATION
-========================== */
+/*==================================================
+                CATEGORY MANAGEMENT
+==================================================*/
 
-/* ==========================
-   PAGINATION
-========================== */
+/*==================================================
+                    CATEGORY ROW
+==================================================*/
 
-.pagination {
-    margin: 0;
-}
+.category-row {
 
-.pagination .page-item {
-    margin: 0;
-}
-
-.pagination .page-link {
-
-    color: #198754;
-
-    background: #fff;
-
-    border: 1px solid #dee2e6;
-
-    padding: .6rem .95rem;
-
-    transition: .25s;
-
-    box-shadow: none;
+    transition: all .45s ease;
 
 }
 
-.pagination .page-link:hover {
+.category-row.removing {
 
-    color: #198754;
+    opacity: 0;
 
-    background: #f8fff9;
-
-    border-color: #198754;
+    transform: translateX(60px);
 
 }
 
-.pagination .page-item.active .page-link {
-
-    background: #fff;
-
-    color: #198754;
-
-    border-color: #198754;
-
-    font-weight: 700;
-
-    z-index: 3;
-
-}
-
-.pagination .page-item.disabled .page-link {
-
-    color: #adb5bd;
-
-    background: #fff;
-
-}
-
-/* ==========================
-   PAGINATION
-========================== */
+/*==================================================
+                    PAGINATION
+==================================================*/
 
 .pagination-wrapper {
 
@@ -130,125 +88,157 @@
 
 .pagination .page-item.disabled .page-link {
 
-    background: #fff;
-
     color: #b4b4b4;
 
-}
-
-.category-row {
-
-    transition: all .45s ease;
+    background: #fff;
 
 }
 
-.category-row.removing {
+/*==================================================
+                    SEARCH
+==================================================*/
 
-    opacity: 0;
+.category-search-card {
 
-    transform: translateX(60px);
+    border: none;
 
-}
+    border-radius: 20px;
 
-/* ===========================
-      CATEGORY TREE
-===========================*/
+    overflow: hidden;
 
-.category-tree,
-.tree-children {
+    background: #fff;
 
-    list-style: none;
-
-    padding-left: 18px;
-
-    margin: 0;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
 
 }
 
-.tree-children {
+.category-search-body {
 
-    display: none;
-
-    margin-top: 6px;
+    padding: 24px;
 
 }
 
-.tree-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 10px 12px;
-
-    border-radius: 12px;
-
-    cursor: pointer;
-
-    transition: .25s;
-
-}
-
-.tree-item:hover {
-
-    background: #f5fbf6;
-
-}
-
-.tree-folder {
-
-    color: #198754;
-
-    font-size: 18px;
-
-}
-
-.tree-name {
-
-    flex: 1;
-
-    font-weight: 600;
-
-}
-
-.tree-badge {
+.category-search-icon {
 
     background: #198754;
 
     color: #fff;
 
-    border-radius: 20px;
+    border: none;
 
-    padding: 3px 10px;
+    border-radius: 14px 0 0 14px;
 
-    font-size: 12px;
-
-}
-
-.tree-toggle {
-
-    width: 18px;
-
-    text-align: center;
-
-    cursor: pointer;
+    padding: 0 18px;
 
 }
 
-.tree-toggle i {
+.category-search-input {
+
+    border-left: none;
+
+    border-right: none;
+
+    min-height: 50px;
+
+    box-shadow: none !important;
+
+}
+
+.category-search-input:focus {
+
+    border-color: #198754;
+
+    box-shadow: 0 0 0 .25rem rgba(25, 135, 84, .15);
+
+}
+
+.category-search-btn {
+
+    min-width: 140px;
+
+    border-radius: 0 14px 14px 0;
+
+    font-weight: 600;
+
+}
+
+.category-form-card {
+
+    margin-bottom: 34px;
+
+}
+
+/*==================================================
+                ACTION BUTTONS
+==================================================*/
+
+.banner-card-header i {
+
+    color: #198754;
+
+}
+
+.cancel-btn {
+
+    min-width: 140px;
+
+}
+
+.btn-edit,
+.btn-delete {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
 
     transition: .25s;
 
 }
 
-.tree-item.open > .tree-toggle i {
+.btn-edit {
 
-    transform: rotate(90deg);
+    background: #fff;
+
+    border: 1px solid #198754;
+
+    color: #198754;
 
 }
 
+.btn-edit:hover {
+
+    background: #198754;
+
+    color: #fff;
+
+}
+
+.btn-delete {
+
+    background: #fff;
+
+    border: 1px solid #dc3545;
+
+    color: #dc3545;
+
+}
+
+.btn-delete:hover {
+
+    background: #dc3545;
+
+    color: #fff;
+
+}
+
+/*==================================================
+                CATEGORY TREE
+==================================================*/
 
 .sticky-tree {
 
@@ -256,139 +246,15 @@
 
     top: 25px;
 
-
 }
-
-.category-tree {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
-
-.category-tree li {
-    list-style: none;
-}
-
-.tree-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: .25s;
-}
-
-.tree-item:hover {
-    background: #eefaf2;
-}
-
-.tree-folder {
-    color: #28a745;
-    font-size: 18px;
-}
-
-.tree-toggle {
-    cursor: pointer;
-    width: 18px;
-    color: #777;
-}
-
-.tree-space {
-    width: 18px;
-}
-
-.tree-link {
-    color: #333;
-    text-decoration: none;
-    flex: 1;
-    font-weight: 500;
-}
-
-.tree-link:hover {
-    color: #198754;
-}
-
-.tree-link.active {
-    color: #198754;
-    font-weight: 700;
-}
-
-.tree-children {
-    list-style: none;
-    padding-left: 28px;
-    margin-top: 4px;
-}
-
-.tree-children {
-
-    display: none;
-
-    margin-left: 22px;
-
-    padding-left: 14px;
-
-    border-left: 1px dashed #d7d7d7;
-
-}
-
-.tree-children.open {
-
-    display: block;
-
-    animation: fadeTree .25s ease;
-
-}
-
-.tree-toggle {
-
-    cursor: pointer;
-
-    width: 20px;
-
-    display: inline-flex;
-
-    justify-content: center;
-
-    transition: .25s;
-
-}
-
-.tree-toggle.open {
-
-    transform: rotate(90deg);
-
-}
-
-@keyframes fadeTree {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(-6px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: none;
-
-    }
-
-}
-
-/*=============================
-        CATEGORY TREE
-=============================*/
 
 .category-tree,
 .category-tree ul {
 
     list-style: none;
+
     margin: 0;
+
     padding-left: 18px;
 
 }
@@ -402,11 +268,17 @@
 .category-tree li::before {
 
     content: "";
+
     position: absolute;
+
     left: -10px;
+
     top: -14px;
+
     width: 1px;
+
     height: 100%;
+
     background: #d8d8d8;
 
 }
@@ -420,11 +292,17 @@
 .category-tree li::after {
 
     content: "";
+
     position: absolute;
+
     left: -10px;
+
     top: 18px;
+
     width: 12px;
+
     height: 1px;
+
     background: #d8d8d8;
 
 }
@@ -432,18 +310,18 @@
 .tree-item {
 
     display: flex;
+
     align-items: center;
+
     gap: 10px;
 
     padding: 9px 12px;
 
     border-radius: 12px;
 
-    transition: .25s;
-
     cursor: pointer;
 
-    position: relative;
+    transition: .25s;
 
 }
 
@@ -455,23 +333,49 @@
 
 .tree-folder {
 
-    color: #ffc107;
-    font-size: 19px;
+    color: #f4b400;
+
+    font-size: 18px;
 
 }
 
 .tree-name {
 
     flex: 1;
+
     font-weight: 600;
+
     color: #444;
+
+}
+
+.tree-link {
+
+    color: inherit;
+
+    text-decoration: none;
+
+    flex: 1;
+
+}
+
+.tree-link:hover,
+.tree-link.active {
+
+    color: #198754;
+
+    font-weight: 700;
 
 }
 
 .tree-toggle {
 
     width: 20px;
-    text-align: center;
+
+    display: inline-flex;
+
+    justify-content: center;
+
     cursor: pointer;
 
     transition: .25s;
@@ -484,37 +388,29 @@
 
 }
 
+.tree-space {
+
+    width: 20px;
+
+}
+
 .tree-children {
 
     display: none;
 
     margin-left: 15px;
 
+    padding-left: 14px;
+
+    border-left: 1px dashed #d8d8d8;
+
 }
 
 .tree-children.open {
 
-    display: block;
+    display: block !important;
 
     animation: fadeTree .25s ease;
-
-}
-
-@keyframes fadeTree {
-
-    from {
-
-        opacity: 0;
-        transform: translateY(-6px);
-
-    }
-
-    to {
-
-        opacity: 1;
-        transform: none;
-
-    }
 
 }
 
@@ -539,10 +435,13 @@
 .tree-btn {
 
     width: 30px;
+
     height: 30px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     border-radius: 8px;
@@ -556,6 +455,7 @@
 .tree-btn-edit {
 
     background: #eefaf2;
+
     color: #198754;
 
 }
@@ -563,6 +463,7 @@
 .tree-btn-delete {
 
     background: #fff1f1;
+
     color: #dc3545;
 
 }
@@ -573,10 +474,274 @@
 
 }
 
-.tree-children {
-    display: none !important;
+@keyframes fadeTree {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-6px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
 }
 
-.tree-children.open {
-    display: block !important;
+/*==================================================
+            CATEGORY FORM CARD
+==================================================*/
+
+.category-form-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+
+    transition: .3s;
+
+}
+
+.category-form-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
+
+}
+
+.category-form-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    background: #fff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+.category-form-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+.category-form-body {
+
+    padding: 28px;
+
+}
+
+.category-label {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-weight: 600;
+
+    color: #495057;
+
+}
+
+.category-form-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 30px;
+
+}
+
+.cancel-btn {
+
+    min-width: 140px;
+
+}
+
+.category-save-btn {
+
+    min-width: 180px;
+
+}
+
+/*==================================================
+            CATEGORY TABLE CARD
+==================================================*/
+
+.category-table-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+
+    transition: .3s;
+
+}
+
+.category-table-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
+
+}
+
+.category-table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    background: #fff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+.category-table-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+.category-table-body {
+
+    padding: 0;
+
+}
+
+.category-table-count {
+
+    background: #eaf8ef;
+
+    color: #198754;
+
+    padding: 8px 16px;
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+}
+
+/*==================================================
+            CATEGORY TREE CARD
+==================================================*/
+
+.category-tree-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+
+    transition: .3s;
+
+}
+
+.category-tree-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
+
+}
+
+.category-tree-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    background: #fff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+.category-tree-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+.category-tree-body {
+
+    padding: 24px;
+
+}
+
+.category-page {
+
+    padding: 30px;
+
+}
+
+.category-subtitle {
+    color: #6c757d;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 35px;
+}
+
+.banner-title {
+    font-size: 34px;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 8px;
 }

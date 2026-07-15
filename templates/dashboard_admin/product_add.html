@@ -18,28 +18,60 @@
     <div class="product-page">
 
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %} alert-dismissible fade show">
-                    {{ message }}
-                    <button class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
+
+            <div class="mb-4">
+
+                {% for message in messages %}
+
+                    <div class="custom-alert {% if message.tags == 'success' %}alert-success-custom{% else %}alert-danger-custom{% endif %}">
+
+                        <div class="d-flex align-items-center">
+
+                            {% if message.tags == 'success' %}
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                            {% else %}
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            {% endif %}
+
+                            <span>{{ message }}</span>
+
+                        </div>
+
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert">
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
         {% endif %}
 
         <form method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
+
             {{ formset.management_form }}
 
-            <!-- =========================
-                 HEADER
-            ========================== -->
+            {% if product %}
+                <input type="hidden" id="isEditMode" value="1">
+            {% else %}
+                <input type="hidden" id="isEditMode" value="0">
+            {% endif %}
 
-            <div class="banner-header">
+            <!-- =======================================
+                        PAGE HEADER
+            ======================================== -->
+
+            <div class="product-header">
 
                 <div>
 
-                    <h1 class="banner-title">
+                    <h1 class="product-title">
 
                         {% if product %}
                             Edit Product
@@ -49,45 +81,46 @@
 
                     </h1>
 
-                    <p class="banner-subtitle">
+                    <p class="product-subtitle">
 
                         {% if product %}
-                            Update your product information and product colors.
+                            Update product information and available colors.
                         {% else %}
-                            Create a new product for your online store.
+                            Create a beautiful product for your online store.
                         {% endif %}
 
                     </p>
 
                 </div>
 
-                <a href="{% url 'list_product' %}" class="btn btn-light">
+                <a href="{% url 'list_product' %}"
+                   class="btn btn-outline-success header-back-btn">
 
                     <i class="bi bi-arrow-left"></i>
 
-                    Back
+                    Back to Product
 
                 </a>
 
             </div>
 
-            <!-- =========================
-                 TOP ROW
-            ========================== -->
+            <!-- =======================================
+                        MAIN INFORMATION
+            ======================================== -->
 
             <div class="row g-4">
 
                 <!-- LEFT -->
 
-                <div class="col-lg-8">
+                <div class="col-xl-8">
 
                     <div class="banner-card">
 
-                        <div class="banner-card-header">
+                        <div class="product-card-header">
 
-                            <i class="bi bi-box-seam"></i>
+                            <i class="bi bi-box-seam-fill"></i>
 
-                            Product Information
+                            <span>Product Information</span>
 
                         </div>
 
@@ -95,7 +128,7 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="product-label">
 
                                     Category
 
@@ -107,7 +140,7 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="product-label">
 
                                     Product Name
 
@@ -119,7 +152,7 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="product-label">
 
                                     Slug
 
@@ -131,7 +164,7 @@
 
                             <div>
 
-                                <label class="form-label">
+                                <label class="product-label">
 
                                     Description
 
@@ -149,15 +182,15 @@
 
                 <!-- RIGHT -->
 
-                <div class="col-lg-4">
+                <div class="col-xl-4">
 
-                    <div class="banner-card mb-4">
+                    <div class="banner-card">
 
-                        <div class="banner-card-header">
+                        <div class="product-card-header">
 
                             <i class="bi bi-cash-stack"></i>
 
-                            Pricing
+                            <span>Pricing</span>
 
                         </div>
 
@@ -165,7 +198,7 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="product-label">
 
                                     Price
 
@@ -177,7 +210,7 @@
 
                             <div>
 
-                                <label class="form-label">
+                                <label class="product-label">
 
                                     Stock
 
@@ -195,28 +228,27 @@
 
             </div>
 
-            <!-- =========================
-                 COLORS
-            ========================== -->
-
+            <!-- =======================================
+                    PRODUCT COLORS
+            ======================================== -->
             <div class="banner-card mt-5">
 
-                <div class="banner-card-header d-flex justify-content-between align-items-center">
+                <div class="product-card-header d-flex justify-content-between align-items-center">
 
-                    <div>
+                    <div class="product-colors-header d-flex align-items-center">
 
-                        <i class="bi bi-palette-fill"></i>
+                        <i class="bi bi-palette-fill me-2"></i>
 
-                        Product Colors
+                        <span>Product Colors</span>
 
                     </div>
 
                     <button
                             type="button"
                             id="addColor"
-                            class="btn btn-success">
+                            class="btn btn-success add-color-btn">
 
-                        <i class="bi bi-plus-circle"></i>
+                        <i class="bi bi-plus-circle-fill"></i>
 
                         Add Color
 
@@ -227,23 +259,38 @@
                 <div class="banner-card-body">
 
                     <div id="colorContainer">
+
                         {% for form in formset %}
 
-                            <div class="banner-card mb-4 color-card">
+                            <div class="banner-card color-card mb-4">
 
                                 <div class="banner-card-body">
 
                                     {{ form.id }}
 
                                     <div class="d-none">
+
                                         {{ form.DELETE }}
+
                                     </div>
 
-                                    <div class="row g-3 align-items-end">
+                                    <div class="color-card-title">
+
+                                        <i class="bi bi-droplet-half"></i>
+
+                                        <span>
+
+                                Color {{ forloop.counter }}
+
+                            </span>
+
+                                    </div>
+
+                                    <div class="row g-4">
 
                                         <div class="col-lg-3">
 
-                                            <label class="form-label">
+                                            <label class="product-label">
 
                                                 Color Name
 
@@ -255,9 +302,9 @@
 
                                         <div class="col-lg-2">
 
-                                            <label class="form-label">
+                                            <label class="product-label">
 
-                                                Color
+                                                Color Code
 
                                             </label>
 
@@ -267,7 +314,7 @@
 
                                         <div class="col-lg-2">
 
-                                            <label class="form-label">
+                                            <label class="product-label">
 
                                                 Stock
 
@@ -279,7 +326,7 @@
 
                                         <div class="col-lg-3">
 
-                                            <label class="form-label">
+                                            <label class="product-label">
 
                                                 Image
 
@@ -293,7 +340,8 @@
 
                                             <button
                                                     type="button"
-                                                    class="btn btn-danger remove-color">
+                                                    class="btn btn-outline-danger remove-color"
+                                                    style="margin-top: 30px;">
 
                                                 <i class="bi bi-trash"></i>
 
@@ -307,11 +355,11 @@
 
                                     {% if form.instance.image %}
 
-                                        <div class="mt-4">
+                                        <div class="color-image-preview">
 
                                             <img
                                                     src="{{ form.instance.image.url }}"
-                                                    class="table-banner-image preview-clickable">
+                                                    class="color-preview-image preview-clickable">
 
                                         </div>
 
@@ -325,129 +373,163 @@
 
                     </div>
 
-                    <!-- =========================
-                         EMPTY FORM
-                    ========================= -->
+                </div>
 
-                    <template id="emptyFormTemplate">
+            </div>
 
-                        <div class="banner-card mb-4 color-card">
+            <!-- =======================================
+                    EMPTY COLOR TEMPLATE
+            ======================================== -->
 
-                            <div class="banner-card-body">
+            <template id="emptyFormTemplate">
 
-                                {{ formset.empty_form.id }}
+                <div class="banner-card color-card mb-4">
 
-                                <div class="d-none">
-                                    {{ formset.empty_form.DELETE }}
-                                </div>
+                    <div class="banner-card-body">
 
-                                <div class="row g-3 align-items-end">
+                        {{ formset.empty_form.id }}
 
-                                    <div class="col-lg-3">
+                        <div class="d-none">
 
-                                        <label class="form-label">
+                            {{ formset.empty_form.DELETE }}
 
-                                            Color Name
+                        </div>
 
-                                        </label>
+                        <div class="color-card-title">
 
-                                        {{ formset.empty_form.name }}
+                            <i class="bi bi-droplet-half"></i>
 
-                                    </div>
+                            <span>
 
-                                    <div class="col-lg-2">
+                    New Color
 
-                                        <label class="form-label">
+                </span>
 
-                                            Color
+                        </div>
 
-                                        </label>
+                        <div class="row g-4">
 
-                                        {{ formset.empty_form.color_code }}
+                            <div class="col-lg-3">
 
-                                    </div>
+                                <label class="product-label">
 
-                                    <div class="col-lg-2">
+                                    Color Name
 
-                                        <label class="form-label">
+                                </label>
 
-                                            Stock
+                                {{ formset.empty_form.name }}
 
-                                        </label>
+                            </div>
 
-                                        {{ formset.empty_form.stock }}
+                            <div class="col-lg-2">
 
-                                    </div>
+                                <label class="product-label">
 
-                                    <div class="col-lg-3">
+                                    Color Code
 
-                                        <label class="form-label">
+                                </label>
 
-                                            Image
+                                {{ formset.empty_form.color_code }}
 
-                                        </label>
+                            </div>
 
-                                        {{ formset.empty_form.image }}
+                            <div class="col-lg-2">
 
-                                    </div>
+                                <label class="product-label">
 
-                                    <div class="col-lg-2 d-grid">
+                                    Stock
 
-                                        <button
-                                                type="button"
-                                                class="btn btn-danger remove-color">
+                                </label>
 
-                                            <i class="bi bi-trash"></i>
+                                {{ formset.empty_form.stock }}
 
-                                            Remove
+                            </div>
 
-                                        </button>
+                            <div class="col-lg-3">
 
-                                    </div>
+                                <label class="product-label">
 
-                                </div>
+                                    Image
+
+                                </label>
+
+                                {{ formset.empty_form.image }}
+
+                            </div>
+
+                            <div class="col-lg-2 d-grid">
+
+                                <button
+                                        type="button"
+                                        class="btn btn-outline-danger remove-color">
+
+                                    <i class="bi bi-trash"></i>
+
+                                    Remove
+
+                                </button>
 
                             </div>
 
                         </div>
 
-                    </template>
+                    </div>
+
                 </div>
 
-            </div>
+            </template>
+            <!-- =======================================
+                        FOOTER
+        ======================================= -->
 
-            <!-- =========================
-                 FOOTER
-            ========================== -->
+            <div class="product-footer">
 
-            <div class="banner-card mt-4">
+                <a href="{% url 'list_product' %}"
+                   class="btn btn-outline-secondary product-footer-btn">
 
-                <div class="banner-card-body d-flex justify-content-between align-items-center">
+                    <i class="bi bi-arrow-left"></i>
 
-                    <a
-                            href="{% url 'list_product' %}"
-                            class="btn btn-light">
+                    Back to Product
 
-                        <i class="bi bi-arrow-left"></i>
+                </a>
 
-                        Back to Products
+                <div class="d-flex gap-2">
 
-                    </a>
+                    {% if product %}
+
+                        <a href="{% url 'product_add' %}"
+                           class="btn btn-outline-danger">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Cancel
+
+                        </a>
+
+                    {% else %}
+
+                        <button
+                                type="reset"
+                                class="btn btn-outline-danger">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Cancel
+
+                        </button>
+
+                    {% endif %}
 
                     <button
                             type="submit"
-                            class="btn btn-success">
+                            class="btn btn-success product-save-btn">
 
                         <i class="bi bi-check-circle-fill"></i>
 
                         {% if product %}
-
                             Update Product
-
                         {% else %}
-
                             Save Product
-
                         {% endif %}
 
                     </button>
@@ -482,5 +564,7 @@
 {% endblock %}
 
 {% block custom_js %}
+
     <script src="{% static 'js/dashboard/admin/product_add.js' %}"></script>
+
 {% endblock %}

@@ -20,13 +20,11 @@
 
 
 {% block custom_css %}
-
-    <link rel="stylesheet" href="{% static 'css/dashboard/new_banner_site.css' %}">
     <link rel="stylesheet" href="{% static 'css/dashboard/categoty_management.css' %}">
 {% endblock %}
 
 {% block app_content %}
-    <div class="banner-page">
+    <div class="category-page">
         <!-- HEADER -->
         <div class="banner-header">
             <div>
@@ -37,11 +35,14 @@
                         Category Management
                     {% endif %}
                 </h2>
-                <p class="banner-subtitle">
-                    Manage product categories with a modern dashboard.
-                </p>
             </div>
         </div>
+
+        <p class="category-subtitle">
+
+            Create, organize and manage your product categories.
+
+        </p>
         <div class="row g-4">
 
             <!-- =========================
@@ -51,25 +52,29 @@
             <div class="col-lg-8">
 
                 <!-- FORM -->
-                <div class="banner-card">
+                <div class="category-form-card">
 
-                    <div class="banner-card-header">
+                    <div class="category-form-header">
 
-                        <i class="bi bi-tags-fill"></i>
+                        <div class="d-flex align-items-center">
 
-                        <span>
+                            <i class="bi bi-tags-fill me-2"></i>
 
-                    {% if category %}
-                        Update Category
-                    {% else %}
-                        Create New Category
-                    {% endif %}
+                            <span>
 
-                </span>
+                {% if category %}
+                    Edit Category
+                {% else %}
+                    Create New Category
+                {% endif %}
+
+            </span>
+
+                        </div>
 
                     </div>
 
-                    <div class="banner-card-body">
+                    <div class="category-form-body">
 
                         <form method="post">
 
@@ -77,8 +82,10 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="category-label">
+
                                     Category Name
+
                                 </label>
 
                                 {{ forms.name }}
@@ -87,8 +94,10 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="category-label">
+
                                     Slug
+
                                 </label>
 
                                 {{ forms.slug }}
@@ -97,34 +106,36 @@
 
                             <div class="mb-4">
 
-                                <label class="form-label">
+                                <label class="category-label">
+
                                     Parent Category
+
                                 </label>
 
                                 {{ forms.parent }}
 
                             </div>
 
-                            <div class="d-flex justify-content-end gap-2">
+                            <div class="category-form-footer">
 
-                                <a href="{% url 'category_management' %}" class="btn btn-light px-4">
+                                <a href="{% url 'category_management' %}"
+                                   class="btn btn-outline-danger cancel-btn">
+
+                                    <i class="bi bi-x-circle"></i>
 
                                     Cancel
 
                                 </a>
 
-                                <button class="btn btn-success px-5">
+                                <button type="submit"
+                                        class="btn btn-success category-save-btn">
+
+                                    <i class="bi bi-check-circle-fill"></i>
 
                                     {% if category %}
-
-                                        <i class="bi bi-check-circle"></i>
                                         Update Category
-
                                     {% else %}
-
-                                        <i class="bi bi-plus-circle"></i>
                                         Create Category
-
                                     {% endif %}
 
                                 </button>
@@ -139,22 +150,30 @@
 
                 <!-- SEARCH -->
 
-                <div class="banner-card mt-5">
+                <div class="category-search-card mt-5">
 
-                    <div class="banner-card-body">
+                    <div class="category-search-body">
 
                         <form method="get">
 
                             <div class="input-group">
 
+                                <span class="input-group-text category-search-icon">
+
+                                    <i class="bi bi-search"></i>
+
+                                </span>
+
                                 <input
                                         type="text"
-                                        class="form-control"
                                         name="q"
                                         value="{{ request.GET.q }}"
-                                        placeholder="Search category name, slug...">
+                                        class="form-control category-search-input"
+                                        placeholder="Search Category Name, Slug...">
 
-                                <button class="btn btn-success">
+                                <button
+                                        type="submit"
+                                        class="btn btn-success category-search-btn">
 
                                     <i class="bi bi-search"></i>
 
@@ -172,17 +191,17 @@
 
                 <!-- TABLE -->
 
-                <div class="banner-card mt-5">
-                    <div class="banner-card-header d-flex justify-content-between align-items-center">
+                <div class="category-table-card mt-5">
+                    <div class="category-table-header">
                         <div>
                             <i class="bi bi-list-ul"></i>
                             <span>Latest Categories</span>
                         </div>
                         <span class="badge bg-success rounded-pill">
-            {{ page_obj.paginator.count }} Categories
-        </span>
+                            {{ page_obj.paginator.count }} Categories
+                        </span>
                     </div>
-                    <div class="banner-card-body p-0">
+                    <div class="category-table-body">
                         <div class="table-responsive">
                             <table class="table banner-table align-middle mb-0">
                                 <thead>
@@ -259,6 +278,13 @@
                                 <li class="page-item">
                                     <a class="page-link"
                                        href="?page=
+
+
+
+
+
+
+
                                                {{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
                                         Previous
                                     </a>
@@ -276,6 +302,13 @@
                                 <li class="page-item">
                                     <a class="page-link"
                                        href="?page=
+
+
+
+
+
+
+
 
                                                {{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
                                         Next
@@ -295,21 +328,21 @@
 
             <div class="col-lg-4">
 
-                <div class="banner-card sticky-tree">
+                <div class="category-tree-card sticky-tree">
 
-                    <div class="banner-card-header">
+                    <div class="category-tree-header">
 
-                        <i class="bi bi-diagram-3-fill"></i>
+                        <div class="d-flex align-items-center">
 
-                        <span>
+                            <i class="bi bi-diagram-3-fill me-2"></i>
 
-                    Category Tree
+                            <span>Category Tree</span>
 
-                </span>
+                        </div>
 
                     </div>
 
-                    <div class="banner-card-body">
+                    <div class="category-tree-body">
 
                         {% include "dashboard_admin/includes/category_tree.html" %}
 
@@ -319,9 +352,7 @@
 
             </div>
 
-        </div>
-
-        {% block custom_js %}
-            <script src="{% static 'js/dashboard/admin/cateogry_managenmet.js' %}"></script>
-        {% endblock %}
+            {% block custom_js %}
+                <script src="{% static 'js/dashboard/admin/cateogry_managenmet.js' %}"></script>
+            {% endblock %}
 {% endblock %}

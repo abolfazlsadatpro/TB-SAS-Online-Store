@@ -1,139 +1,428 @@
 {% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+{% load static %}
+
 
 {% block title %}
     Vote Manager
 {% endblock %}
 
-{% block meta_data %}
-    <meta name="title" content="Dashboard Admin"/>
-    <meta name="author" content="Abolfazl"/>
-    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
-    <meta name="keywords" content="dashboard,adminlte"/>
+
+
+{% block custom_css %}
+
+    <link rel="stylesheet" href="{% static 'css/dashboard/vote_manager.css' %}">
+
 {% endblock %}
+
+
 
 {% block app_content %}
 
-    <div class="card m-1">
-        <div class="card-footer">
-            <form action="#" method="post">
-                <div class="input-group gap-2">
-                    <input type="text" name="message" placeholder="Type Mobile,Username,name,Email ..."
-                           class="form-control" aria-label="Type Message ...">
-                    <span class="input-group-append">
-                          <button type="button" class="btn btn-primary">Search</button>
-                        </span>
-                </div>
-            </form>
-        </div>
-    </div>
+
+    <div class="vote-page">
 
 
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Latest Users</h3>
+        <div class="vote-header">
 
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                    <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                    <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+            <div>
+
+                <h2 class="vote-title">
+                    Vote Manager
+                </h2>
+
+
+                <p class="vote-subtitle">
+                    Manage customer reviews and product ratings.
+                </p>
+
             </div>
+
+
         </div>
-        <!-- /.card-header -->
-        <div class="card-body p-0">
+
+
+        <!-- SEARCH -->
+
+
+        <div class="vote-card mt-4">
+
+
+            <div class="vote-card-body">
+
+
+                <form method="get">
+
+
+                    <div class="input-group">
+
+
+                        <input
+
+                                type="text"
+
+                                name="q"
+
+                                value="{{ request.GET.q }}"
+
+                                class="form-control vote-search"
+
+                                placeholder="Search User, Email, Product..."
+
+                        >
+
+
+                        <button class="btn btn-success px-4">
+
+
+                            <i class="bi bi-search"></i>
+
+                            Search
+
+
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- TABLE -->
+
+
+        <div class="vote-card mt-4">
+
+
+            <div class="vote-card-header">
+
+
+                <div>
+
+
+                    <i class="bi bi-chat-square-text-fill"></i>
+
+
+                    Reviews List
+
+
+                </div>
+
+
+                <span class="vote-count">
+
+                {{ votes.paginator.count|default:0 }} Reviews
+
+            </span>
+
+
+            </div>
+
+
             <div class="table-responsive">
-                <table class="table m-0" role="table">
+
+
+                <table class="table vote-table">
+
+
                     <thead>
+
                     <tr>
-                        <th>Name</th>
+
+                        <th>User</th>
+
                         <th>Email</th>
+
                         <th>Product</th>
+
                         <th>Rating</th>
+
                         <th>Comment</th>
+
                         <th>Status</th>
+
                         <th>Date</th>
-                        <th>Operate</th>
+
+                        <th>Action</th>
+
                     </tr>
+
+
                     </thead>
+
 
                     <tbody>
 
+
                     {% for item in votes %}
+
+
                         <tr>
+
+
                             <td>
-                                {{ item.user.first_name }} {{ item.user.last_name }}
+
+                                {{ item.user.first_name }}
+
+                                {{ item.user.last_name }}
+
                             </td>
+
+
                             <td>
+
                                 {{ item.user.email }}
+
                             </td>
+
+
                             <td>
+
                                 {{ item.product.name }}
+
                             </td>
+
+
                             <td>
+
+
                                 {% for i in "12345" %}
+
                                     {% if forloop.counter <= item.rating %}
+
                                         <i class="fa-solid fa-star text-warning"></i>
+
                                     {% else %}
+
                                         <i class="fa-regular fa-star text-secondary"></i>
+
                                     {% endif %}
+
+
                                 {% endfor %}
-                                ({{ item.rating }}/5)
+
+
+                                <small>
+                                    ({{ item.rating }}/5)
+                                </small>
+
+
                             </td>
-                            <td style="max-width:350px;">
+
+
+                            <td class="comment-text">
+
+
                                 {{ item.description }}
+
+
                             </td>
+
+
                             <td>
+
+
                                 {% if item.status %}
-                                    <span class="badge text-bg-success">
-                                        Approved
-                                    </span>
+
+
+                                    <span class="badge approved-badge">
+
+                                Approved
+
+                            </span>
+
+
                                 {% else %}
-                                    <span class="badge text-bg-warning">
-                                        Pending
-                                    </span>
+
+
+                                    <span class="badge pending-badge">
+
+                                Pending
+
+                            </span>
+
+
                                 {% endif %}
+
+
                             </td>
+
+
                             <td>
+
+
                                 {{ item.created_at|date:"Y-m-d" }}
+
+
                             </td>
+
+
                             <td>
-                                <a href="{% url 'change_publish_vote' item.id %}" class="btn btn-primary">
+
+
+                                <a href="{% url 'change_publish_vote' item.id %}"
+
+                                   class="btn btn-outline-success btn-sm">
+
+
                                     {% if item.status %}
+
                                         Unpublish
+
                                     {% else %}
+
                                         Publish
+
                                     {% endif %}
+
+
                                 </a>
+
+
                             </td>
+
+
                         </tr>
+
+
+
                     {% empty %}
+
+
                         <tr>
-                            <td colspan="6" class="text-center">
-                                No comments found
+
+                            <td colspan="8" class="text-center py-5">
+
+                                No reviews found.
+
                             </td>
+
                         </tr>
+
+
+
                     {% endfor %}
 
+
                     </tbody>
+
+
                 </table>
+
+
             </div>
-            <!-- /.table-responsive -->
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer clearfix">
-            <div class="d-flex justify-content-center">
-                <div class="pagination">
-                    <div class="page-item"><a class="page-link" href="#">Previous</a></div>
-                    <div class="page-item"><a class="page-link" href="#">1</a></div>
-                    <div class="page-item"><a class="page-link" href="#">2</a></div>
-                    <div class="page-item"><a class="page-link" href="#">3</a></div>
-                    <div class="page-item"><a class="page-link" href="#">Next</a></div>
+
+
+
+
+
+
+
+            {% if votes.has_other_pages %}
+
+
+                <div class="pagination-wrapper">
+
+
+                    <nav>
+
+
+                        <ul class="pagination justify-content-center">
+
+
+                            {% if votes.has_previous %}
+
+                                <li class="page-item">
+
+                                    <a class="page-link"
+
+                                       href="?page={{ votes.previous_page_number }}&q={{ request.GET.q }}">
+
+                                        Previous
+
+                                    </a>
+
+                                </li>
+
+
+                            {% endif %}
+
+
+
+
+
+
+                            {% for num in votes.paginator.page_range %}
+
+
+
+                                <li class="page-item {% if votes.number == num %}active{% endif %}">
+
+
+                                    <a class="page-link"
+
+                                       href="?page={{ num }}&q={{ request.GET.q }}">
+
+                                        {{ num }}
+
+                                    </a>
+
+
+                                </li>
+
+
+
+                            {% endfor %}
+
+
+
+
+
+                            {% if votes.has_next %}
+
+
+                                <li class="page-item">
+
+
+                                    <a class="page-link"
+
+                                       href="?page={{ votes.next_page_number }}&q={{ request.GET.q }}">
+
+                                        Next
+
+                                    </a>
+
+
+                                </li>
+
+
+                            {% endif %}
+
+
+                        </ul>
+
+
+                    </nav>
+
+
                 </div>
-            </div>
+
+
+
+            {% endif %}
+
+
         </div>
-        <!-- /.card-footer -->
+
+
     </div>
+
+
+
 {% endblock %}
