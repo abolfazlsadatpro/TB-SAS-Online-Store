@@ -1,0 +1,405 @@
+/***********************************/
+/*********** PAGE HEADER ***********/
+/***********************************/
+
+.new-order-page-header {
+    margin-bottom: 30px;
+}
+
+.new-order-page-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.new-order-page-description {
+    margin-top: 8px;
+    margin-bottom: 0;
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+
+/***********************************/
+/************* CARD ****************/
+/***********************************/
+
+.new-order-form-card {
+    background-color: #ffffff;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .08);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+
+.new-order-card-header {
+    padding: 25px 30px;
+}
+
+
+.new-order-card-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.new-order-card-title i {
+    margin-right: 8px;
+}
+
+
+.new-order-card-body {
+    padding: 35px;
+}
+
+
+/***********************************/
+/************ SECTION **************/
+/***********************************/
+
+.new-order-section {
+    padding-bottom: 30px;
+}
+
+
+.new-order-section:last-of-type {
+    margin-bottom: 0;
+}
+
+
+.new-order-section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #343a40;
+}
+
+
+/***********************************/
+/************* LABEL ***************/
+/***********************************/
+
+.new-order-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+
+/***********************************/
+/************** INPUT **************/
+/***********************************/
+
+.new-order-select,
+.new-order-textarea,
+.new-order-section .form-control {
+    min-height: 50px;
+    border-radius: 15px;
+    border: 1px solid #dcdcdc;
+    box-shadow: none !important;
+    transition: all .3s ease;
+}
+
+
+.new-order-textarea {
+    min-height: 130px;
+    resize: vertical;
+    padding-top: 15px;
+}
+
+
+.new-order-select:focus,
+.new-order-textarea:focus,
+.new-order-section .form-control:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 .2rem rgba(25, 135, 84, .15) !important;
+}
+
+
+/***********************************/
+/************* SELECT2 *************/
+/***********************************/
+
+.select2-container {
+    width: 100% !important;
+}
+
+
+.select2-container--default .select2-selection--single {
+    height: 50px !important;
+    border-radius: 15px !important;
+    border: 1px solid #dcdcdc !important;
+}
+
+
+.select2-container--default .select2-selection--single:hover {
+    border-color: #198754 !important;
+}
+
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 48px !important;
+    padding-left: 18px !important;
+    color: #495057;
+}
+
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 50px !important;
+}
+
+
+.select2-dropdown {
+    border-radius: 15px !important;
+    overflow: hidden;
+    border: 1px solid #198754 !important;
+}
+
+
+.select2-search__field {
+    border-radius: 10px !important;
+}
+
+
+.select2-results__option--highlighted {
+    background-color: #198754 !important;
+}
+
+
+/***********************************/
+/*********** ORDER ITEMS ***********/
+/***********************************/
+
+.orders_items {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+
+.orders_items > div {
+    padding: 25px;
+    background: #fafafa;
+    border-radius: 20px;
+    border: 1px solid #ececec;
+    transition: .3s;
+}
+
+
+.orders_items > div:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+}
+
+
+/***********************************/
+/************* BUTTONS *************/
+/***********************************/
+
+.new-order-action-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+
+.new-order-add-item-btn,
+.new-order-submit-btn {
+    min-width: 190px;
+    min-height: 52px;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all .3s ease;
+}
+
+
+.new-order-add-item-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+
+.new-order-add-item-btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+
+.new-order-submit-btn {
+    background-color: #198754;
+    color: white;
+    border: none;
+}
+
+
+.new-order-submit-btn:hover {
+    background-color: #157347;
+    transform: translateY(-2px);
+}
+
+
+.new-order-submit-btn:focus,
+.new-order-add-item-btn:focus {
+    box-shadow: none !important;
+}
+
+.new-order-submit-btn {
+    background-color: #198754;
+    color: white;
+    border: none;
+}
+
+
+.new-order-submit-btn:hover {
+    background-color: #239b65;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+.new-order-submit-btn:focus {
+    color: white !important;
+}
+
+
+.new-order-submit-btn:hover i {
+    color: white;
+}
+
+
+.new-order-submit-btn i {
+    margin-right: 8px;
+}
+
+
+/***********************************/
+/************** ALERT **************/
+/***********************************/
+
+.alert {
+    border-radius: 15px;
+}
+
+
+/***********************************/
+/************ RESPONSIVE ***********/
+/***********************************/
+
+@media (max-width: 992px) {
+
+    .new-order-card-body {
+        padding: 25px;
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .new-order-page-title {
+        font-size: 1.7rem;
+    }
+
+
+    .new-order-action-buttons {
+        flex-direction: column;
+    }
+
+
+    .new-order-add-item-btn,
+    .new-order-submit-btn {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .new-order-card-body {
+        padding: 20px;
+    }
+
+
+    .new-order-page-title {
+        font-size: 1.5rem;
+    }
+
+
+    .new-order-section-title {
+        font-size: 1rem;
+    }
+
+}
+
+.orders-page {
+    padding: 30px;
+}
+
+
+.new-order-add-item-btn {
+    min-width: 190px;
+    min-height: 52px;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: .3s;
+    border: none;
+    color: white;
+    background-color: #6c757d;
+}
+
+
+.new-order-add-item-btn:hover {
+    background-color: #5f666d;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+.new-order-add-item-btn:focus {
+    color: white !important;
+}
+
+
+.new-order-add-item-btn i {
+    margin-right: 8px;
+}
+
+.new-order-remove-btn {
+
+    width: 100%;
+    border: none;
+    color: white;
+    background-color: #dc3545;
+    border-radius: 14px;
+    min-height: 50px;
+    font-weight: 600;
+    transition: .25s;
+
+}
+
+
+.new-order-remove-btn:hover {
+
+    color: white;
+    background-color: #c82333;
+    transform: translateY(-2px);
+
+}
+
+
+.new-order-remove-btn i {
+
+    margin-right: 6px;
+
+}
+
+.new-order-card-title i {
+    margin-right: 8px;
+}
+
+.bi-clipboard-check {
+    color: #198754;
+}

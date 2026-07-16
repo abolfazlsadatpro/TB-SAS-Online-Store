@@ -55,11 +55,22 @@ function addOrderItem() {
 
     // Create Remove Button column
     const removeCol = document.createElement('div');
+
     removeCol.className = 'col-md-3 d-flex align-items-center';
     const removeButton = document.createElement('button');
+    removeCol.className =
+        'col-md-2 d-flex align-items-end';
+    removeButton.className =
+        'btn new-order-remove-btn';
     removeButton.type = 'button';
-    removeButton.className = 'btn btn-danger';
+    removeButton.className = 'btn btn-outline-danger';
     removeButton.innerText = 'Remove';
+    removeButton.innerHTML =
+        `
+<i class="bi bi-trash"></i>
+Remove
+`;
+
     removeButton.onclick = function () {
         newRow.remove();
     };

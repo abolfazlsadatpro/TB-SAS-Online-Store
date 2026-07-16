@@ -133,3 +133,91 @@ class BannerMain(models.Model):
 class SettingSite(models.Model):
     key = models.CharField(max_length=100)
     value = models.CharField(max_length=100)
+
+
+class SettingSite(models.Model):
+    # ==========================
+    # General Information
+    # ==========================
+
+    website_name
+    website_title
+    website_short_description
+    website_keywords
+
+    website_logo
+    website_logo_dark
+    website_favicon
+
+    # ==========================
+    # Contact Information
+    # ==========================
+
+    email
+    support_email
+
+    phone_number
+    support_phone_number
+
+    address
+    working_hours
+
+    # ==========================
+    # Social Media
+    # ==========================
+
+    instagram
+    telegram
+    github
+    linkedin
+    youtube
+    twitter_x
+
+    # ==========================
+    # Footer Section
+    # ==========================
+
+    footer_description
+    copyright_text
+
+    # ==========================
+    # SEO Settings
+    # ==========================
+
+    meta_title
+    meta_description
+    meta_keywords
+
+    # ==========================
+    # Site Features
+    # ==========================
+
+    maintenance_mode
+    maintenance_message
+
+    allow_registration
+    allow_product_comments
+    allow_contact_messages
+
+    enable_wishlist
+    enable_newsletter
+    enable_contact_page
+    enable_about_us_page
+
+    # ==========================
+    # Store Settings
+    # ==========================
+
+    free_shipping_threshold
+    tax_percent
+
+    enable_coupon
+    enable_discount_code
+    enable_guest_checkout
+
+    # ==========================
+    # Date & Time
+    # ==========================
+
+    created_at
+    updated_at

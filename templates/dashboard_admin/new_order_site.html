@@ -1,117 +1,244 @@
- {% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
 {% load static %}
+
 {% block title %}
     New Orders
 {% endblock %}
 
 {% block custom_css %}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/dashboard/new_order_site.css' %}">
 {% endblock %}
 
 {% block meta_data %}
     <meta name="title" content="Dashboard Admin"/>
     <meta name="author" content="Abolfazl"/>
-    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
-    <meta name="keywords" content="dashboard,adminlte"/>
+    <meta name="description" content="Create and manage customer orders."/>
+    <meta name="keywords" content="dashboard,adminlte,new-order"/>
 {% endblock %}
 
 {% block app_content %}
+    <div class="orders-page">
 
-    <div class="wrapper">
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Create New Order</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="card card-primary">
-                        <div class="card-header">
-                            <h3 class="card-title">Order Details</h3>
-                        </div>
-                        <!-- Form Start -->
-                        <form method="POST">
-                            {% csrf_token %}
-                            <div class="card-body">
-                                <div class="orders_items">
-                                    <div class="form-group">
-                                        <label for="customer-name">Customer Name</label>
-                                        <select class="form-control" id="customer-name" name="customer">
-                                        </select>
+        <div class="wrapper">
 
-                                    </div>
-                                    <hr>
-                                </div>
+            <div class="content-wrapper">
 
-                                <div class="form-group">
-                                    <hr>
-                                    <label for="order-notes">Order Notes</label>
-                                    <textarea class="form-control" id="order-notes" name="note"
-                                              placeholder="Additional notes"></textarea>
-                                </div>
+                <div class="content-header">
+                    <div class="container-fluid">
 
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="status_order">Status Order</label>
-                                            <select class="form-control" id="status_order" name="status">
-                                                {% for key,value in statuses.items %}
-                                                    <option value="{{ key }}">{{ value }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="is_paid">Is Paid</label>
-                                            <select class="form-control" id="is_paid" name="is_paid">
-                                                <option>
-                                                    Yes
-                                                </option>
-                                                <option>
-                                                    No
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
+                        <div class="new-order-page-header">
+                            <div class="new-order-page-title-box">
+                                <h1 class="new-order-page-title">
+                                    Create New Order
+                                </h1>
 
-                                </div>
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit Order</button>
-
-                                    <button type="button" class="btn btn-secondary" onclick="addOrderItem()">
-                                        Add Another Item
-                                    </button>
-                                </div>
+                                <p class="new-order-page-description">
+                                    Create and manage customer orders quickly and efficiently.
+                                </p>
                             </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
+
+                <div class="content">
+
+                    <div class="container-fluid">
+
+                        <div class="new-order-form-card">
+
+                            <div class="new-order-card-header">
+                                <h3 class="new-order-card-title">
+                                    <i class="bi bi-clipboard-check"></i>
+                                    Order Details
+                                </h3>
+                            </div>
+
+                            <form method="POST">
+
+                                {% csrf_token %}
+
+                                <div class="new-order-card-body">
+
+                                    <!-- Customer Section -->
+
+                                    <div class="new-order-section">
+
+                                        <div class="form-group">
+
+                                            <label for="customer-name"
+                                                   class="new-order-label">
+                                                Customer Name
+                                            </label>
+
+                                            <select class="form-control new-order-select"
+                                                    id="customer-name"
+                                                    name="customer">
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Order Items Section -->
+
+                                    <div class="new-order-section">
+
+                                        <h4 class="new-order-section-title">
+                                            Order Items
+                                        </h4>
+
+                                        <div class="orders_items">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Notes Section -->
+
+                                    <div class="new-order-section">
+                                        <div class="form-group">
+
+                                            <label for="order-notes"
+                                                   class="new-order-label">
+                                                Order Notes
+                                            </label>
+
+                                            <textarea class="form-control new-order-textarea"
+                                                      id="order-notes"
+                                                      name="note"
+                                                      placeholder="Write additional notes here..."></textarea>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Status Section -->
+
+                                    <div class="new-order-section">
+
+                                        <div class="row">
+
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label for="status_order"
+                                                           class="new-order-label">
+                                                        Status Order
+                                                    </label>
+
+                                                    <select class="form-control new-order-select"
+                                                            id="status_order"
+                                                            name="status">
+
+                                                        {% for key,value in statuses.items %}
+                                                            <option value="{{ key }}">
+                                                                {{ value }}
+                                                            </option>
+                                                        {% endfor %}
+
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+
+                                                    <label for="is_paid"
+                                                           class="new-order-label">
+                                                        Is Paid
+                                                    </label>
+
+                                                    <select class="form-control new-order-select"
+                                                            id="is_paid"
+                                                            name="is_paid">
+
+                                                        <option>
+                                                            Yes
+                                                        </option>
+
+                                                        <option>
+                                                            No
+                                                        </option>
+
+                                                    </select>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Buttons -->
+
+                                    <div class="new-order-action-buttons">
+
+                                        <button type="button"
+                                                class="btn btn-outline-secondary"
+                                                onclick="addOrderItem()">
+                                            <i class="bi bi-plus-circle"></i>
+                                            Add Another Item
+
+                                        </button>
+
+                                        <button type="submit"
+                                                class="btn new-order-submit-btn">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            Save Order
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+
             </div>
-            {% if messages %}
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            {% endif %}
+
         </div>
+
     </div>
 
 {% endblock %}
 
 {% block custom_js %}
     <script type="text/javascript">
+
         var searchProductUrl = "{% url 'search_product_item' %}";
-        var searchCustomerUrl = "{% url 'search_customers_item' %}"
+        var searchCustomerUrl = "{% url 'search_customers_item' %}";
+
     </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
     <script src="{% static 'js/dashboard/admin/new_order.js' %}"></script>
 
 {% endblock %}

@@ -10,7 +10,6 @@
 }
 
 
-
 /*==================================================
                     HEADER
 ==================================================*/
@@ -29,7 +28,6 @@
 }
 
 
-
 .orders-title {
 
     font-size: 32px;
@@ -43,7 +41,6 @@
 }
 
 
-
 .orders-subtitle {
 
     margin: 0;
@@ -53,7 +50,6 @@
     font-size: 15px;
 
 }
-
 
 
 /*==================================================
@@ -71,10 +67,9 @@
 
     overflow: hidden;
 
-    box-shadow: 0 12px 35px rgba(0,0,0,.05);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, .05);
 
 }
-
 
 
 .orders-card-body {
@@ -82,7 +77,6 @@
     padding: 24px;
 
 }
-
 
 
 .orders-search {
@@ -98,25 +92,20 @@
 }
 
 
-
 .orders-search:focus {
 
     border-color: #198754;
 
-    box-shadow: 0 0 0 .25rem rgba(25,135,84,.15) !important;
+    box-shadow: 0 0 0 .25rem rgba(25, 135, 84, .15) !important;
 
 }
 
 
-
-.search-btn {
+.search-btn{
 
     min-width: 140px;
-
     border-radius: 0 14px 14px 0;
-
     font-weight: 600;
-
     transition: .25s;
 
 }
@@ -134,7 +123,6 @@
     padding: 0 18px;
 
 }
-
 
 
 /*==================================================
@@ -159,7 +147,6 @@
 }
 
 
-
 .orders-card-header > div {
 
     display: flex;
@@ -177,7 +164,6 @@
 }
 
 
-
 .orders-card-header i {
 
     color: #198754;
@@ -185,7 +171,6 @@
     font-size: 22px;
 
 }
-
 
 
 .orders-count {
@@ -207,7 +192,6 @@
 }
 
 
-
 /*==================================================
                     TABLE
 ==================================================*/
@@ -218,7 +202,6 @@
     margin: 0;
 
 }
-
 
 
 .orders-table thead th {
@@ -240,7 +223,6 @@
 }
 
 
-
 .orders-table tbody td {
 
     padding: 18px 20px;
@@ -252,7 +234,6 @@
 }
 
 
-
 .orders-table tbody tr {
 
     transition: .25s;
@@ -262,13 +243,11 @@
 }
 
 
-
 .orders-table tbody tr:hover {
 
     background: #f8fffb;
 
 }
-
 
 
 /*==================================================
@@ -283,7 +262,6 @@
     font-weight: 700;
 
 }
-
 
 
 /*==================================================
@@ -311,7 +289,6 @@
 }
 
 
-
 .paid-badge {
 
     background: #edf9f1;
@@ -321,7 +298,6 @@
 }
 
 
-
 .unpaid-badge {
 
     background: #fff2f2;
@@ -329,7 +305,6 @@
     color: #dc3545;
 
 }
-
 
 
 /*==================================================
@@ -350,7 +325,6 @@
 }
 
 
-
 /*==================================================
                     DETAIL BUTTON
 ==================================================*/
@@ -369,15 +343,13 @@
 }
 
 
-
 .orders-table .btn-outline-success:hover {
 
     transform: translateY(-2px);
 
-    box-shadow: 0 8px 20px rgba(25,135,84,.15);
+    box-shadow: 0 8px 20px rgba(25, 135, 84, .15);
 
 }
-
 
 
 /*==================================================
@@ -396,7 +368,6 @@
 }
 
 
-
 /*==================================================
                     PAGINATION
 ==================================================*/
@@ -413,13 +384,11 @@
 }
 
 
-
 .pagination {
 
     gap: 8px;
 
 }
-
 
 
 .page-link {
@@ -449,7 +418,6 @@
 }
 
 
-
 .page-link:hover {
 
     background: #198754;
@@ -461,7 +429,6 @@
 }
 
 
-
 .page-item.active .page-link {
 
     background: #198754;
@@ -469,7 +436,6 @@
     color: #fff;
 
 }
-
 
 
 /*==================================================
@@ -501,13 +467,12 @@
 }
 
 
-
 /*==================================================
                     RESPONSIVE
 ==================================================*/
 
 
-@media(max-width:992px){
+@media (max-width: 992px) {
 
 
     .orders-header {
@@ -524,8 +489,7 @@
 }
 
 
-
-@media(max-width:768px){
+@media (max-width: 768px) {
 
 
     .orders-page {
