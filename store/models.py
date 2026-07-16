@@ -131,93 +131,94 @@ class BannerMain(models.Model):
 
 
 class SettingSite(models.Model):
-    key = models.CharField(max_length=100)
-    value = models.CharField(max_length=100)
-
-
-class SettingSite(models.Model):
     # ==========================
     # General Information
     # ==========================
 
-    website_name
-    website_title
-    website_short_description
-    website_keywords
-
-    website_logo
-    website_logo_dark
-    website_favicon
+    website_name = models.CharField(max_length=150)
+    website_title = models.CharField(max_length=200)
+    website_short_description = models.CharField(max_length=300, blank=True)
+    website_keywords = models.CharField(max_length=500, blank=True)
+    website_logo = models.ImageField(upload_to="settings/logo/", blank=True, null=True)
+    website_logo_dark = models.ImageField(upload_to="settings/logo_dark/", blank=True, null=True)
+    website_favicon = models.ImageField(upload_to="settings/favicon/", blank=True, null=True)
 
     # ==========================
     # Contact Information
     # ==========================
 
-    email
-    support_email
-
-    phone_number
-    support_phone_number
-
-    address
-    working_hours
+    email = models.EmailField(blank=True)
+    support_email = models.EmailField(blank=True)
+    phone_number = models.CharField(max_length=30, blank=True)
+    support_phone_number = models.CharField(max_length=30, blank=True)
+    address = models.TextField(blank=True)
+    working_hours = models.CharField(max_length=200, blank=True)
 
     # ==========================
     # Social Media
     # ==========================
 
-    instagram
-    telegram
-    github
-    linkedin
-    youtube
-    twitter_x
+    instagram = models.URLField(blank=True)
+    telegram = models.URLField(blank=True)
+    github = models.URLField(blank=True)
+    linkedin = models.URLField(blank=True)
+    youtube = models.URLField(blank=True)
+    twitter_x = models.URLField(blank=True)
 
     # ==========================
     # Footer Section
     # ==========================
 
-    footer_description
-    copyright_text
+    footer_description = models.TextField(blank=True)
+    copyright_text = models.CharField(max_length=300, blank=True)
 
     # ==========================
     # SEO Settings
     # ==========================
 
-    meta_title
-    meta_description
-    meta_keywords
+    meta_title = models.CharField(max_length=200, blank=True)
+    meta_description = models.TextField(blank=True)
+    meta_keywords = models.CharField(max_length=500, blank=True)
 
     # ==========================
     # Site Features
     # ==========================
 
-    maintenance_mode
-    maintenance_message
-
-    allow_registration
-    allow_product_comments
-    allow_contact_messages
-
-    enable_wishlist
-    enable_newsletter
-    enable_contact_page
-    enable_about_us_page
+    maintenance_mode = models.BooleanField(default=False)
+    maintenance_message = models.TextField(blank=True)
+    allow_registration = models.BooleanField(default=True)
+    allow_product_comments = models.BooleanField(default=True)
+    allow_contact_messages = models.BooleanField(default=True)
+    enable_wishlist = models.BooleanField(default=True)
+    enable_newsletter = models.BooleanField(default=True)
+    enable_contact_page = models.BooleanField(default=True)
+    enable_about_us_page = models.BooleanField(default=True)
 
     # ==========================
     # Store Settings
     # ==========================
 
-    free_shipping_threshold
-    tax_percent
-
-    enable_coupon
-    enable_discount_code
-    enable_guest_checkout
+    free_shipping_threshold = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    tax_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    enable_coupon = models.BooleanField(default=True)
+    enable_discount_code = models.BooleanField(default=True)
+    enable_guest_checkout = models.BooleanField(default=True)
 
     # ==========================
     # Date & Time
     # ==========================
 
-    created_at
-    updated_at
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+    class Meta:
+        verbose_name = "Site Setting"
+        verbose_name_plural = "Site Settings"
+
+    def __str__(self):
+        return self.website_name

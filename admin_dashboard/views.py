@@ -13,6 +13,8 @@ from store.models import Order, OrderItem, Customer, VoteProduct, ContactMessage
     BannerMain
 from users.models import PersonUser
 from django.db import IntegrityError
+from store.models import SettingSite
+from admin_dashboard.forms import SettingSiteForm
 
 
 # Create your views here.
@@ -508,7 +510,36 @@ def build_category_tree(parent=None):
     return tree
 
 
-@never_cache
-@login_required(login_url='/')
-def setting_admin(request):
-    return render(request, "dashboard_admin/setting_admin.html")
+def setting_site(request):
+    setting = SettingSite.load()
+
+    if request.method == "POST":
+
+        form = SettingSiteForm(
+            request.POST,
+            request.FILES,
+            instance=setting
+        )
+
+        if form.is_valid():
+            form.save()
+
+            return redirect(
+                "setting_site"
+            )
+
+    else:
+
+        form = SettingSiteForm(
+            instance=setting
+        )
+
+    context = {
+        "form": form,
+    }
+
+    return render(
+        request,
+        "dashboard_admin/setting_site.html",
+        context
+    )

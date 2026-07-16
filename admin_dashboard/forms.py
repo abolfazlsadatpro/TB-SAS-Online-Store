@@ -3,7 +3,7 @@ from django.forms import inlineformset_factory
 from store.models import Product, ProductColor, BannerMain
 from store.models import Order, Category
 from store.untils import get_tuple_status
-
+from store.models import SettingSite
 
 class OrderStatusForm(forms.Form):
     order_id = forms.IntegerField(widget=forms.HiddenInput())
@@ -198,5 +198,98 @@ class BannerForm(forms.ModelForm):
                 "class": "form-control banner-file"
 
             }),
+
+        }
+
+
+
+
+class SettingSiteForm(forms.ModelForm):
+    class Meta:
+        model = SettingSite
+
+        fields = "__all__"
+
+        widgets = {
+
+            # ==========================
+            # General Information
+            # ==========================
+
+            "website_name": forms.TextInput(),
+            "website_title": forms.TextInput(),
+            "website_short_description": forms.Textarea(
+                attrs={"rows": 3}
+            ),
+            "website_keywords": forms.Textarea(
+                attrs={"rows": 3}
+            ),
+
+            # ==========================
+            # Contact Information
+            # ==========================
+
+            "email": forms.EmailInput(),
+            "support_email": forms.EmailInput(),
+
+            "phone_number": forms.TextInput(),
+            "support_phone_number": forms.TextInput(),
+
+            "address": forms.Textarea(
+                attrs={"rows": 3}
+            ),
+
+            "working_hours": forms.TextInput(),
+
+            # ==========================
+            # Social Media
+            # ==========================
+
+            "instagram": forms.URLInput(),
+            "telegram": forms.URLInput(),
+            "github": forms.URLInput(),
+            "linkedin": forms.URLInput(),
+            "youtube": forms.URLInput(),
+            "twitter_x": forms.URLInput(),
+
+            # ==========================
+            # Footer Section
+            # ==========================
+
+            "footer_description": forms.Textarea(
+                attrs={"rows": 4}
+            ),
+
+            "copyright_text": forms.TextInput(),
+
+            # ==========================
+            # SEO Settings
+            # ==========================
+
+            "meta_title": forms.TextInput(),
+
+            "meta_description": forms.Textarea(
+                attrs={"rows": 4}
+            ),
+
+            "meta_keywords": forms.Textarea(
+                attrs={"rows": 3}
+            ),
+
+            # ==========================
+            # Site Features
+            # ==========================
+
+            "maintenance_message": forms.Textarea(
+                attrs={"rows": 4}
+            ),
+
+            # ==========================
+            # Store Settings
+            # ==========================
+
+            "free_shipping_threshold": forms.NumberInput(),
+
+            "tax_percent": forms.NumberInput(),
 
         }
