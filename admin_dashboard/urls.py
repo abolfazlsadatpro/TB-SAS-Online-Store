@@ -3,6 +3,7 @@ from .views import dashboard_admin, ListOrders, new_order_site, InboxManager, Vo
     sign_out_admin, CategoryManagement, product_add, ProductList, setting_site, LastUsers, \
     DetailOrderView, order_status_update, search_customers_item, change_publish_vote, category_delete, product_delete, \
     delete_banner, BannerManagement, inbox_seen, search_product_item
+from . import views
 
 urlpatterns = [
     path('', dashboard_admin, name='dashboard_admin'),
@@ -32,7 +33,7 @@ urlpatterns = [
     path("product/delete/<int:pk>/", product_delete, name="product_delete"),
 
     path('sign_out_admin/', sign_out_admin, name='sign_out_admin'),
-    path("setting-site/",views.setting_site,name="setting_site"),
+    path("setting_site/",views.setting_site,name="setting_admin"),
     path('search_customers_item/', search_customers_item, name='search_customers_item'),
     path('search_product_item/', search_product_item, name='search_product_item'),
 ]

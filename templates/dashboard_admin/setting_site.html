@@ -1,0 +1,669 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% load static %}
+
+
+{% block title %}
+    Site Setting
+{% endblock %}
+
+
+{% block meta_data %}
+    <meta name="title" content="Site Setting"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Manage all website settings"/>
+{% endblock %}
+
+
+{% block custom_css  %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/setting_site.css' %}">
+{% endblock %}
+
+
+
+{% block app_content  %}
+
+    <div class="setting-site-page">
+
+
+        <!-- Page Header -->
+
+        <div class="setting-site-header">
+
+            <h1>
+                Site Setting
+            </h1>
+
+            <p>
+                Manage all your website settings from one place.
+            </p>
+
+        </div>
+
+
+        <form method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+
+            <div class="setting-site-main-card">
+
+
+                <!-- ==========================
+                     General Information
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+                        <i class="bi bi-globe me-2"></i>
+                        General Information
+                    </h3>
+
+
+                    <div class="setting-site-form-grid">
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Website Name
+                            </label>
+
+                            {{ form.website_name }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Website Title
+                            </label>
+
+                            {{ form.website_title }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Short Description
+                            </label>
+
+                            {{ form.website_short_description }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Website Keywords
+                            </label>
+
+                            {{ form.website_keywords }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     Image Section
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+                        <i class="bi bi-image-fill me-2"></i>
+                        Website Images
+                    </h3>
+
+
+                    <div class="setting-site-image-grid">
+
+
+                        <div class="setting-site-image-card">
+
+
+                            <h4>
+                                Website Logo
+                            </h4>
+
+
+                            <div class="setting-site-image-preview">
+
+
+                                {% if form.instance.website_logo %}
+
+                                    <img src="{{ form.instance.website_logo.url }}" alt="Website Logo">
+
+                                {% else %}
+
+                                    <span>
+                                    No Image Available
+                                </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            {{ form.website_logo }}
+
+
+                        </div>
+
+
+                        <div class="setting-site-image-card">
+
+
+                            <h4>
+                                Website Logo Dark
+                            </h4>
+
+
+                            <div class="setting-site-image-preview">
+
+
+                                {% if form.instance.website_logo_dark %}
+
+                                    <img src="{{ form.instance.website_logo_dark.url }}" alt="Website Logo Dark">
+
+                                {% else %}
+
+                                    <span>
+                                    No Image Available
+                                </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            {{ form.website_logo_dark }}
+
+
+                        </div>
+
+
+                        <div class="setting-site-image-card">
+
+
+                            <h4>
+                                Website Favicon
+                            </h4>
+
+
+                            <div class="setting-site-image-preview">
+
+
+                                {% if form.instance.website_favicon %}
+
+                                    <img src="{{ form.instance.website_favicon.url }}" alt="Website Favicon">
+
+                                {% else %}
+
+                                    <span>
+                                    No Image Available
+                                </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+
+                            {{ form.website_favicon }}
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     Contact Information
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+
+                        <i class="bi bi-person-lines-fill me-2"></i>
+
+                        Contact Information
+
+                    </h3>
+
+
+                    <div class="setting-site-form-grid">
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Email
+                            </label>
+
+                            {{ form.email }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Support Email
+                            </label>
+
+                            {{ form.support_email }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Phone Number
+                            </label>
+
+                            {{ form.phone_number }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Support Phone Number
+                            </label>
+
+                            {{ form.support_phone_number }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Address
+                            </label>
+
+                            {{ form.address }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Working Hours
+                            </label>
+
+                            {{ form.working_hours }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     Social Media
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+
+                        <i class="bi bi-share-fill me-2"></i>
+
+                        Social Media
+
+                    </h3>
+
+
+                    <div class="setting-site-form-grid">
+
+
+                        <div class="setting-site-form-group">
+                            <label class="setting-site-label">Instagram</label>
+                            {{ form.instagram }}
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+                            <label class="setting-site-label">Telegram</label>
+                            {{ form.telegram }}
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+                            <label class="setting-site-label">Github</label>
+                            {{ form.github }}
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+                            <label class="setting-site-label">Linkedin</label>
+                            {{ form.linkedin }}
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+                            <label class="setting-site-label">Youtube</label>
+                            {{ form.youtube }}
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+                            <label class="setting-site-label">Twitter X</label>
+                            {{ form.twitter_x }}
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     Footer Section
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+
+                        <i class="bi bi-file-text-fill me-2"></i>
+
+                        Footer Section
+
+                    </h3>
+
+
+                    <div class="setting-site-form-grid">
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Footer Description
+                            </label>
+
+                            {{ form.footer_description }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Copyright Text
+                            </label>
+
+                            {{ form.copyright_text }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     SEO Settings
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+
+                        <i class="bi bi-search me-2"></i>
+
+                        SEO Settings
+
+                    </h3>
+
+
+                    <div class="setting-site-form-grid">
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Meta Title
+                            </label>
+
+                            {{ form.meta_title }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Meta Description
+                            </label>
+
+                            {{ form.meta_description }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group setting-site-full">
+
+                            <label class="setting-site-label">
+                                Meta Keywords
+                            </label>
+
+                            {{ form.meta_keywords }}
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     Site Features
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+
+                        <i class="bi bi-sliders me-2"></i>
+
+                        Site Features
+
+                    </h3>
+
+
+                    <div class="setting-site-checkbox-grid">
+
+
+                        {% for field in form %}
+
+                            {% if field.name == "maintenance_mode" or field.name == "allow_registration" or field.name == "allow_product_comments" or field.name == "allow_contact_messages" or field.name == "enable_wishlist" or field.name == "enable_newsletter" or field.name == "enable_contact_page" or field.name == "enable_about_us_page" %}
+
+
+                                <div class="setting-site-checkbox-card">
+
+                                    {{ field }}
+
+                                    <label>
+                                        {{ field.label }}
+                                    </label>
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    <div class="setting-site-form-group setting-site-full">
+
+                        <label class="setting-site-label">
+                            Maintenance Message
+                        </label>
+
+                        {{ form.maintenance_message }}
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ==========================
+                     Store Settings
+                =========================== -->
+
+
+                <div class="setting-site-section">
+
+
+                    <h3 class="setting-site-section-title">
+
+                        <i class="bi bi-cart-fill me-2"></i>
+
+                        Store Settings
+
+                    </h3>
+
+
+                    <div class="setting-site-form-grid">
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Free Shipping Threshold
+                            </label>
+
+                            {{ form.free_shipping_threshold }}
+
+                        </div>
+
+
+                        <div class="setting-site-form-group">
+
+                            <label class="setting-site-label">
+                                Tax Percent
+                            </label>
+
+                            {{ form.tax_percent }}
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="setting-site-checkbox-grid">
+
+
+                        <div class="setting-site-checkbox-card">
+
+                            {{ form.enable_coupon }}
+
+                            <label>
+                                Enable Coupon
+                            </label>
+
+                        </div>
+
+
+                        <div class="setting-site-checkbox-card">
+
+                            {{ form.enable_discount_code }}
+
+                            <label>
+                                Enable Discount Code
+                            </label>
+
+                        </div>
+
+
+                        <div class="setting-site-checkbox-card">
+
+                            {{ form.enable_guest_checkout }}
+
+                            <label>
+                                Enable Guest Checkout
+                            </label>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- Save Button -->
+
+
+                <button type="submit" class="setting-site-save-btn">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Site Settings
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+{% endblock %}

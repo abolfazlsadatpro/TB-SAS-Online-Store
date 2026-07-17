@@ -525,7 +525,7 @@ def setting_site(request):
             form.save()
 
             return redirect(
-                "setting_site"
+                "setting_admin"
             )
 
     else:
