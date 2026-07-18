@@ -5,7 +5,6 @@ from store.forms import VoteSubmitForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, Count, Q
-from .models import ContactMessage
 from .forms import ContactMessageForm
 
 
