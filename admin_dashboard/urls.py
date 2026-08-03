@@ -27,13 +27,13 @@ urlpatterns = [
     path('category_management/<int:id>/', CategoryManagement.as_view(), name='category_edit'),
     path('category_delete/<int:pk>', category_delete, name='category_delete'),
 
-    path('product_add/<int:id>', product_add, name='product_edit'),
-    path('product_add/', product_add, name='product_add'),
-    path('list_product/', ProductList.as_view(), name='list_product'),
+    path("product_add/", product_add, name="product_add"),
+    path("product_add/<int:id>/", product_add, name="product_edit"),
+    path("list_product/", ProductList.as_view(), name="list_product"),
     path("product/delete/<int:pk>/", product_delete, name="product_delete"),
 
     path('sign_out_admin/', sign_out_admin, name='sign_out_admin'),
-    path("setting_site/",views.setting_site,name="setting_admin"),
+    path("setting_site/", views.setting_site, name="setting_admin"),
     path('search_customers_item/', search_customers_item, name='search_customers_item'),
     path('search_product_item/', search_product_item, name='search_product_item'),
 ]

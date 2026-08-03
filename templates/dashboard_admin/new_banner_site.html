@@ -128,6 +128,91 @@
 
                             </div>
 
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Button Text
+
+                                </label>
+
+                                {{ forms.button_text }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Button Link
+
+                                </label>
+
+                                {{ forms.button_link }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <div class="form-check">
+
+                                    {{ forms.show_button }}
+
+                                    <label class="form-check-label ms-2">
+
+                                        Show Button
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="mb-4">
+
+                                <div class="form-check">
+
+                                    {{ forms.open_in_new_tab }}
+
+                                    <label class="form-check-label ms-2">
+
+                                        Open In New Tab
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Display Order
+
+                                </label>
+
+                                {{ forms.order }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <div class="form-check">
+
+                                    {{ forms.is_active }}
+
+                                    <label class="form-check-label ms-2">
+
+                                        Active Banner
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
                             <div class="banner-form-footer">
 
                                 <a
@@ -216,6 +301,7 @@
 
                         </div>
 
+
                         <h5 class="banner-preview-title">
 
                             {% if banner %}
@@ -224,17 +310,67 @@
 
                             {% else %}
 
-                                Banner Preview
+                                Banner Title
 
                             {% endif %}
 
                         </h5>
 
+
                         <p class="banner-preview-text">
 
-                            Upload a beautiful banner for your homepage.
+                            {% if banner %}
+
+                                {{ banner.description }}
+
+                            {% else %}
+
+                                Banner Description
+
+                            {% endif %}
 
                         </p>
+
+
+                        {% if banner and banner.show_button and banner.button_text %}
+
+                            <button class="btn btn-success">
+
+                                {{ banner.button_text }}
+
+                            </button>
+
+                        {% endif %}
+
+
+                        {% if banner and banner.open_in_new_tab %}
+
+                            <div class="mt-3">
+
+                                <span class="badge bg-success">
+
+                                    Open In New Tab
+
+                                </span>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if banner and not banner.is_active %}
+
+                            <div class="mt-2">
+
+                                <span class="badge bg-danger">
+
+                                    Inactive Banner
+
+                                </span>
+
+                            </div>
+
+                        {% endif %}
 
                     </div>
 
@@ -247,7 +383,6 @@
         <!-- =========================
              TABLE
         ========================== -->
-
         <div class="banner-table-card mt-5">
 
             <div class="banner-table-header">
@@ -258,7 +393,7 @@
 
                         <i class="bi bi-images me-2"></i>
 
-                        Latest Banners
+                        Banner Management
 
                     </h3>
 
@@ -272,7 +407,7 @@
 
                 <div class="banner-table-count">
 
-                    {{ paginator.count }} Banner{{ paginator.count|pluralize }}
+                    {{ paginator.count }} Total Banners
 
                 </div>
 
@@ -288,22 +423,36 @@
 
                         <tr>
 
-                            <th width="130">
-
+                            <th width="120">
                                 Preview
-
                             </th>
 
                             <th>
-
                                 Title
+                            </th>
 
+                            <th width="80">
+                                Order
+                            </th>
+
+                            <th width="100">
+                                Status
+                            </th>
+
+                            <th width="100">
+                                Button
+                            </th>
+
+                            <th width="100">
+                                New Tab
+                            </th>
+
+                            <th width="120">
+                                Button Text
                             </th>
 
                             <th>
-
                                 Description
-
                             </th>
 
                             <th width="170"
@@ -344,13 +493,105 @@
 
                                 <td>
 
+                                    {{ banner_item.order }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if banner_item.is_active %}
+
+                                        <span class="badge bg-success">
+
+                    Active
+
+                </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-danger">
+
+                    Inactive
+
+                </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if banner_item.show_button %}
+
+                                        <span class="badge bg-success">
+
+                    Visible
+
+                </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                    Hidden
+
+                </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if banner_item.open_in_new_tab %}
+
+                                        <span class="badge bg-success">
+
+                    Yes
+
+                </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                    No
+
+                </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if banner_item.button_text %}
+
+                                        {{ banner_item.button_text }}
+
+                                    {% else %}
+
+                                        -----
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
                                     <div class="banner-description">
 
-                                        {{ banner_item.description|truncatechars:90 }}
+                                        {{ banner_item.description|truncatechars:50 }}
 
                                     </div>
 
                                 </td>
+
 
                                 <td>
 
@@ -382,7 +623,7 @@
 
                             <tr>
 
-                                <td colspan="4">
+                                <td colspan="9">
 
                                     <div class="banner-empty">
 
@@ -411,11 +652,13 @@
                         </tbody>
 
                     </table>
+
                 </div>
 
             </div>
 
         </div>
+
 
         <!-- =========================
              PAGINATION

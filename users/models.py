@@ -34,6 +34,10 @@ class PersonUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True, verbose_name='Active')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Date Joined')
 
+    @property
+    def total_wishlist(self):
+        return self.wishlists.count()
+
     objects = CustomContextManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number']

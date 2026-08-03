@@ -1,9 +1,9 @@
 from django import forms
 from django.forms import inlineformset_factory
-from store.models import Product, ProductColor, BannerMain
-from store.models import Order, Category
+from store.models import Product, ProductColor, BannerMain, ProductImage, ProductSpecification, Category, Order
 from store.untils import get_tuple_status
 from store.models import SettingSite
+
 
 class OrderStatusForm(forms.Form):
     order_id = forms.IntegerField(widget=forms.HiddenInput())
@@ -60,10 +60,26 @@ class ProductForm(forms.ModelForm):
             "slug",
             "description",
             "price",
-            "stock",
+            "discount_price",
+
+            "brand",
+            "sku",
+            "weight",
+            "warranty",
+
+            "is_active",
+            "is_available",
+            "is_featured",
+            "is_best_seller",
+
+            "meta_title",
+            "meta_description",
+            "meta_keywords",
         ]
 
         widgets = {
+
+            # Product Information
 
             "category": forms.Select(
                 attrs={
@@ -93,18 +109,99 @@ class ProductForm(forms.ModelForm):
                 }
             ),
 
+            # Pricing
+
             "price": forms.NumberInput(
                 attrs={
                     "class": "form-control"
                 }
             ),
 
-            "stock": forms.NumberInput(
+            "discount_price": forms.NumberInput(
                 attrs={
                     "class": "form-control"
                 }
             ),
 
+            # Additional Information
+
+            "brand": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Brand Name"
+                }
+            ),
+
+            "sku": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Product SKU"
+                }
+            ),
+
+            "weight": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Weight in Gram"
+                }
+            ),
+
+            "warranty": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Warranty Information"
+                }
+            ),
+
+            # Product Status
+
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
+
+            "is_available": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
+
+            "is_featured": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
+
+            "is_best_seller": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
+
+            # SEO
+
+            "meta_title": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Meta Title"
+                }
+            ),
+
+            "meta_description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 5,
+                    "placeholder": "Meta Description"
+                }
+            ),
+
+            "meta_keywords": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "apple, iphone, samsung"
+                }
+            ),
         }
 
 
@@ -113,10 +210,13 @@ class ProductColorForm(forms.ModelForm):
         model = ProductColor
 
         fields = [
+
             "name",
             "color_code",
             "image",
             "stock",
+            "is_default",
+
         ]
 
         widgets = {
@@ -125,6 +225,12 @@ class ProductColorForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Color Name"
+                }
+            ),
+
+            "is_default": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
                 }
             ),
 
@@ -150,6 +256,94 @@ class ProductColorForm(forms.ModelForm):
         }
 
 
+class ProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+
+        fields = (
+            "image",
+            "alt_text",
+            "display_order",
+        )
+
+        widgets = {
+
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+            "alt_text": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Image alt text"
+                }
+            ),
+
+            "display_order": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Display order"
+                }
+            ),
+
+        }
+
+
+class ProductSpecificationForm(forms.ModelForm):
+    class Meta:
+        model = ProductSpecification
+
+        fields = (
+
+            "group",
+            "title",
+            "value",
+            "display_order",
+
+        )
+
+        widgets = {
+
+            "group": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Display"
+                }
+            ),
+
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "RAM"
+                }
+            ),
+
+            "value": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "16 GB"
+                }
+            ),
+
+            "display_order": forms.NumberInput(
+                attrs={
+                    "class": "form-control"
+                }
+            ),
+
+        }
+
+
+ProductSpecificationFormSet = inlineformset_factory(
+    Product,
+    ProductSpecification,
+    form=ProductSpecificationForm,
+    extra=1,
+    can_delete=True
+)
+
 ProductColorFormSet = inlineformset_factory(
     Product,
     ProductColor,
@@ -166,6 +360,14 @@ ProductColorEditFormSet = inlineformset_factory(
     can_delete=True
 )
 
+ProductImageFormSet = inlineformset_factory(
+    Product,
+    ProductImage,
+    form=ProductImageForm,
+    extra=1,
+    can_delete=True
+)
+
 
 class BannerForm(forms.ModelForm):
     class Meta:
@@ -175,33 +377,55 @@ class BannerForm(forms.ModelForm):
 
         widgets = {
 
-            "title": forms.TextInput(attrs={
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "placeholder": "Enter banner title"
+                }
+            ),
 
-                "class": "form-control banner-input",
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control banner-textarea",
+                    "rows": 5,
+                    "placeholder": "Write banner description..."
+                }
+            ),
 
-                "placeholder": "Enter banner title"
+            "picture": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control banner-file"
+                }
+            ),
 
-            }),
+            "button_text": forms.TextInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "placeholder": "Shop Now"
+                }
+            ),
 
-            "description": forms.Textarea(attrs={
+            "button_link": forms.URLInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "placeholder": "/products/"
+                }
+            ),
 
-                "class": "form-control banner-textarea",
+            "order": forms.NumberInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "min": "0"
+                }
+            ),
 
-                "rows": 5,
-
-                "placeholder": "Write banner description..."
-
-            }),
-
-            "picture": forms.ClearableFileInput(attrs={
-
-                "class": "form-control banner-file"
-
-            }),
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
 
         }
-
-
 
 
 class SettingSiteForm(forms.ModelForm):

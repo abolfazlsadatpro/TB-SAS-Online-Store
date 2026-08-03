@@ -298,6 +298,23 @@ textarea.form-control {
 
 }
 
+
+.color-card,
+.image-card,
+.specification-card {
+
+    overflow: hidden;
+
+    transition: opacity .35s ease,
+    transform .35s ease,
+    max-height .45s ease,
+    margin .35s ease,
+    padding .35s ease;
+
+    max-height: 700px;
+
+}
+
 .color-card {
 
     border: 1px solid #e8edf2;
@@ -312,7 +329,9 @@ textarea.form-control {
 
 }
 
-.color-card:hover {
+.color-card:hover,
+.image-card:hover,
+.specification-card:hover {
 
     border-color: #19875433;
 
@@ -432,23 +451,7 @@ textarea.form-control {
 
 }
 
-.remove-color {
 
-    border-radius: 14px;
-
-    min-height: 50px;
-
-    font-weight: 600;
-
-    transition: .25s;
-
-}
-
-.remove-color:hover {
-
-    transform: translateY(-2px);
-
-}
 
 /*==================================================
                 FOOTER
@@ -508,7 +511,9 @@ textarea.form-control {
                 REMOVE ANIMATION
 ==================================================*/
 
-.color-card.removing {
+.color-card.removing,
+.image-card.removing,
+.specification-card.removing {
 
     opacity: 0;
 
@@ -923,7 +928,9 @@ textarea {
 
 }
 
-.color-card.removing {
+.color-card.removing,
+.image-card.removing,
+.specification-card.removing{
 
     opacity: 0;
 
@@ -978,4 +985,59 @@ textarea {
 
     color: white !important;
 
+}
+
+.color-card,
+.image-card,
+.specification-card {
+
+    border: 1px solid #e8edf2;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: .3s;
+    background: #fff;
+
+}
+
+.color-card:hover,
+.image-card:hover,
+.specification-card:hover {
+
+    border-color: #19875433;
+    box-shadow: 0 12px 28px rgba(25, 135, 84, .08);
+
+}
+
+.remove-item-btn{
+    min-height:50px;
+    min-width:140px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    transition:.25s;
+}
+
+.remove-item-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.remove-item-btn{
+
+    height:50px;
+    min-height:50px;
+    max-height:50px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+}
+
+.remove-color{
+    margin-top: 30px;
 }

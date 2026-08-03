@@ -1,0 +1,338 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+
+{% block title %}
+Wishlist
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<section class="wishlist-page">
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="wishlist-header">
+
+            <div>
+
+                <h1>
+                    <i class="fa-solid fa-heart"></i>
+                    My Wishlist
+                </h1>
+
+                <p>
+                    Manage all your favorite products.
+                </p>
+
+            </div>
+
+            <div class="wishlist-count">
+
+        <span id="wishlistPageCount">
+
+            {{ wishlists.count }}
+
+        </span>
+
+                Product{{ wishlists.count|pluralize }}
+
+            </div>
+
+        </div>
+
+        <!-- STATS -->
+
+        <div class="wishlist-stats">
+
+            <div class="wishlist-stat-card">
+
+                <span>Total Products</span>
+
+                <h3>
+                    {{ wishlists.count }}
+                </h3>
+
+            </div>
+
+            <div class="wishlist-stat-card">
+
+                <span>Discount Products</span>
+
+                <h3>
+                    {{ wishlists|length }}
+                </h3>
+
+            </div>
+
+            <div class="wishlist-stat-card">
+
+                <span>Total Value</span>
+
+                <h3>
+                    $----
+                </h3>
+
+            </div>
+
+        </div>
+
+        {% if wishlists %}
+
+        <!-- PRODUCTS -->
+
+        <div class="wishlist-products">
+
+            {% for item in wishlists %}
+
+            <div class="wishlist-card">
+
+                <div class="wishlist-image">
+
+                    <img
+                            src="{{ item.product.main_image.url }}"
+                            alt="{{ item.product.name }}"
+                    >
+
+                </div>
+
+                <div class="wishlist-content">
+
+                    <h3>
+                        {{ item.product.name }}
+                    </h3>
+
+                    <p>
+                        {{ item.product.category.name }}
+                    </p>
+
+                    <div class="wishlist-price">
+
+                        {% if item.product.has_discount %}
+
+                        <span class="old-price">
+
+                    {{ item.product.price }}
+
+                </span>
+
+                        <span class="new-price">
+
+                    {{ item.product.discount_price }}
+
+                </span>
+
+                        {% else %}
+
+                        <span class="new-price">
+
+                    {{ item.product.price }}
+
+                </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <div class="wishlist-actions">
+
+                    <a
+                            href="{% url 'product_detail' item.product.id %}"
+                            class="view-btn"
+                    >
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </a>
+
+                    <button
+                            class="remove-btn wishlist-remove"
+                            data-id="{{ item.product.id }}"
+                    >
+
+                        <i class="fa-solid fa-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- RECOMMENDED -->
+
+        <div class="wishlist-recommended">
+
+            <h2>
+                Popular Products
+            </h2>
+
+            <div class="recommended-grid">
+
+                {% for product in popular_products %}
+
+                <div class="recommended-card">
+
+                    <img
+                            src="{{ product.main_image.url }}"
+                            alt="{{ product.name }}"
+                    >
+
+                    <h5>
+                        {{ product.name }}
+                    </h5>
+
+                    <p>
+                        ${{ product.price }}
+                    </p>
+
+                    <a href="{% url 'product_detail' product.id %}">
+                        View Product
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY -->
+
+        <div class="wishlist-empty">
+
+            <div class="wishlist-empty-icon">
+
+                <i class="fa-regular fa-heart"></i>
+
+            </div>
+
+            <h2>
+                Your Wishlist Is Empty
+            </h2>
+
+            <p>
+
+                Discover amazing products and save
+                your favorites to view them later.
+
+            </p>
+
+            <a
+                    href="{% url 'products' %}"
+                    class="shopping-btn"
+            >
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+                Continue Shopping
+
+            </a>
+
+        </div>
+
+        <!-- RECOMMENDED -->
+
+        <div class="wishlist-recommended">
+
+            <div class="section-title">
+
+                <h2>
+
+                    Popular Products
+
+                </h2>
+
+            </div>
+
+            <!-- Product Slider -->
+
+        </div>
+
+        {% endif %}
+
+    </div>
+    <div class="wishlist-footer-info">
+
+        <div>
+
+            <i class="fa-solid fa-shield-heart"></i>
+
+            <span>
+            Your wishlist is synced with your account.
+        </span>
+
+        </div>
+
+        <div>
+
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            <span>
+            Access your favorite products anytime.
+        </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div class="wishlist-toast" id="wishlistToast">
+
+    <div class="wishlist-toast-icon">
+        <i class="fa-solid fa-heart"></i>
+    </div>
+
+    <div class="wishlist-toast-content">
+
+        <h5>
+            Product added to Wishlist
+        </h5>
+
+        <p>
+            You can view your wishlist anytime.
+        </p>
+
+        <a href="{% url 'wishlist' %}" class="wishlist-link">
+
+            <i class="fa-regular fa-heart"></i>
+
+            <span id="wishlistCount">
+
+                {% if request.user.is_authenticated %}
+                    {{ request.user.total_wishlist }}
+                {% else %}
+                    0
+                {% endif %}
+
+            </span>
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'js/wishlist.js' %}"></script>
+
+{% endblock %}

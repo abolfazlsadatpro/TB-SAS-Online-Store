@@ -14,228 +14,167 @@
         <div class="container">
             <!-- Slider -->
             <div id="mainSlider" class="carousel slide" data-bs-ride="carousel">
+                {% if banners %}
 
-                <!-- indicators -->
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
-                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
-                    <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="2"></button>
-                </div>
+                    <div id="homeSlider" class="carousel slide" data-bs-ride="carousel">
 
-                <!-- slides -->
-                <div class="carousel-inner">
+                        <div class="carousel-inner">
 
-                    <div class="carousel-item active">
-                        <img src="{% static 'images/slider1.jpeg' %}" class="d-block w-100" alt="Slide 1">
-                        <div class="carousel-caption">
-                            <h2>Big Sale</h2>
-                            <p>Up to 50% off</p>
-                            <a href="#" class="btn btn-primary">Shop Now</a>
+                            {% for banner in banners %}
+
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+
+                                    <img
+                                            src="{{ banner.picture.url }}"
+                                            class="d-block w-100"
+                                            alt="{{ banner.title }}"
+                                    >
+
+                                    <div class="carousel-caption">
+
+                                        <h1>
+                                            {{ banner.title }}
+                                        </h1>
+
+
+                                        {% if banner.description %}
+
+                                            <p>
+                                                {{ banner.description }}
+                                            </p>
+
+                                        {% endif %}
+
+
+                                        {% if banner.show_button and banner.button_text %}
+
+                                            <a
+                                                    href="{{ banner.button_link }}"
+
+                                                    {% if banner.open_in_new_tab %}
+                                                    target="_blank"
+                                                    {% endif %}
+
+                                                    class="btn btn-success"
+                                            >
+
+                                                {{ banner.button_text }}
+
+                                            </a>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            {% endfor %}
+
                         </div>
+
+
+                        <button
+                                class="carousel-control-prev"
+                                type="button"
+                                data-bs-target="#homeSlider"
+                                data-bs-slide="prev"
+                        >
+
+                            <span class="carousel-control-prev-icon"></span>
+
+                        </button>
+
+
+                        <button
+                                class="carousel-control-next"
+                                type="button"
+                                data-bs-target="#homeSlider"
+                                data-bs-slide="next"
+                        >
+
+                            <span class="carousel-control-next-icon"></span>
+
+                        </button>
+
+
                     </div>
 
-                    <div class="carousel-item">
-                        <img src="{% static 'images/slider2.jpeg' %}" class="d-block w-100" alt="Slide 2">
-                        <div class="carousel-caption">
-                            <h2>New Products</h2>
-                            <p>Check our latest items</p>
-                            <a href="#" class="btn btn-primary">View Products</a>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <img src="{% static 'images/slider3.jpeg' %}" class="d-block w-100" alt="Slide 3">
-                        <div class="carousel-caption">
-                            <h2>Best Quality</h2>
-                            <p>Only original products</p>
-                            <a href="#" class="btn btn-primary">Learn More</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-
-                <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
-
-            </div>
-
-            <div class="categories-slider">
-
-                <div class="product-categories">
-
-                    <div class="category-item health">
-                        <i class="fa-solid fa-heart-pulse"></i>
-                        <span>Health Tools</span>
-                    </div>
-                    <div class="category-item car">
-                        <i class="fa-solid fa-car"></i>
-                        <span>Car Accessories</span>
-                    </div>
-                    <div class="category-item market">
-                        <i class="fa-solid fa-basket-shopping"></i>
-                        <span>Supermarket</span>
-                    </div>
-                    <div class="category-item phone">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                        <span>Mobile Phones</span>
-                    </div>
-                    <div class="category-item gold">
-                        <i class="fa-solid fa-gem"></i>
-                        <span>Gold & Jewelry</span>
-                    </div>
-                    <div class="category-item console">
-                        <i class="fa-solid fa-gamepad"></i>
-                        <span>Game Consoles</span>
-                    </div>
-                    <div class="category-item fashion">
-                        <i class="fa-solid fa-shirt"></i>
-                        <span>Fashion</span>
-                    </div>
-                    <div class="category-item home">
-                        <i class="fa-solid fa-house">
-                        </i><span>Home & Kitchen</span>
-                    </div>
-                    <div class="category-item book">
-                        <i class="fa-solid fa-book"></i>
-                        <span>Books</span>
-                    </div>
-                    <div class="category-item sport">
-                        <i class="fa-solid fa-dumbbell">
-                        </i><span>Sports</span>
-                    </div>
-                    <div class="category-item toy">
-                        <i class="fa-solid fa-puzzle-piece"></i>
-                        <span>Toys</span>
-                    </div>
-
-                </div>
+                {% endif %}
             </div>
 
 
             <!-- اسلایدر تخفیف -->
             <section class="special-offers-section position-relative">
-                <div class="container-fluid">
+                <!-- محصولات -->
 
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="special-title">🔥 Special Discounts</h3>
-                        <a href="#" class="view-all">View All</a>
+                {% for product in discount_products %}
+
+                    <div class="col-auto special-col">
+
+                        <div class="special-card">
+
+                            {% if product.has_discount %}
+
+                                <span class="discount-badge">
+
+                    -{{ product.discount_percent }}%
+
+                </span>
+
+                            {% endif %}
+
+                            {% if product.main_image_url %}
+
+                                <img
+                                        src="{{ product.main_image_url }}"
+                                        class="special-img"
+                                        alt="{{ product.name }}">
+
+                            {% endif %}
+
+                            <h6 class="product-title">
+
+                                {{ product.name|truncatechars:35 }}
+
+                            </h6>
+
+                            <div class="price-box">
+
+                <span class="new-price">
+
+                    ${{ product.display_price }}
+
+                </span>
+
+                                {% if product.has_discount %}
+
+                                    <span class="old-price">
+
+                        ${{ product.price }}
+
+                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <!-- Buttons با id جدید -->
-                    <button class="slider-btn left" id="slideLeftSpecial">&#10094;</button>
-                    <button class="slider-btn right" id="slideRightSpecial">&#10095;</button>
+                {% empty %}
 
-                    <!-- Slider -->
-                    <div class="row flex-nowrap overflow-auto special-scroll" id="specialSlider">
+                    <div class="col-12 text-center">
 
-                        <!-- محصولات -->
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/4.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
+                        <p>
 
-                        <!-- بقیه محصولات ... -->
+                            No discount products found.
 
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/6.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
+                        </p>
 
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/7.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/12.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/8.jpg' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/9.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/10.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
-                        <div class="col-auto special-col">
-                            <div class="special-card">
-                                <span class="discount-badge">-40%</span>
-                                <img src="{% static 'images/11.webp' %}" class="special-img" alt="">
-                                <h6 class="product-title">Samsung Flash Drive 64GB</h6>
-                                <div class="price-box">
-                                    <span class="new-price">$19.99</span>
-                                    <span class="old-price">$33.00</span>
-                                </div>
-                                <div class="timer" data-time="7200"></div>
-                            </div>
-                        </div>
                     </div>
-                </div>
+
+                {% endfor %}
             </section>
 
             <!-- promo-section بدون متن پایین عکس -->

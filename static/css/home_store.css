@@ -5,7 +5,7 @@ body {
     overflow-x: hidden;
 }
 
-#mainSlider {
+#homeSlider {
     margin-bottom: 4rem;
     position: relative; /* خیلی مهم */
     z-index: 1;
@@ -59,7 +59,7 @@ body {
     border-right: 1px solid #0000004d;
 }
 
-#mainSlider {
+#homeSlider {
     width: 100vw;
     position: relative;
     left: 50%;
@@ -546,7 +546,7 @@ body {
     right: 10px;
 }
 
-#mainSlider,
+#homeSlider,
 .special-offers-section,
 .product-slider-wrapper {
     position: relative;

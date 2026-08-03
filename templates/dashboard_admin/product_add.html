@@ -2,223 +2,175 @@
 {% load static %}
 
 {% block title %}
-    {% if product %}
-        Edit Product
-    {% else %}
-        Add Product
-    {% endif %}
+{% if product %}
+Edit Product
+{% else %}
+Add Product
+{% endif %}
 {% endblock %}
 
 {% block custom_css %}
-    <link rel="stylesheet" href="{% static 'css/dashboard/product_add.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard/product_add.css' %}">
 {% endblock %}
 
 {% block app_content %}
 
-    <div class="product-page">
+<div class="product-page">
 
-        {% if messages %}
+    {% if messages %}
 
-            <div class="mb-4">
+    <div class="mb-4">
 
-                {% for message in messages %}
+        {% for message in messages %}
 
-                    <div class="custom-alert {% if message.tags == 'success' %}alert-success-custom{% else %}alert-danger-custom{% endif %}">
+        <div class="custom-alert {% if message.tags == 'success' %}alert-success-custom{% else %}alert-danger-custom{% endif %}">
 
-                        <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center">
 
-                            {% if message.tags == 'success' %}
-                                <i class="bi bi-check-circle-fill me-2"></i>
-                            {% else %}
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            {% endif %}
+                {% if message.tags == 'success' %}
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {% else %}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {% endif %}
 
-                            <span>{{ message }}</span>
-
-                        </div>
-
-                        <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="alert">
-                        </button>
-
-                    </div>
-
-                {% endfor %}
+                <span>{{ message }}</span>
 
             </div>
 
+            <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ formset.management_form }}
+
+        {% if product %}
+        <input type="hidden" id="isEditMode" value="1">
+        {% else %}
+        <input type="hidden" id="isEditMode" value="0">
         {% endif %}
 
-        <form method="POST" enctype="multipart/form-data">
+        <!-- =======================================
+                    PAGE HEADER
+        ======================================== -->
 
-            {% csrf_token %}
+        <div class="product-header">
 
-            {{ formset.management_form }}
+            <div>
 
-            {% if product %}
-                <input type="hidden" id="isEditMode" value="1">
-            {% else %}
-                <input type="hidden" id="isEditMode" value="0">
-            {% endif %}
+                <h1 class="product-title">
 
-            <!-- =======================================
-                        PAGE HEADER
-            ======================================== -->
+                    {% if product %}
+                    Edit Product
+                    {% else %}
+                    Add Product
+                    {% endif %}
 
-            <div class="product-header">
+                </h1>
 
-                <div>
+                <p class="product-subtitle">
 
-                    <h1 class="product-title">
+                    {% if product %}
+                    Update product information and available colors.
+                    {% else %}
+                    Create a beautiful product for your online store.
+                    {% endif %}
 
-                        {% if product %}
-                            Edit Product
-                        {% else %}
-                            Add Product
-                        {% endif %}
-
-                    </h1>
-
-                    <p class="product-subtitle">
-
-                        {% if product %}
-                            Update product information and available colors.
-                        {% else %}
-                            Create a beautiful product for your online store.
-                        {% endif %}
-
-                    </p>
-
-                </div>
-
-                <a href="{% url 'list_product' %}"
-                   class="btn btn-outline-success header-back-btn">
-
-                    <i class="bi bi-arrow-left"></i>
-
-                    Back to Product
-
-                </a>
+                </p>
 
             </div>
 
-            <!-- =======================================
-                        MAIN INFORMATION
-            ======================================== -->
+            <a href="{% url 'list_product' %}"
+               class="btn btn-outline-success header-back-btn">
 
-            <div class="row g-4">
+                <i class="bi bi-arrow-left"></i>
 
-                <!-- LEFT -->
+                Back to Product
 
-                <div class="col-xl-8">
+            </a>
 
-                    <div class="banner-card">
+        </div>
 
-                        <div class="product-card-header">
+        <!-- =======================================
+                    MAIN INFORMATION
+        ======================================== -->
 
-                            <i class="bi bi-box-seam-fill"></i>
+        <div class="row g-4">
 
-                            <span>Product Information</span>
+            <!-- LEFT -->
 
-                        </div>
+            <div class="col-xl-8">
 
-                        <div class="banner-card-body">
+                <div class="banner-card">
 
-                            <div class="mb-4">
+                    <div class="product-card-header">
 
-                                <label class="product-label">
+                        <i class="bi bi-box-seam-fill"></i>
 
-                                    Category
-
-                                </label>
-
-                                {{ forms.category }}
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <label class="product-label">
-
-                                    Product Name
-
-                                </label>
-
-                                {{ forms.name }}
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <label class="product-label">
-
-                                    Slug
-
-                                </label>
-
-                                {{ forms.slug }}
-
-                            </div>
-
-                            <div>
-
-                                <label class="product-label">
-
-                                    Description
-
-                                </label>
-
-                                {{ forms.description }}
-
-                            </div>
-
-                        </div>
+                        <span>Product Information</span>
 
                     </div>
 
-                </div>
+                    <div class="banner-card-body">
 
-                <!-- RIGHT -->
+                        <div class="mb-4">
 
-                <div class="col-xl-4">
+                            <label class="product-label">
 
-                    <div class="banner-card">
+                                Category
 
-                        <div class="product-card-header">
+                            </label>
 
-                            <i class="bi bi-cash-stack"></i>
-
-                            <span>Pricing</span>
+                            {{ forms.category }}
 
                         </div>
 
-                        <div class="banner-card-body">
+                        <div class="mb-4">
 
-                            <div class="mb-4">
+                            <label class="product-label">
 
-                                <label class="product-label">
+                                Product Name
 
-                                    Price
+                            </label>
 
-                                </label>
+                            {{ forms.name }}
 
-                                {{ forms.price }}
+                        </div>
 
-                            </div>
+                        <div class="mb-4">
 
-                            <div>
+                            <label class="product-label">
 
-                                <label class="product-label">
+                                Slug
 
-                                    Stock
+                            </label>
 
-                                </label>
+                            {{ forms.slug }}
 
-                                {{ forms.stock }}
+                        </div>
 
-                            </div>
+                        <div>
+
+                            <label class="product-label">
+
+                                Description
+
+                            </label>
+
+                            {{ forms.description }}
 
                         </div>
 
@@ -228,148 +180,560 @@
 
             </div>
 
-            <!-- =======================================
-                    PRODUCT COLORS
-            ======================================== -->
-            <div class="banner-card mt-5">
+            <!-- RIGHT -->
 
-                <div class="product-card-header d-flex justify-content-between align-items-center">
+            <div class="col-xl-4">
 
-                    <div class="product-colors-header d-flex align-items-center">
+                <div class="banner-card">
 
-                        <i class="bi bi-palette-fill me-2"></i>
+                    <div class="product-card-header">
 
-                        <span>Product Colors</span>
+                        <i class="bi bi-cash-stack"></i>
+
+                        <span>Pricing</span>
 
                     </div>
 
-                    <button
-                            type="button"
-                            id="addColor"
-                            class="btn btn-success add-color-btn">
+                    <div class="banner-card-body">
 
-                        <i class="bi bi-plus-circle-fill"></i>
+                        <div class="mb-4">
 
-                        Add Color
+                            <label class="product-label">
+                                Price
+                            </label>
 
-                    </button>
+                            {{ forms.price }}
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="product-label">
+                                Discount Price
+                            </label>
+
+                            {{ forms.discount_price }}
+
+                        </div>
+
+                        <!-- Brand & SKU -->
+
+                        <div class="mb-4">
+
+                            <label class="product-label" for="{{ forms.brand.id_for_label }}">
+                                Brand
+                            </label>
+
+                            {{ forms.brand }}
+
+                            {% if forms.brand.errors %}
+                            <small class="text-danger">
+                                {{ forms.brand.errors|striptags }}
+                            </small>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label class="product-label" for="{{ forms.sku.id_for_label }}">
+                                SKU
+                            </label>
+
+                            {{ forms.sku }}
+
+                            {% if forms.sku.errors %}
+                            <small class="text-danger">
+                                {{ forms.sku.errors|striptags }}
+                            </small>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label class="product-label" for="{{ forms.weight.id_for_label }}">
+                                Weight (Gram)
+                            </label>
+
+                            {{ forms.weight }}
+
+                            {% if forms.weight.errors %}
+                            <small class="text-danger">
+                                {{ forms.weight.errors|striptags }}
+                            </small>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label class="product-label" for="{{ forms.warranty.id_for_label }}">
+                                Warranty
+                            </label>
+
+                            {{ forms.warranty }}
+
+                            {% if forms.warranty.errors %}
+                            <small class="text-danger">
+                                {{ forms.warranty.errors|striptags }}
+                            </small>
+                            {% endif %}
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <div class="banner-card-body">
+            </div>
 
-                    <div id="colorContainer">
+        </div>
 
-                        {% for form in formset %}
+        <!-- =======================================
+                PRODUCT COLORS
+        ======================================== -->
+        <div class="banner-card mt-5">
 
-                            <div class="banner-card color-card mb-4">
+            <div class="product-card-header d-flex justify-content-between align-items-center">
 
-                                <div class="banner-card-body">
+                <div class="product-colors-header d-flex align-items-center">
 
-                                    {{ form.id }}
+                    <i class="bi bi-palette-fill me-2"></i>
 
-                                    <div class="d-none">
+                    <span>Product Colors</span>
 
-                                        {{ form.DELETE }}
+                </div>
 
-                                    </div>
+                <button
+                        type="button"
+                        id="addColor"
+                        class="btn btn-success add-color-btn">
 
-                                    <div class="color-card-title">
+                    <i class="bi bi-plus-circle-fill"></i>
 
-                                        <i class="bi bi-droplet-half"></i>
+                    Add Color
 
-                                        <span>
+                </button>
+
+            </div>
+
+            <div class="banner-card-body">
+
+                <div id="colorContainer">
+
+                    {% for form in formset %}
+
+                    <div class="banner-card color-card mb-4">
+
+                        <div class="banner-card-body">
+
+                            {{ form.id }}
+
+                            <div class="d-none">
+
+                                {{ form.DELETE }}
+
+                            </div>
+
+                            <div class="color-card-title">
+
+                                <i class="bi bi-droplet-half"></i>
+
+                                <span>
 
                                 Color {{ forloop.counter }}
 
                             </span>
 
-                                    </div>
+                            </div>
 
-                                    <div class="row g-4">
+                            <div class="row g-4">
 
-                                        <div class="col-lg-3">
+                                <div class="col-lg-3">
 
-                                            <label class="product-label">
+                                    <label class="product-label">
 
-                                                Color Name
+                                        Color Name
 
-                                            </label>
+                                    </label>
 
-                                            {{ form.name }}
+                                    {{ form.name }}
 
-                                        </div>
+                                </div>
 
-                                        <div class="col-lg-2">
+                                <div class="col-lg-2">
 
-                                            <label class="product-label">
+                                    <label class="product-label">
 
-                                                Color Code
+                                        Color Code
 
-                                            </label>
+                                    </label>
 
-                                            {{ form.color_code }}
+                                    {{ form.color_code }}
 
-                                        </div>
+                                </div>
 
-                                        <div class="col-lg-2">
+                                <div class="col-lg-2">
 
-                                            <label class="product-label">
+                                    <label class="product-label">
 
-                                                Stock
+                                        Stock
 
-                                            </label>
+                                    </label>
 
-                                            {{ form.stock }}
+                                    {{ form.stock }}
 
-                                        </div>
+                                </div>
 
-                                        <div class="col-lg-3">
+                                <div class="col-lg-3">
 
-                                            <label class="product-label">
+                                    <label class="product-label">
 
-                                                Image
+                                        Image
 
-                                            </label>
+                                    </label>
 
-                                            {{ form.image }}
+                                    {{ form.image }}
 
-                                        </div>
+                                </div>
 
-                                        <div class="col-lg-2 d-grid">
+                                <div class="col-lg-2 d-grid">
 
-                                            <button
-                                                    type="button"
-                                                    class="btn btn-outline-danger remove-color"
-                                                    style="margin-top: 30px;">
+                                    <button
+                                            type="button"
+                                            class="btn btn-outline-danger remove-item-btn remove-color"
+                                            style="margin-top:30px;">
 
-                                                <i class="bi bi-trash"></i>
-
-                                                Remove
-
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-
-                                    {% if form.instance.image %}
-
-                                        <div class="color-image-preview">
-
-                                            <img
-                                                    src="{{ form.instance.image.url }}"
-                                                    class="color-preview-image preview-clickable">
-
-                                        </div>
-
-                                    {% endif %}
+                                        <i class="bi bi-trash"></i>
+                                        Remove
+                                    </button>
 
                                 </div>
 
                             </div>
 
-                        {% endfor %}
+                            {% if form.instance.image %}
+
+                            <div class="color-image-preview">
+
+                                <img
+                                        src="{{ form.instance.image.url }}"
+                                        class="color-preview-image preview-clickable">
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =======================================
+                    PRODUCT IMAGES
+        ======================================== -->
+
+        {{ image_formset.management_form }}
+
+        <div class="banner-card mt-5">
+
+            <div class="product-card-header d-flex justify-content-between align-items-center">
+
+                <div class="d-flex align-items-center">
+
+                    <i class="bi bi-images me-2"></i>
+
+                    <span>Product Images</span>
+
+                </div>
+
+                <button
+                        type="button"
+                        id="addImage"
+                        class="btn btn-success add-color-btn">
+
+                    <i class="bi bi-plus-circle-fill"></i>
+
+                    Add Image
+
+                </button>
+
+            </div>
+
+            <div class="banner-card-body">
+
+                <div id="imageContainer">
+
+                    {% for form in image_formset %}
+
+                    <div class="banner-card image-card mb-4">
+
+                        <div class="banner-card-body">
+
+                            {{ form.id }}
+
+                            <div class="d-none">
+                                {{ form.DELETE }}
+                            </div>
+
+                            <div class="color-card-title">
+
+                                <i class="bi bi-image-fill"></i>
+
+                                <span>
+                                Image {{ forloop.counter }}
+                            </span>
+
+                            </div>
+
+                            <div class="row g-4">
+
+                                <div class="col-lg-4">
+
+                                    <label class="product-label">
+                                        Product Image
+                                    </label>
+
+                                    {{ form.image }}
+
+                                </div>
+
+                                <div class="col-lg-4">
+
+                                    <label class="product-label">
+                                        Alt Text
+                                    </label>
+
+                                    {{ form.alt_text }}
+
+                                </div>
+
+                                <div class="col-lg-2">
+
+                                    <label class="product-label">
+                                        Display Order
+                                    </label>
+
+                                    {{ form.display_order }}
+
+                                </div>
+
+                                <div class="col-lg-2 d-grid">
+
+                                    <button
+                                            type="button"
+                                            class="btn btn-outline-danger remove-item-btn remove-image"
+                                            style="margin-top:30px;">
+
+                                        <i class="bi bi-trash"></i>
+                                        Remove
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            {% if form.instance.image %}
+
+                            <div class="color-image-preview">
+
+                                <img
+                                        src="{{ form.instance.image.url }}"
+                                        class="color-preview-image preview-clickable"
+                                        alt="{{ form.instance.alt_text }}">
+
+                            </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- =======================================
+                PRODUCT SPECIFICATIONS
+        ======================================== -->
+
+        {{ specification_formset.management_form }}
+
+        <div class="banner-card mt-5">
+
+            <div class="product-card-header d-flex justify-content-between align-items-center">
+
+                <div class="d-flex align-items-center">
+
+                    <i class="bi bi-card-list me-2"></i>
+
+                    <span>Product Specifications</span>
+
+                </div>
+
+                <button
+                        type="button"
+                        id="addSpecification"
+                        class="btn btn-success add-color-btn">
+
+                    <i class="bi bi-plus-circle-fill"></i>
+
+                    Add Specification
+
+                </button>
+
+            </div>
+
+            <div class="banner-card-body">
+
+                <div id="specificationContainer">
+
+                    {% for form in specification_formset %}
+
+                    <div class="banner-card specification-card mb-4">
+
+                        <div class="banner-card-body">
+
+                            {{ form.id }}
+
+                            <div class="d-none">
+                                {{ form.DELETE }}
+                            </div>
+
+                            <div class="color-card-title">
+
+                                <i class="bi bi-card-text"></i>
+
+                                <span>
+                                Specification {{ forloop.counter }}
+                            </span>
+
+                            </div>
+
+                            <div class="row g-4">
+
+                                <div class="col-lg-4">
+
+                                    <label class="product-label">
+                                        Title
+                                    </label>
+
+                                    {{ form.title }}
+
+                                </div>
+
+                                <div class="col-lg-4">
+
+                                    <label class="product-label">
+                                        Value
+                                    </label>
+
+                                    {{ form.value }}
+
+                                </div>
+
+                                <div class="col-lg-2">
+
+                                    <label class="product-label">
+                                        Display Order
+                                    </label>
+
+                                    {{ form.display_order }}
+
+                                </div>
+
+                                <div class="col-lg-2 d-grid">
+                                    <button
+                                            type="button"
+                                            class="btn btn-outline-danger remove-item-btn remove-specification"
+                                            style="margin-top:30px;">
+                                        <i class="bi bi-trash"></i>
+                                        Remove
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =======================================
+                SEO SETTINGS
+======================================= -->
+
+        <div class="banner-card mt-5">
+
+            <div class="product-card-header">
+
+                <i class="bi bi-search"></i>
+
+                <span>SEO Settings</span>
+
+            </div>
+
+            <div class="banner-card-body">
+
+                <div class="row g-4">
+
+                    <div class="col-lg-6">
+
+                        <label class="product-label">
+
+                            Meta Title
+
+                        </label>
+
+                        {{ forms.meta_title }}
+
+                    </div>
+
+                    <div class="col-lg-6">
+
+                        <label class="product-label">
+
+                            Meta Keywords
+
+                        </label>
+
+                        {{ forms.meta_keywords }}
+
+                    </div>
+
+                    <div class="col-12">
+
+                        <label class="product-label">
+
+                            Meta Description
+
+                        </label>
+
+                        {{ forms.meta_description }}
 
                     </div>
 
@@ -377,99 +741,187 @@
 
             </div>
 
-            <!-- =======================================
-                    EMPTY COLOR TEMPLATE
-            ======================================== -->
+        </div>
 
-            <template id="emptyFormTemplate">
+        <!-- =======================================
+            PRODUCT FEATURES
+======================================= -->
 
-                <div class="banner-card color-card mb-4">
+        <div class="banner-card mt-5">
 
-                    <div class="banner-card-body">
+            <div class="product-card-header">
 
-                        {{ formset.empty_form.id }}
+                <i class="bi bi-stars"></i>
 
-                        <div class="d-none">
+                <span>Product Features</span>
 
-                            {{ formset.empty_form.DELETE }}
+            </div>
+
+            <div class="banner-card-body">
+
+                <div class="row g-4">
+
+                    <div class="col-md-4">
+
+                        <div class="form-check">
+
+                            {{ forms.is_active }}
+
+                            <label class="form-check-label">
+
+                                Active Product
+
+                            </label>
 
                         </div>
 
-                        <div class="color-card-title">
+                    </div>
 
-                            <i class="bi bi-droplet-half"></i>
+                    <div class="col-md-4">
 
-                            <span>
+                        <div class="form-check">
+
+                            {{ forms.is_available }}
+
+                            <label class="form-check-label">
+
+                                Available Product
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-check">
+
+                            {{ forms.is_featured }}
+
+                            <label class="form-check-label">
+
+                                Featured Product
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-check">
+
+                            {{ forms.is_best_seller }}
+
+                            <label class="form-check-label">
+
+                                Best Seller
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =======================================
+                EMPTY COLOR TEMPLATE
+        ======================================== -->
+
+        <template id="emptyFormTemplate">
+
+            <div class="banner-card color-card mb-4">
+
+                <div class="banner-card-body">
+
+                    {{ formset.empty_form.id }}
+
+                    <div class="d-none">
+
+                        {{ formset.empty_form.DELETE }}
+
+                    </div>
+
+                    <div class="color-card-title">
+
+                        <i class="bi bi-droplet-half"></i>
+
+                        <span>
 
                     New Color
 
                 </span>
 
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-lg-3">
+
+                            <label class="product-label">
+
+                                Color Name
+
+                            </label>
+
+                            {{ formset.empty_form.name }}
+
                         </div>
 
-                        <div class="row g-4">
+                        <div class="col-lg-2">
 
-                            <div class="col-lg-3">
+                            <label class="product-label">
 
-                                <label class="product-label">
+                                Color Code
 
-                                    Color Name
+                            </label>
 
-                                </label>
+                            {{ formset.empty_form.color_code }}
 
-                                {{ formset.empty_form.name }}
+                        </div>
 
-                            </div>
+                        <div class="col-lg-2">
 
-                            <div class="col-lg-2">
+                            <label class="product-label">
 
-                                <label class="product-label">
+                                Stock
 
-                                    Color Code
+                            </label>
 
-                                </label>
+                            {{ formset.empty_form.stock }}
 
-                                {{ formset.empty_form.color_code }}
+                        </div>
 
-                            </div>
+                        <div class="col-lg-3">
 
-                            <div class="col-lg-2">
+                            <label class="product-label">
 
-                                <label class="product-label">
+                                Image
 
-                                    Stock
+                            </label>
 
-                                </label>
+                            {{ formset.empty_form.image }}
 
-                                {{ formset.empty_form.stock }}
+                        </div>
 
-                            </div>
+                        <div class="col-lg-2 d-grid">
 
-                            <div class="col-lg-3">
+                            <button
+                                    type="button"
+                                    class="btn btn-outline-danger remove-item-btn remove-color">
 
-                                <label class="product-label">
+                                <i class="bi bi-trash"></i>
 
-                                    Image
+                                Remove
 
-                                </label>
-
-                                {{ formset.empty_form.image }}
-
-                            </div>
-
-                            <div class="col-lg-2 d-grid">
-
-                                <button
-                                        type="button"
-                                        class="btn btn-outline-danger remove-color">
-
-                                    <i class="bi bi-trash"></i>
-
-                                    Remove
-
-                                </button>
-
-                            </div>
+                            </button>
 
                         </div>
 
@@ -477,76 +929,233 @@
 
                 </div>
 
-            </template>
-            <!-- =======================================
-                        FOOTER
-        ======================================= -->
+            </div>
 
-            <div class="product-footer">
+        </template>
 
-                <a href="{% url 'list_product' %}"
-                   class="btn btn-outline-secondary product-footer-btn">
+        <template id="emptyImageTemplate">
 
-                    <i class="bi bi-arrow-left"></i>
+            <div class="banner-card image-card mb-4">
 
-                    Back to Product
+                <div class="banner-card-body">
 
-                </a>
+                    {{ image_formset.empty_form.id }}
 
-                <div class="d-flex gap-2">
+                    <div class="d-none">
+                        {{ image_formset.empty_form.DELETE }}
+                    </div>
 
-                    {% if product %}
+                    <div class="color-card-title">
+                        <i class="bi bi-image-fill"></i>
+                        <span>New Image</span>
+                    </div>
 
-                        <a href="{% url 'product_add' %}"
-                           class="btn btn-outline-danger">
+                    <div class="row g-4">
 
-                            <i class="bi bi-x-circle"></i>
+                        <div class="col-lg-4">
 
-                            Cancel
+                            <label class="product-label">
+                                Product Image
+                            </label>
 
-                        </a>
+                            {{ image_formset.empty_form.image }}
 
-                    {% else %}
+                        </div>
 
-                        <button
-                                type="reset"
-                                class="btn btn-outline-danger">
+                        <div class="col-lg-4">
 
-                            <i class="bi bi-x-circle"></i>
+                            <label class="product-label">
+                                Alt Text
+                            </label>
 
-                            Cancel
+                            {{ image_formset.empty_form.alt_text }}
 
-                        </button>
+                        </div>
 
-                    {% endif %}
+                        <div class="col-lg-2">
 
-                    <button
-                            type="submit"
-                            class="btn btn-success product-save-btn">
+                            <label class="product-label">
+                                Display Order
+                            </label>
 
-                        <i class="bi bi-check-circle-fill"></i>
+                            {{ image_formset.empty_form.display_order }}
 
-                        {% if product %}
-                            Update Product
-                        {% else %}
-                            Save Product
-                        {% endif %}
+                        </div>
 
-                    </button>
+                        <div class="col-lg-2 d-grid">
+
+                            <label class="product-label invisible">
+                                Remove
+                            </label>
+
+                            <button
+                                    type="button"
+                                    class="btn btn-outline-danger remove-item-btn remove-image">
+
+                                <i class="bi bi-trash"></i>
+
+                                Remove
+
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </form>
+        </template>
 
-    </div>
+        <template id="emptySpecificationTemplate">
 
-    <!-- =========================
-         IMAGE PREVIEW MODAL
-    ========================= -->
+            <div class="banner-card specification-card mb-4">
 
-    <div class="image-preview-modal">
+                <div class="banner-card-body">
+
+                    {{ specification_formset.empty_form.id }}
+
+                    <div class="d-none">
+                        {{ specification_formset.empty_form.DELETE }}
+                    </div>
+
+                    <div class="color-card-title">
+
+                        <i class="bi bi-card-text"></i>
+
+                        <span>
+                    New Specification
+                </span>
+
+                    </div>
+
+                    <div class="row g-4">
+
+                        <div class="col-lg-4">
+
+                            <label class="product-label">
+                                Title
+                            </label>
+
+                            {{ specification_formset.empty_form.title }}
+
+                        </div>
+
+                        <div class="col-lg-4">
+
+                            <label class="product-label">
+                                Value
+                            </label>
+
+                            {{ specification_formset.empty_form.value }}
+
+                        </div>
+
+                        <div class="col-lg-2">
+
+                            <label class="product-label">
+                                Display Order
+                            </label>
+
+                            {{ specification_formset.empty_form.display_order }}
+
+                        </div>
+
+                        <div class="col-lg-2 d-grid">
+
+                            <label class="product-label invisible">
+                                Remove
+                            </label>
+
+                            <button
+                                    type="button"
+                                    class="btn btn-outline-danger remove-item-btn remove-specification">
+
+                                <i class="bi bi-trash"></i>
+
+                                Remove
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </template>
+        <!-- =======================================
+                    FOOTER
+    ======================================= -->
+
+        <div class="product-footer">
+
+            <a href="{% url 'list_product' %}"
+               class="btn btn-outline-secondary product-footer-btn">
+
+                <i class="bi bi-arrow-left"></i>
+
+                Back to Product
+
+            </a>
+
+            <div class="d-flex gap-2">
+
+                {% if product %}
+
+                <a href="{% url 'product_add' %}"
+                   class="btn btn-outline-danger">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Cancel
+
+                </a>
+
+                {% else %}
+
+                <button
+                        type="reset"
+                        class="btn btn-outline-danger">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Cancel
+
+                </button>
+
+                {% endif %}
+
+                <button
+                        type="submit"
+                        class="btn btn-success product-save-btn">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    {% if product %}
+                    Update Product
+                    {% else %}
+                    Save Product
+                    {% endif %}
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<!-- =========================
+     IMAGE PREVIEW MODAL
+========================= -->
+
+<div class="image-preview-modal">
 
     <span class="close-preview">
 
@@ -554,17 +1163,17 @@
 
     </span>
 
-        <img
-                src=""
-                class="preview-modal-image"
-                alt="Preview">
+    <img
+            src=""
+            class="preview-modal-image"
+            alt="Preview">
 
-    </div>
+</div>
 
 {% endblock %}
 
 {% block custom_js %}
 
-    <script src="{% static 'js/dashboard/admin/product_add.js' %}"></script>
+<script src="{% static 'js/dashboard/admin/product_add.js' %}"></script>
 
 {% endblock %}

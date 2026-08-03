@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const addBtn = document.getElementById("addColor");
     const container = document.getElementById("colorContainer");
     const template = document.getElementById("emptyFormTemplate");
 

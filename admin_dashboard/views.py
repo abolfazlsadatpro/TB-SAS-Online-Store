@@ -8,13 +8,14 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import ListView, DetailView
 from store.untils import get_tuple_status, STATUS_CHOICES
 from admin_dashboard.forms import OrderStatusForm, CategoryForm, ProductForm, ProductColorFormSet, \
-    ProductColorEditFormSet, BannerForm
+    ProductColorEditFormSet, BannerForm, ProductImageFormSet, ProductSpecificationFormSet
 from store.models import Order, OrderItem, Customer, VoteProduct, ContactMessage, Category, Product, \
     BannerMain
 from users.models import PersonUser
-from django.db import IntegrityError
 from store.models import SettingSite
 from admin_dashboard.forms import SettingSiteForm
+from django.db import transaction
+from django.db import IntegrityError
 
 
 # Create your views here.
@@ -356,51 +357,193 @@ def category_delete(request, pk):
 def product_add(request, id=None):
     if id:
         product = get_object_or_404(Product, id=id)
-        FormSet = ProductColorEditFormSet
+        ColorFormSet = ProductColorEditFormSet
     else:
         product = None
-        FormSet = ProductColorFormSet
+        ColorFormSet = ProductColorFormSet
+
     if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES, instance=product)
-        formset = FormSet(request.POST, request.FILES, instance=product, prefix="colors")
-        if form.is_valid() and formset.is_valid():
+
+        form = ProductForm(
+            request.POST,
+            request.FILES,
+            instance=product
+        )
+
+        color_formset = ColorFormSet(
+            request.POST,
+            request.FILES,
+            instance=product,
+            prefix="colors"
+        )
+
+        image_formset = ProductImageFormSet(
+            request.POST,
+            request.FILES,
+            instance=product,
+            prefix="images"
+        )
+
+        specification_formset = ProductSpecificationFormSet(
+            request.POST,
+            instance=product,
+            prefix="specifications"
+        )
+
+        if (
+                form.is_valid()
+                and color_formset.is_valid()
+                and image_formset.is_valid()
+                and specification_formset.is_valid()
+        ):
+
             try:
-                product = form.save()
-                formset.instance = product
-                formset.save()
+
+                with transaction.atomic():
+
+                    product = form.save()
+
+                    color_formset.instance = product
+                    color_formset.save()
+
+                    image_formset.instance = product
+                    image_formset.save()
+
+                    specification_formset.instance = product
+                    specification_formset.save()
+
                 if id:
-                    messages.success(request, "Product updated successfully.")
+                    messages.success(
+                        request,
+                        "Product updated successfully."
+                    )
                 else:
-                    messages.success(request, "Product created successfully.")
-                return redirect("product_add")
-            except IntegrityError:
-                messages.error(request, "Slug already exists.")
+                    messages.success(
+                        request,
+                        "Product created successfully."
+                    )
+
+                return redirect("list_product")
+
+            except IntegrityError as e:
+
+                messages.error(
+                    request,
+                    f"Database Error: {e}"
+                )
 
         else:
-            for field, errors in form.errors.items():
+
+            print("=" * 50)
+
+            print("PRODUCT")
+            print(form.errors)
+
+            print("=" * 50)
+
+            print("COLORS")
+            print(color_formset.errors)
+            print(color_formset.non_form_errors())
+
+            print("=" * 50)
+
+            print("IMAGES")
+            print(image_formset.errors)
+            print(image_formset.non_form_errors())
+
+            print("=" * 50)
+
+            print("SPECIFICATIONS")
+            print(specification_formset.errors)
+            print(specification_formset.non_form_errors())
+
+            print("=" * 50)
+
+            for errors in form.errors.values():
                 for error in errors:
-                    messages.error(request, f"{field.capitalize()} : {error}")
-            for error in formset.non_form_errors():
-                messages.error(request, error)
+                    messages.error(request, error)
+
+            for single_form in color_formset:
+                for errors in single_form.errors.values():
+                    for error in errors:
+                        messages.error(request, error)
+
+            for single_form in image_formset:
+                for errors in single_form.errors.values():
+                    for error in errors:
+                        messages.error(request, error)
+
+            for single_form in specification_formset:
+                for errors in single_form.errors.values():
+                    for error in errors:
+                        messages.error(request, error)
+
     else:
+
         form = ProductForm(instance=product)
-        formset = FormSet(instance=product, prefix="colors")
-    return render(request, "dashboard_admin/product_add.html",
-                  {"forms": form, "formset": formset, "product": product, })
+
+        color_formset = ColorFormSet(
+            instance=product,
+            prefix="colors"
+        )
+
+        image_formset = ProductImageFormSet(
+            instance=product,
+            prefix="images"
+        )
+
+        specification_formset = ProductSpecificationFormSet(
+            instance=product,
+            prefix="specifications"
+        )
+
+    return render(
+        request,
+        "dashboard_admin/product_add.html",
+        {
+            "forms": form,
+            "formset": color_formset,
+            "image_formset": image_formset,
+            "specification_formset": specification_formset,
+            "product": product,
+        }
+    )
 
 
 class ProductList(ListView):
+
     paginate_by = 10
-    context_object_name = 'products'
     model = Product
+    context_object_name = "products"
     template_name = "dashboard_admin/list_product.html"
 
     def get_queryset(self):
-        qs = super().get_queryset().select_related("category").prefetch_related("colors")
+
+        queryset = (
+            Product.objects
+            .select_related("category")
+            .prefetch_related(
+                "colors",
+                "images",
+                "specifications"
+            )
+        )
+
         q = self.request.GET.get("q")
+
         if q:
-            qs = qs.filter(Q(name__icontains=q) | Q(slug__icontains=q))
-        return qs
+
+            queryset = queryset.filter(
+                Q(name__icontains=q)
+                |
+                Q(slug__icontains=q)
+                |
+                Q(category__name__icontains=q)
+                |
+                Q(brand__icontains=q)
+            )
+
+        return queryset
 
 
 def product_delete(request, pk):
@@ -422,7 +565,11 @@ class BannerManagement(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        qs = BannerMain.objects.all().order_by("-id")
+
+        qs = BannerMain.objects.all().order_by(
+            "order",
+            "-id"
+        )
 
         q = self.request.GET.get("q")
 

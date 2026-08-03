@@ -82,33 +82,33 @@
                 <div class="mega-menu">
                     <ul class="mega-main">
 
-                        <li class="has-sub">
-                            Mobile Phones
-                            <div class="mega-sub">
-                                <a href="#">Samsung</a>
-                                <a href="#">Apple</a>
-                                <a href="#">Xiaomi</a>
-                                <a href="#">Nokia</a>
-                            </div>
-                        </li>
+                        {% for category in mega_categories %}
 
                         <li class="has-sub">
-                            Laptops
+
+                            {{ category.name }}
+
+                            {% if category.children.exists %}
+
                             <div class="mega-sub">
-                                <a href="#">Dell</a>
-                                <a href="#">HP</a>
-                                <a href="#">Asus</a>
+
+                                {% for child in category.children.all %}
+
+                                <a href="#">
+
+                                    {{ child.name }}
+
+                                </a>
+
+                                {% endfor %}
+
                             </div>
+
+                            {% endif %}
+
                         </li>
 
-                        <li class="has-sub">
-                            Accessories
-                            <div class="mega-sub">
-                                <a href="#">Headphones</a>
-                                <a href="#">Chargers</a>
-                                <a href="#">Power Bank</a>
-                            </div>
-                        </li>
+                        {% endfor %}
 
                     </ul>
                 </div>
