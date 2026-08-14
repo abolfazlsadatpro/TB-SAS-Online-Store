@@ -1,0 +1,650 @@
+/*==================================================
+   ABOUT US MANAGEMENT PAGE
+   TB_SAS Online Store Admin Dashboard
+========================================================== */
+
+.about-us-page {
+    width: 100%;
+    padding: 30px;
+}
+
+.about-us-header {
+    margin-bottom: 30px;
+}
+
+.about-us-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 8px;
+}
+
+
+.about-us-header p {
+    color: #6c757d;
+    font-size: 15px;
+    margin: 0;
+}
+
+
+.setting-site-section {
+
+    margin-bottom: 45px;
+
+}
+
+
+.setting-site-section:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+.setting-site-section-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    padding-bottom: 15px;
+
+    margin-bottom: 25px;
+
+    border-bottom: 1px solid #eeeeee;
+
+}
+
+
+.setting-site-section-title i {
+
+    font-size: 18px;
+
+    color: #198754;
+
+
+}
+
+
+/* ==========================================================
+   About Us Sections Table
+========================================================== */
+
+.about-us-sections-table {
+
+}
+
+
+.about-us-table-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+
+    transition: .3s;
+
+}
+
+
+.about-us-table-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
+
+}
+
+
+.about-us-table-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    background: #fff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.about-us-table-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+
+.about-us-table-body {
+
+    padding: 24px;
+
+}
+
+
+.about-us-table-count {
+
+    background: #eaf8ef;
+
+    color: #198754;
+
+    padding: 8px 16px;
+
+    border-radius: 50px;
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+}
+
+
+.about-us-table-empty {
+
+    text-align: center;
+
+    padding: 40px 20px;
+
+    color: #6c757d;
+
+}
+
+
+.about-us-table-empty i {
+
+    font-size: 32px;
+
+    margin-bottom: 12px;
+
+    display: block;
+
+}
+
+
+/* ==========================================================
+   About Us Form Card
+========================================================== */
+
+.about-us-form-card {
+
+    background: #fff;
+
+    border-radius: 22px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .05);
+
+    transition: .3s;
+
+}
+
+
+.about-us-form-card:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .08);
+
+}
+
+
+.about-us-form-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 22px 28px;
+
+    border-bottom: 1px solid #edf0f2;
+
+    background: #fff;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.about-us-form-header i {
+
+    color: #198754;
+
+    font-size: 22px;
+
+}
+
+
+.about-us-form-body {
+
+    padding: 28px;
+
+}
+
+
+.about-us-label {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-weight: 600;
+
+    color: #495057;
+
+}
+
+
+.about-us-form-footer {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    margin-top: 30px;
+
+}
+
+
+.about-us-cancel-btn {
+
+    min-width: 140px;
+
+}
+
+
+.about-us-save-btn {
+
+    min-width: 180px;
+
+}
+
+
+/* ==========================================================
+   About Us Section Row
+========================================================== */
+
+.about-us-section-row {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 30px;
+
+    margin-top: 20px;
+
+}
+
+
+.about-us-section-col {
+
+    flex: 1;
+
+
+}
+
+
+/* ==========================================================
+   Section Type Select
+========================================================== */
+
+.about-us-section-type {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+}
+
+
+.about-us-section-type-label {
+
+    background: #f8f9fa;
+
+    border: 1px solid #dee2e6;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #6c757d;
+
+    transition: .25s;
+
+    user-select: none;
+
+
+}
+
+
+.about-us-section-type-label:hover {
+
+    background: #e9ecef;
+
+
+}
+
+
+.about-us-section-type-label.active {
+
+    background: #198754;
+
+    color: #fff;
+
+    border-color: #198754;
+
+
+}
+
+
+/* ==========================================================
+   Status Badge
+========================================================== */
+
+.badge-active {
+
+    background: #eaf8ef;
+
+    color: #198754;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+.badge-inactive {
+
+    background: #f8d7da;
+
+    color: #dc3545;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+}
+
+
+/* ==========================================================
+   Empty State
+========================================================== */
+
+.empty-about-us {
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    color: #6c757d;
+
+}
+
+
+.empty-about-us i {
+
+    font-size: 48px;
+
+    margin-bottom: 16px;
+
+    display: block;
+
+}
+
+
+.empty-about-us h4 {
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    margin-bottom: 8px;
+
+    color: #444;
+
+}
+
+
+.empty-about-us p {
+
+    font-size: 15px;
+
+    margin-top: 12px;
+
+}
+
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 1200px) {
+
+    .about-us-section-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    .about-us-page {
+
+        padding: 20px;
+
+    }
+
+
+    .about-us-form-card,
+
+    .about-us-table-card {
+
+        border-radius: 20px;
+
+    }
+
+
+    .about-us-form-header,
+
+    .about-us-table-header {
+
+        padding: 18px 20px;
+
+        font-size: 16px;
+
+    }
+
+
+    .about-us-form-body,
+
+    .about-us-table-body {
+
+        padding: 20px;
+
+    }
+
+
+    .about-us-form-footer {
+
+        gap: 8px;
+
+        margin-top: 20px;
+
+    }
+
+
+    .about-us-cancel-btn,
+
+    .about-us-save-btn {
+
+        min-width: 130px;
+
+        font-size: 14px;
+
+    }
+
+
+    .about-us-section-type {
+
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 8px;
+
+    }
+
+
+    .about-us-section-type-label {
+
+        padding: 8px;
+
+        font-size: 12px;
+
+    }
+
+
+    .setting-site-section-title {
+
+        font-size: 18px;
+
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .about-us-form-card,
+
+    .about-us-table-card {
+
+        border-radius: 18px;
+
+    }
+
+
+    .about-us-form-header,
+
+    .about-us-table-header {
+
+        padding: 15px 15px;
+
+        font-size: 14px;
+
+    }
+
+
+    .about-us-form-body,
+
+    .about-us-table-body {
+
+        padding: 15px;
+
+    }
+
+
+    .about-us-form-footer {
+
+        gap: 5px;
+
+        margin-top: 15px;
+
+    }
+
+
+    .about-us-cancel-btn,
+
+    .about-us-save-btn {
+
+        min-width: 110px;
+
+        font-size: 13px;
+
+    }
+
+
+    .about-us-section-type-label {
+
+        padding: 6px;
+
+        font-size: 11px;
+
+    }
+
+
+    .setting-site-section-title {
+
+        font-size: 16px;
+
+    }
+
+    .about-us-table-count {
+
+        font-size: 12px;
+
+        padding: 6px 12px;
+
+    }
+
+}
+
+
+.about-us-section-title i {
+
+    color: #198754;
+
+    font-size: 1.2rem;
+
+}

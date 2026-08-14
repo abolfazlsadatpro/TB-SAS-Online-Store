@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header Mockup C — Minimal Luxury</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f6faf7}
+
+    /* ===== MINIMAL LUXURY ===== */
+    .site-header{
+        position:relative;
+        margin:16px;
+        z-index:999;
+    }
+
+    /* top strip */
+    .top-strip{
+        max-width:1200px;
+        margin:0 auto 12px;
+        display:flex;
+        justify-content:flex-end;
+        gap:18px;
+        font-size:12.5px;
+        color:#5f7a6a;
+        padding:0 6px;
+    }
+
+    .top-strip a{
+        color:#5f7a6a;
+        text-decoration:none;
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        transition:.2s;
+    }
+
+    .top-strip a:hover{color:#198754}
+    .top-strip i{color:#198754;font-size:11px}
+
+    .custom-navbar{
+        background:linear-gradient(160deg,#0b5134 0%,#11704a 55%,#198754 100%);
+        border-radius:22px;
+        padding:16px 20px;
+        box-shadow:0 20px 45px -20px rgba(13,62,41,.55);
+        position:relative;
+        overflow:hidden;
+    }
+
+    /* soft glow top-right */
+    .custom-navbar::before{
+        content:"";
+        position:absolute;
+        top:-90px;
+        right:-50px;
+        width:280px;
+        height:280px;
+        background:radial-gradient(circle,rgba(120,220,170,.22),transparent 65%);
+        pointer-events:none;
+    }
+
+    .nav-top{
+        display:flex;
+        align-items:center;
+        gap:22px;
+        max-width:1200px;
+        margin:0 auto;
+        position:relative;
+        z-index:1;
+    }
+
+    .nav-logo img{
+        height:58px;
+        filter:drop-shadow(0 6px 14px rgba(0,0,0,.3));
+    }
+
+    /* SEARCH — dark underline style */
+    .nav-search{
+        flex:1;
+        max-width:620px;
+        position:relative;
+    }
+
+    .nav-search input{
+        width:100%;
+        padding:12px 16px 12px 44px;
+        border-radius:14px;
+        border:1px solid rgba(255,255,255,.18);
+        background:rgba(0,0,0,.16);
+        color:#fff;
+        outline:none;
+        font-size:15px;
+        transition:.25s;
+    }
+
+    .nav-search input::placeholder{color:rgba(255,255,255,.6)}
+    .nav-search input:focus{border-color:rgba(255,255,255,.45);background:rgba(0,0,0,.24)}
+
+    .search-icon{
+        position:absolute;
+        left:16px;
+        top:50%;
+        transform:translateY(-50%);
+        color:rgba(255,255,255,.7);
+        font-size:14px;
+    }
+
+    .nav-actions{
+        display:flex;
+        align-items:center;
+        gap:18px;
+        margin-left:auto;
+    }
+
+    /* AUTH — minimal text links */
+    .auth-box{
+        display:flex;
+        align-items:center;
+        gap:14px;
+    }
+
+    .auth-box a{
+        color:rgba(255,255,255,.85);
+        text-decoration:none;
+        font-size:14px;
+        font-weight:600;
+        transition:.2s;
+        position:relative;
+        padding-bottom:3px;
+    }
+
+    .auth-box a::after{
+        content:"";
+        position:absolute;
+        left:0;
+        bottom:0;
+        width:0;
+        height:2px;
+        border-radius:2px;
+        background:#7fe3a9;
+        transition:.25s;
+    }
+
+    .auth-box a:hover{color:#fff}
+    .auth-box a:hover::after{width:100%}
+
+    .auth-box .divider{
+        width:1px;
+        height:16px;
+        background:rgba(255,255,255,.25);
+    }
+
+    /* CART — icon circle */
+    .nav-cart{
+        position:relative;
+    }
+
+    .cart-link{
+        width:46px;
+        height:46px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:1.5px solid rgba(255,255,255,.4);
+        background:rgba(255,255,255,.1);
+        -webkit-backdrop-filter:blur(6px);
+        backdrop-filter:blur(6px);
+        color:#fff;
+        text-decoration:none;
+        font-size:17px;
+        transition:.25s;
+    }
+
+    .cart-link:hover{background:rgba(255,255,255,.25);transform:translateY(-3px)}
+
+    .cart-badge{
+        position:absolute;
+        top:-4px;
+        right:-4px;
+        min-width:20px;
+        height:20px;
+        border-radius:50%;
+        background:#fff;
+        color:#0e5c3d;
+        font-size:11px;
+        font-weight:800;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    /* ===== CATEGORY BAR — simple white pill ===== */
+    .category-bar{
+        background:rgba(255,255,255,.55);
+        -webkit-backdrop-filter:blur(14px);
+        backdrop-filter:blur(14px);
+        border-radius:16px;
+        margin:12px 6px 0;
+        padding:6px 10px;
+        border:1px solid rgba(255,255,255,.85);
+        box-shadow:0 10px 26px -18px rgba(13,62,41,.3);
+    }
+
+    .category-bar .container{
+        display:flex;
+        align-items:center;
+    }
+
+    .mega-btn{
+        background:transparent;
+        color:#0e5c3d;
+        padding:9px 18px;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:700;
+        font-size:14px;
+        display:inline-flex;
+        align-items:center;
+        gap:10px;
+        transition:.2s;
+    }
+
+    .mega-btn:hover{background:rgba(25,135,84,.08)}
+    .mega-btn i{color:#198754}
+
+    .mega-category{position:relative}
+
+    .mega-menu{
+        position:absolute;
+        top:calc(100% + 10px);
+        left:0;
+        width:650px;
+        background:#fff;
+        border-radius:16px;
+        box-shadow:0 24px 50px -20px rgba(13,62,41,.3);
+        padding:14px;
+        display:none;
+        z-index:9999;
+        border:1px solid rgba(25,135,84,.1);
+    }
+
+    .mega-category:hover .mega-menu{display:block}
+
+    .mega-main{list-style:none;padding:0;margin:0}
+
+    .mega-main li{
+        padding:10px 12px;
+        font-weight:700;
+        cursor:pointer;
+        position:relative;
+        border-radius:10px;
+        transition:.15s;
+        font-size:14.5px;
+        color:#143120;
+    }
+
+    .mega-main li:hover{background:#eef7f1;color:#198754}
+
+    .mega-sub{
+        position:absolute;
+        top:0;
+        left:100%;
+        width:220px;
+        background:#fff;
+        border-radius:12px;
+        box-shadow:0 16px 36px -14px rgba(13,62,41,.3);
+        padding:10px;
+        display:none;
+        border:1px solid rgba(25,135,84,.08);
+    }
+
+    .has-sub:hover .mega-sub{display:block}
+
+    .mega-sub a{
+        display:block;
+        padding:7px 10px;
+        text-decoration:none;
+        color:#333;
+        font-size:13.5px;
+        border-radius:8px;
+        transition:.15s;
+    }
+
+    .mega-sub a:hover{color:#198754;background:#f0f9f3}
+
+    .fake-content{
+        margin:24px 16px;
+        height:380px;
+        border-radius:18px;
+        background:#fff;
+        border:1px dashed #cfe5d8;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#9db8aa;
+        font-size:18px;
+    }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="top-strip">
+        <a href="#"><i class="fa-solid fa-phone"></i> 09053295969</a>
+        <a href="#"><i class="fa-solid fa-envelope"></i> tb_sas@gmail.com</a>
+        <a href="#"><i class="fa-solid fa-truck-fast"></i> Free Shipping Over $100</a>
+    </div>
+
+    <nav class="custom-navbar">
+        <div class="nav-top">
+
+            <a class="nav-logo" href="#">
+                <img src="../../images/logo_tb_sas.png" alt="TBSAS">
+            </a>
+
+            <div class="nav-search">
+                <i class="fa fa-search search-icon"></i>
+                <input type="text" placeholder="Search products...">
+            </div>
+
+            <div class="nav-actions">
+                <div class="auth-box">
+                    <a href="#">Login</a>
+                    <span class="divider"></span>
+                    <a href="#">Register</a>
+                </div>
+
+                <div class="nav-cart">
+                    <a href="#" class="cart-link">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+                    <span class="cart-badge">3</span>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="category-bar">
+        <div class="container">
+            <div class="mega-category">
+                <div class="mega-btn">
+                    <i class="fa fa-bars"></i> Product Categories
+                </div>
+                <div class="mega-menu">
+                    <ul class="mega-main">
+                        <li class="has-sub">Phones &amp; Tablets
+                            <div class="mega-sub">
+                                <a href="#">Smartphones</a>
+                                <a href="#">Tablets</a>
+                                <a href="#">Accessories</a>
+                            </div>
+                        </li>
+                        <li class="has-sub">Laptops
+                            <div class="mega-sub">
+                                <a href="#">Gaming</a>
+                                <a href="#">Business</a>
+                            </div>
+                        </li>
+                        <li>Audio</li>
+                        <li>Accessories</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="fake-content">Page Content Area</div>
+
+</body>
+</html>

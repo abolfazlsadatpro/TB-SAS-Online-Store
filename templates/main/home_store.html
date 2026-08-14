@@ -105,54 +105,88 @@
 
             <!-- اسلایدر تخفیف -->
             <section class="special-offers-section position-relative">
-                <!-- محصولات -->
 
-                {% for product in discount_products %}
+                <div class="offers-header">
 
-                    <div class="col-auto special-col">
+                    <div class="offers-title">
 
-                        <div class="special-card">
+                        <span class="ic"><i class="fa-solid fa-bolt"></i></span>
+
+                        Flash Deals
+
+                    </div>
+
+                    <a href="#" class="offers-all">View All →</a>
+
+                </div>
+
+                <div class="timer-bar">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                    <span class="lbl">Ends in</span>
+
+                    <span class="timer-box">02<small>HRS</small></span>
+
+                    <span class="timer-box">14<small>MIN</small></span>
+
+                    <span class="timer-box">36<small>SEC</small></span>
+
+                </div>
+
+                <div class="offers-track-wrap">
+
+                    <button class="nav-btn prev" id="specialPrev"><i class="fa-solid fa-chevron-left"></i></button>
+
+                    <div class="offers-track" id="specialTrack">
+
+                        {% for product in discount_products %}
+
+                        <div class="offer-card">
 
                             {% if product.has_discount %}
 
-                                <span class="discount-badge">
+                            <span class="offer-tag">
 
-                    -{{ product.discount_percent }}%
+                                -{{ product.discount_percent }}%
 
-                </span>
+                            </span>
 
                             {% endif %}
 
-                            {% if product.main_image_url %}
+                            <div class="offer-img">
+
+                                {% if product.main_image %}
 
                                 <img
-                                        src="{{ product.main_image_url }}"
-                                        class="special-img"
+                                        src="{{ product.main_image.url }}"
                                         alt="{{ product.name }}">
 
-                            {% endif %}
+                                {% endif %}
 
-                            <h6 class="product-title">
+                            </div>
+
+                            <h5 class="product-title">
 
                                 {{ product.name|truncatechars:35 }}
 
-                            </h6>
+                            </h5>
 
-                            <div class="price-box">
+                            <div class="offer-price">
 
-                <span class="new-price">
+                                <span class="new-price">
 
-                    ${{ product.display_price }}
+                                    ${{ product.final_price }}
 
-                </span>
+                                </span>
 
                                 {% if product.has_discount %}
 
-                                    <span class="old-price">
+                                <span class="old-price">
 
-                        ${{ product.price }}
+                                    ${{ product.price }}
 
-                    </span>
+                                </span>
 
                                 {% endif %}
 
@@ -160,21 +194,18 @@
 
                         </div>
 
-                    </div>
+                        {% empty %}
 
-                {% empty %}
+                        <p style="color:#fff;">No discount products found.</p>
 
-                    <div class="col-12 text-center">
-
-                        <p>
-
-                            No discount products found.
-
-                        </p>
+                        {% endfor %}
 
                     </div>
 
-                {% endfor %}
+                    <button class="nav-btn next" id="specialNext"><i class="fa-solid fa-chevron-right"></i></button>
+
+                </div>
+
             </section>
 
             <!-- promo-section بدون متن پایین عکس -->
@@ -183,234 +214,158 @@
 
                     <div class="row g-3 promo-wrapper">
 
-                        <div class="col-lg-4 col-md-4 col-12">
-                            <div class="promo-box">
-                                <img src="{% static 'images/Advertisemenet 1.png' %}" class="promo-img" alt="">
-                            </div>
-                        </div>
+                        {% for banner in promo_banners|slice:":3" %}
 
                         <div class="col-lg-4 col-md-4 col-12">
                             <div class="promo-box">
-                                <img src="{% static 'images/Advertisemenet 2.png' %}" class="promo-img" alt="">
+                                {% if banner.button_link %}<a href="{{ banner.button_link }}">{% endif %}
+                                    <img src="{{ banner.picture.url }}" class="promo-img" alt="{{ banner.title }}">
+                                {% if banner.button_link %}</a>{% endif %}
+                                <div class="promo-overlay">
+                                    <div class="promo-overlay-text">
+                                        <h4>{{ banner.title }}</h4>
+                                        <small>Shop now</small>
+                                    </div>
+                                    <div class="promo-cta"><i class="fa-solid fa-arrow-right"></i></div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-lg-4 col-md-4 col-12">
-                            <div class="promo-box">
-                                <img src="{% static 'images/Advertisemenet 3.png' %}" class="promo-img" alt="">
-                            </div>
-                        </div>
+                        {% endfor %}
 
                     </div>
                 </div>
             </section>
 
-            <h2 class="text-center my-4">Mobile Bests</h2>
+            <h2 class="text-center my-4">{{ settings.home_mobile_title|default:"Mobile Bests" }}</h2>
 
-            <ul id="best_phones" class="best-phones-list">
+            <div class="brands-float">
 
-                <li class="phone-item">
-                    <img src="{% static 'images/Sumsung.webp' %}" alt="Samsung"
-                         title="Samsung" width="180" height="180">
-                    <a href="/product/list/samsung">Samsung</a>
-                </li>
+                {% for brand in mobile_brands %}
 
-                <li class="phone-item">
-                    <img src="{% static 'images/Poco.webp' %}" alt="Poco" title="Poco"
-                         width="180" height="180">
-                    <a href="/product/list/poco">Poco</a>
-                </li>
-
-                <li class="phone-item">
-                    <img src="{% static 'images/Apple.webp' %}" alt="iPhone" title="iPhone"
-                         width="180" height="180">
-                    <a href="/product/list/apple">Apple (iPhone)</a>
-                </li>
-
-                <li class="phone-item">
-                    <img src="{% static 'images/Honer.webp' %}" alt="Honor" title="Honor"
-                         width="180" height="180">
-                    <a href="/product/list/honor">Honor</a>
-                </li>
-
-                <li class="phone-item">
-                    <img src="{% static 'images/Xiaomi.webp' %}" alt="Xiaomi" title="Xiaomi"
-                         width="180" height="180">
-                    <a href="/product/list/xiaomi">Xiaomi</a>
-                </li>
-
-            </ul>
-
-            <section class="promo-section my-4">
-                <div class="">
-
-                    <div class="row g-3 promo-wrapper">
-
-                        <div class="col-lg-6 col-md-6 col-12">
-                            <div class="promo-box">
-                                <img src="{% static 'images/Advertisemenet 2.png' %}" class="promo-img" alt="">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-12">
-                            <div class="promo-box">
-                                <img src="{% static 'images/Advertisemenet 3.png' %}" class="promo-img" alt="">
-                            </div>
-                        </div>
-
+                <a href="{% url 'brand_page' brand.slug %}?cat=mobile" class="brand-float">
+                    <div class="float-ico">
+                        {% if brand.main_product_image %}
+                            <img src="{{ brand.main_product_image.url }}" alt="{{ brand.name }}"
+                                 title="{{ brand.name }}">
+                        {% endif %}
                     </div>
-                </div>
-            </section>
+                    <span>{{ brand.name }}</span>
+                </a>
+
+                {% empty %}
+
+                <p>No mobile brands yet.</p>
+
+                {% endfor %}
+
+            </div>
 
             <div class="product-slider-wrapper">
 
                 <div class="slider-header">
-                    <h3>Tools</h3>
-                    <a href="#">View All</a>
+                    <div class="header-title-wrap">
+                        <h3>Latest Products</h3>
+                        <span class="bar"></span>
+                    </div>
+                    <a href="#">View All →</a>
                 </div>
 
-                <button class="slider-btn left" id="slideLeft">❮</button>
-                <button class="slider-btn right" id="slideRight">❯</button>
+                <button class="arr prev" id="latestPrev"><i class="fa-solid fa-chevron-left"></i></button>
 
                 <div class="product-slider" id="productSlider">
 
-                    <!-- product card -->
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools1.webp' %}" alt="">
-                        <p class="title">Double Sink Steel Model 164SP</p>
+                    {% for product in latest_products %}
 
-                        <div class="price-box">
-                            <span class="price">$560.00</span>
+                    <a href="{% url 'product_detail' product.id %}" class="product-card">
+                        <div class="product-img">
+                            {% if product.has_discount %}
+                                <span class="disc-tag">-{{ product.discount_percent }}%</span>
+                            {% endif %}
+                            <span class="wish-btn" data-id="{{ product.id }}"><i class="fa-regular fa-heart"></i></span>
+                            {% if product.main_image %}
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                            {% endif %}
                         </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools2.webp' %}" alt="">
-                        <p class="title">Adjustable Wrench 10 inch</p>
-                        <div class="price-box">
-                            <span class="price">$85.00</span>
+                        <h5 class="title">{{ product.name|truncatechars:30 }}</h5>
+                        <div class="product-price">
+                            {% if product.has_discount %}
+                                <span class="price old-price">${{ product.price }}</span>
+                            {% endif %}
+                            <span class="price new-price">${{ product.final_price }}</span>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools3.webp' %}" alt="">
-                        <p class="title">Mixer Faucet Set Italy</p>
-                        <div class="price-box">
-                            <span class="price">$180.00</span>
-                        </div>
-                    </div>
+                    {% empty %}
 
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools4.webp' %}" alt="">
-                        <p class="title">Mini Grinder 3165</p>
-                        <div class="price-box">
-                            <span class="price">$55.00</span>
-                        </div>
-                    </div>
+                    <p class="text-center">No products found.</p>
 
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools5.webp' %}" alt="">
-                        <p class="title">Double Sink Steel Model 164SP</p>
-
-                        <div class="price-box">
-                            <span class="price">$560.00</span>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools6.webp' %}" alt="">
-                        <p class="title">Double Sink Steel Model 164SP</p>
-
-                        <div class="price-box">
-                            <span class="price">$560.00</span>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools7.webp' %}" alt="">
-                        <p class="title">Double Sink Steel Model 164SP</p>
-
-                        <div class="price-box">
-                            <span class="price">$560.00</span>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <img src="{% static 'images/Tools8.webp' %}" alt="">
-                        <p class="title">Double Sink Steel Model 164SP</p>
-
-                        <div class="price-box">
-                            <span class="price">$560.00</span>
-                        </div>
-                    </div>
+                    {% endfor %}
 
                 </div>
-            </div>
 
+                <button class="arr next" id="latestNext"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
 
             <section class="promo-section my-4">
                 <div class="">
 
                     <div class="row g-3 promo-wrapper">
 
-                        <div class="col-lg-12 col-md-12 col-12">
+                        {% for banner in promo_banners|slice:"3:5" %}
+
+                        <div class="col-lg-6 col-md-6 col-12">
                             <div class="promo-box">
-                                <img src="{% static 'images/Advertisemenet 2.png' %}" class="promo-img" alt="">
+                                {% if banner.button_link %}<a href="{{ banner.button_link }}">{% endif %}
+                                    <img src="{{ banner.picture.url }}" class="promo-img" alt="{{ banner.title }}">
+                                {% if banner.button_link %}</a>{% endif %}
+                                <div class="promo-overlay">
+                                    <div class="promo-overlay-text">
+                                        <h4>{{ banner.title }}</h4>
+                                        <small>Shop now</small>
+                                    </div>
+                                    <div class="promo-cta"><i class="fa-solid fa-arrow-right"></i></div>
+                                </div>
                             </div>
                         </div>
+
+                        {% endfor %}
 
                     </div>
                 </div>
             </section>
 
 
-            <h2 class="text-center my-4">The best laptops</h2>
+            <h2 class="text-center my-4">{{ settings.home_laptop_title|default:"Best Laptops" }}</h2>
 
-            <ul id="best_phones" class="best-phones-list">
+            <div class="brands-float">
 
-                <li class="phone-item">
-                    <img src="{% static 'images/MSI.webp' %}" alt="MSI"
-                         title="MSI" width="180" height="180">
-                    <a href="/product/list/MSI">MSI</a>
-                </li>
+                {% for brand in laptop_brands %}
 
-                <li class="phone-item">
-                    <img src="{% static 'images/Acer.webp' %}" alt="Acer" title="Acer"
-                         width="180" height="180">
-                    <a href="/product/list/Acer">Acer</a>
-                </li>
+                <a href="{% url 'brand_page' brand.slug %}?cat=laptop" class="brand-float">
+                    <div class="float-ico">
+                        {% if brand.main_product_image %}
+                            <img src="{{ brand.main_product_image.url }}" alt="{{ brand.name }}"
+                                 title="{{ brand.name }}">
+                        {% endif %}
+                    </div>
+                    <span>{{ brand.name }}</span>
+                </a>
 
-                <li class="phone-item">
-                    <img src="{% static 'images/Lenovo.webp' %}" alt="Lenovo" title="Lenovo"
-                         width="180" height="180">
-                    <a href="/product/list/Lenovo">Lenovo</a>
-                </li>
+                {% empty %}
 
-                <li class="phone-item">
-                    <img src="{% static 'images/MacBook.webp' %}" alt="MacBook" title="MacBook"
-                         width="180" height="180">
-                    <a href="/product/list/MacBook">MacBook</a>
-                </li>
+                <p>No laptop brands yet.</p>
 
-                <li class="phone-item">
-                    <img src="{% static 'images/ASUS.webp' %}" alt="ASUS" title="ASUS"
-                         width="180" height="180">
-                    <a href="/product/list/ASUS">ASUS</a>
-                </li>
+                {% endfor %}
 
-                <li class="phone-item">
-                    <img src="{% static 'images/HP.webp' %}" alt="HP" title="HP"
-                         width="180" height="180">
-                    <a href="/product/list/HP">HP</a>
-                </li>
-
-            </ul>
+            </div>
 
             <div class="brand-section">
 
                 <div class="brand-title">
-                    <i class="fa fa-check-circle text-4xl"></i>
                     <h3>Top Brands</h3>
+                    <span class="bar"></span>
+                    <span class="count">{{ brands|length }} Brands</span>
                 </div>
 
                 <div class="brand-slider-wrapper">
@@ -420,29 +375,60 @@
 
                     <!-- Slider -->
                     <div class="brand-slider" id="brandSlider">
-                        <img src="{% static 'images/Logo_NOKIA.webp' %}" alt="NOKIA">
-                        <img src="{% static 'images/Logo_SAMSUNG.webp' %}" alt="SAMSUNG">
-                        <img src="{% static 'images/Logo_Apple.webp' %}" alt="Apple">
-                        <img src="{% static 'images/Logo_Xiaomi.webp' %}" alt="Xiaomi">
-                        <img src="{% static 'images/Logo_AUSU.webp' %}" alt="AUSU">
-                        <img src="{% static 'images/Logo_JBL.webp' %}" alt="JBL">
-                        <img src="{% static 'images/Logo_HUAWEl.webp' %}" alt="HUAWEl">
-                        <img src="{% static 'images/Logo_ADATA.webp' %}" alt="ADATA">
-                        <img src="{% static 'images/Logo_SONY.webp' %}" alt="SONY">
-                        <img src="{% static 'images/Logo_LG.webp' %}" alt="LG">
-                        <img src="{% static 'images/Logo_TP-LINK.webp' %}" alt="TP-LINK">
-                        <img src="{% static 'images/Logo_SP.webp' %}" alt="SP">
-                        <img src="{% static 'images/Logo_BEEN.webp' %}" alt="BEEN">
-                        <img src="{% static 'images/Logo_TSCO.webp' %}" alt="TSCO">
-                        <img src="{% static 'images/Logo_PHILIPS.webp' %}" alt="PHILIPS">
+
+                        {% for brand in brands %}
+
+                        <a href="{% url 'brand_page' brand.slug %}" title="{{ brand.name }}">
+                            {% if brand.logo %}
+                                <img src="{{ brand.logo.url }}" alt="{{ brand.name }}">
+                            {% endif %}
+                        </a>
+
+                        {% empty %}
+
+                        <p>No brands yet.</p>
+
+                        {% endfor %}
+
                     </div>
                 </div>
             </div>
 
+            <section class="promo-section my-4">
+                <div class="">
+
+                    <div class="row g-3 promo-wrapper">
+
+                        {% for banner in promo_banners|slice:"5:6" %}
+
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <div class="promo-box">
+                                {% if banner.button_link %}<a href="{{ banner.button_link }}">{% endif %}
+                                    <img src="{{ banner.picture.url }}" class="promo-img" alt="{{ banner.title }}">
+                                {% if banner.button_link %}</a>{% endif %}
+                                <div class="promo-overlay">
+                                    <div class="promo-overlay-text">
+                                        <h4>{{ banner.title }}</h4>
+                                        <small>Shop now</small>
+                                    </div>
+                                    <div class="promo-cta"><i class="fa-solid fa-arrow-right"></i></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </section>
+
             <div class="accessory-slider-wrapper">
 
                 <div class="accessory-slider-header">
-                    <h3>Selected Accessories</h3>
+                    <div class="header-title-wrap">
+                        <h3>Selected Accessories</h3>
+                        <span class="bar"></span>
+                    </div>
                     <a href="#">View All</a>
                 </div>
 
@@ -453,86 +439,32 @@
                 <!-- Slider -->
                 <div class="accessory-slider" id="accessorySlider">
 
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories1.webp' %}" alt="">
-                        <p class="title">Wireless Mouse Pro</p>
-                        <div class="price-box">
-                            <span class="price">$45.00</span>
-                        </div>
-                    </div>
+                    {% for product in featured_products %}
 
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories2.webp' %}" alt="">
-                        <p class="title">Mechanical Keyboard RGB</p>
-                        <div class="price-box">
-                            <span class="price">$120.00</span>
+                    <a href="{% url 'product_detail' product.id %}" class="accessory-card">
+                        <div class="accessory-img">
+                            {% if product.has_discount %}
+                                <span class="disc-tag">-{{ product.discount_percent }}%</span>
+                            {% endif %}
+                            <span class="wish-btn" data-id="{{ product.id }}"><i class="fa-regular fa-heart"></i></span>
+                            {% if product.main_image %}
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}">
+                            {% endif %}
                         </div>
-                    </div>
-
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories3.webp' %}" alt="">
-                        <p class="title">Gaming Headset 7.1</p>
+                        <p class="title">{{ product.name|truncatechars:30 }}</p>
                         <div class="price-box">
-                            <span class="price">$89.00</span>
+                            {% if product.has_discount %}
+                                <span class="price old-price">${{ product.price }}</span>
+                            {% endif %}
+                            <span class="price">${{ product.final_price }}</span>
                         </div>
-                    </div>
+                    </a>
 
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories4.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
+                    {% empty %}
 
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories5.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
+                    <p class="text-center">No products found.</p>
 
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories6.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
-
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories7.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
-
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories8.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
-
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories11.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
-
-                    <div class="accessory-card">
-                        <img src="{% static 'images/Selected Accessories10.webp' %}" alt="">
-                        <p class="title">USB Hub 7 Ports</p>
-                        <div class="price-box">
-                            <span class="price">$25.00</span>
-                        </div>
-                    </div>
-
+                    {% endfor %}
 
                 </div>
             </div>

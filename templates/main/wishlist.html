@@ -7,7 +7,7 @@ Wishlist
 
 {% block css %}
 
-<link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+<link rel="stylesheet" href="{% static 'css/wishlist.css' %}?v={{ static_versions.css_wishlist }}">
 
 {% endblock %}
 
@@ -34,13 +34,13 @@ Wishlist
 
             </div>
 
-            <div class="wishlist-count">
+            <div class="wishlist-count" id="wishlistPageCountBox">
 
-        <span id="wishlistPageCount">
+                <span id="wishlistPageCount">
 
-            {{ wishlists.count }}
+                    {{ wishlists.count }}
 
-        </span>
+                </span>
 
                 Product{{ wishlists.count|pluralize }}
 
@@ -54,88 +54,130 @@ Wishlist
 
             <div class="wishlist-stat-card">
 
-                <span>Total Products</span>
+                <div class="stat-ico">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
 
-                <h3>
-                    {{ wishlists.count }}
-                </h3>
+                <div>
 
-            </div>
+                    <span>Total Products</span>
 
-            <div class="wishlist-stat-card">
+                    <h3 id="statTotal">
+                        {{ wishlists.count }}
+                    </h3>
 
-                <span>Discount Products</span>
-
-                <h3>
-                    {{ wishlists|length }}
-                </h3>
+                </div>
 
             </div>
 
             <div class="wishlist-stat-card">
 
-                <span>Total Value</span>
+                <div class="stat-ico">
+                    <i class="fa-solid fa-tags"></i>
+                </div>
 
-                <h3>
-                    $----
-                </h3>
+                <div>
+
+                    <span>Discount Products</span>
+
+                    <h3 id="statDiscount">
+                        {{ discount_count }}
+                    </h3>
+
+                </div>
+
+            </div>
+
+            <div class="wishlist-stat-card">
+
+                <div class="stat-ico">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+
+                <div>
+
+                    <span>Total Value</span>
+
+                    <h3 id="statValue">
+                        ${{ total_value }}
+                    </h3>
+
+                </div>
 
             </div>
 
         </div>
 
-        {% if wishlists %}
-
         <!-- PRODUCTS -->
 
-        <div class="wishlist-products">
+        <div class="wishlist-products" id="wishlistProducts">
 
             {% for item in wishlists %}
 
-            <div class="wishlist-card">
+            <div class="wishlist-card" data-id="{{ item.product.id }}">
 
                 <div class="wishlist-image">
 
                     <img
                             src="{{ item.product.main_image.url }}"
                             alt="{{ item.product.name }}"
+                            loading="lazy"
                     >
 
                 </div>
 
                 <div class="wishlist-content">
 
+                    {% if item.product.has_discount %}
+
+                    <span class="wishlist-badge">
+                        -{{ item.product.discount_percent|floatformat:0 }}%
+                    </span>
+
+                    {% endif %}
+
                     <h3>
                         {{ item.product.name }}
                     </h3>
 
-                    <p>
+                    <p class="wishlist-category">
+                        <i class="fa-solid fa-tag"></i>
                         {{ item.product.category.name }}
                     </p>
+
+                    {% if item.product.is_out_of_stock %}
+
+                    <span class="stock-chip out">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        Out of stock
+                    </span>
+
+                    {% else %}
+
+                    <span class="stock-chip in">
+                        <i class="fa-solid fa-circle-check"></i>
+                        In stock
+                    </span>
+
+                    {% endif %}
 
                     <div class="wishlist-price">
 
                         {% if item.product.has_discount %}
 
                         <span class="old-price">
-
-                    {{ item.product.price }}
-
-                </span>
+                            ${{ item.product.price }}
+                        </span>
 
                         <span class="new-price">
-
-                    {{ item.product.discount_price }}
-
-                </span>
+                            ${{ item.product.discount_price }}
+                        </span>
 
                         {% else %}
 
                         <span class="new-price">
-
-                    {{ item.product.price }}
-
-                </span>
+                            ${{ item.product.price }}
+                        </span>
 
                         {% endif %}
 
@@ -148,6 +190,7 @@ Wishlist
                     <a
                             href="{% url 'product_detail' item.product.id %}"
                             class="view-btn"
+                            title="View product"
                     >
 
                         <i class="fa-solid fa-eye"></i>
@@ -157,6 +200,7 @@ Wishlist
                     <button
                             class="remove-btn wishlist-remove"
                             data-id="{{ item.product.id }}"
+                            title="Remove from wishlist"
                     >
 
                         <i class="fa-solid fa-trash"></i>
@@ -173,36 +217,54 @@ Wishlist
 
         <!-- RECOMMENDED -->
 
+        {% if popular_products %}
+
         <div class="wishlist-recommended">
 
-            <h2>
-                Popular Products
-            </h2>
+            <div class="section-title">
+
+                <h2>
+                    <i class="fa-solid fa-fire"></i>
+                    Popular Products
+                </h2>
+
+                <p>Loved by other shoppers — maybe your next favorite.</p>
+
+            </div>
 
             <div class="recommended-grid">
 
                 {% for product in popular_products %}
 
-                <div class="recommended-card">
+                <a
+                        href="{% url 'product_detail' product.id %}"
+                        class="recommended-card"
+                >
 
                     <img
                             src="{{ product.main_image.url }}"
                             alt="{{ product.name }}"
+                            loading="lazy"
                     >
 
-                    <h5>
-                        {{ product.name }}
-                    </h5>
+                    <div class="rec-body">
 
-                    <p>
-                        ${{ product.price }}
-                    </p>
+                        <h5>
+                            {{ product.name }}
+                        </h5>
 
-                    <a href="{% url 'product_detail' product.id %}">
-                        View Product
-                    </a>
+                        <p>
+                            ${{ product.final_price }}
+                        </p>
 
-                </div>
+                        <span class="rec-view">
+                            <i class="fa-solid fa-eye"></i>
+                            View Product
+                        </span>
+
+                    </div>
+
+                </a>
 
                 {% endfor %}
 
@@ -210,11 +272,11 @@ Wishlist
 
         </div>
 
-        {% else %}
+        {% endif %}
 
-        <!-- EMPTY -->
+        <!-- EMPTY STATE -->
 
-        <div class="wishlist-empty">
+        <div class="wishlist-empty {% if wishlists %}hidden{% endif %}" id="wishlistEmpty">
 
             <div class="wishlist-empty-icon">
 
@@ -246,27 +308,8 @@ Wishlist
 
         </div>
 
-        <!-- RECOMMENDED -->
-
-        <div class="wishlist-recommended">
-
-            <div class="section-title">
-
-                <h2>
-
-                    Popular Products
-
-                </h2>
-
-            </div>
-
-            <!-- Product Slider -->
-
-        </div>
-
-        {% endif %}
-
     </div>
+
     <div class="wishlist-footer-info">
 
         <div>
@@ -331,8 +374,12 @@ Wishlist
 
 {% endblock %}
 
-{% block js %}
+{% block custom_js %}
 
-<script src="{% static 'js/wishlist.js' %}"></script>
+<script>
+    window.WISHLIST_CSRF = "{{ csrf_token }}";
+</script>
+
+<script src="{% static 'js/wishlist.js' %}?v={{ static_versions.js_wishlist }}"></script>
 
 {% endblock %}

@@ -990,6 +990,7 @@ function shareProduct() {
 const wishlistBtn =
     document.querySelector(".wishlist-btn");
 
+
 if(wishlistBtn){
 
     wishlistBtn.addEventListener(
@@ -999,8 +1000,10 @@ if(wishlistBtn){
             const productId =
                 this.dataset.id;
 
+
             const icon =
                 this.querySelector("i");
+
 
             fetch(
                 `/wishlist/add/${productId}/`,
@@ -1009,53 +1012,71 @@ if(wishlistBtn){
 
                     headers:{
                         "X-CSRFToken":
-                            getCookie(
-                                "csrftoken"
-                            ),
+                            getCookie("csrftoken"),
                     }
                 }
             )
-            .then(
-                response=>response.json()
-            )
-            .then(data=>{
+
+            .then(response => response.json())
+
+            .then(data => {
+
 
                 if(data.success){
 
-                    document.getElementById(
-                        "wishlistCount"
-                    ).innerText =
-                        data.total;
 
-                    if(
-                        data.action === "added"
-                    ){
-
-                        icon.classList.remove(
-                            "fa-regular"
+                    const count =
+                        document.getElementById(
+                            "wishlistCount"
                         );
 
-                        icon.classList.add(
-                            "fa-solid"
-                        );
 
-                        showWishlistToast();
+                    if(count){
 
-                    }else{
-
-                        icon.classList.remove(
-                            "fa-solid"
-                        );
-
-                        icon.classList.add(
-                            "fa-regular"
-                        );
+                        count.innerText =
+                            data.total;
 
                     }
 
+
+
+                    if(data.action === "added"){
+
+
+                        icon.classList.remove(
+                            "fa-regular"
+                        );
+
+
+                        icon.classList.add(
+                            "fa-solid"
+                        );
+
+
+                        showWishlistToast();
+
+
+                    }else{
+
+
+                        icon.classList.remove(
+                            "fa-solid"
+                        );
+
+
+                        icon.classList.add(
+                            "fa-regular"
+                        );
+
+
+                    }
+
+
                 }
 
+
             });
+
 
         }
     );
@@ -1084,13 +1105,3 @@ function showWishlistToast(){
     },3000);
 
 }
-
-.then(data => {
-
-    if(data.success){
-
-        showWishlistToast();
-
-    }
-
-})

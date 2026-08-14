@@ -1,0 +1,720 @@
+{% extends 'dashboard_admin/base/base_dashboard_admin.html' %}
+
+{% block title %}
+    Brand Management
+{% endblock %}
+
+{% load static %}
+
+{% block meta_data %}
+    <meta name="title" content="Dashboard Admin"/>
+    <meta name="author" content="Abolfazl"/>
+    <meta name="description" content="Dashboard Admin 30 example pages using Vanilla JS."/>
+    <meta name="keywords" content="dashboard,adminlte"/>
+{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard/new_banner_site.css' %}">
+{% endblock %}
+
+{% block app_content %}
+
+    <div class="banner-page">
+
+        <!-- =========================
+             PAGE HEADER
+        ========================== -->
+
+        <div class="banner-page-header">
+
+            <div>
+
+                <h1 class="banner-page-title">
+
+                    {% if brand %}
+                        Edit Brand
+                    {% else %}
+                        Brand Management
+                    {% endif %}
+
+                </h1>
+
+                <p class="banner-page-subtitle">
+
+                    Manage brands shown on the homepage (Mobile Bests, Laptops, Top Brands).
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             TYPE TABS
+        ========================== -->
+
+        <ul class="nav nav-pills banner-type-tabs mb-4">
+
+            <li class="nav-item">
+
+                <a
+                        class="nav-link {% if current_type == 'all' %}active{% endif %}"
+                        href="?type=all">
+
+                    All
+
+                    <span class="badge bg-secondary ms-1">{{ type_counts.all }}</span>
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a
+                        class="nav-link {% if current_type == 'mobile' %}active{% endif %}"
+                        href="?type=mobile">
+
+                    Mobile Bests
+
+                    <span class="badge bg-secondary ms-1">{{ type_counts.mobile }}</span>
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a
+                        class="nav-link {% if current_type == 'laptop' %}active{% endif %}"
+                        href="?type=laptop">
+
+                    Best Laptops
+
+                    <span class="badge bg-secondary ms-1">{{ type_counts.laptop }}</span>
+
+                </a>
+
+            </li>
+
+        </ul>
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+
+        <div class="row g-4">
+
+            <!-- =========================
+             FORM
+            ========================== -->
+
+            <div class="col-lg-8">
+
+                <div class="banner-form-card">
+
+                    <div class="banner-form-header">
+
+                        <div class="d-flex align-items-center">
+
+                            <i class="bi bi-shield-half me-2"></i>
+
+                            <span>
+
+                            {% if brand %}
+                                Edit Brand
+                            {% else %}
+                                Create New Brand
+                            {% endif %}
+
+                        </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="banner-form-body">
+
+                        <form
+                                method="post"
+                                enctype="multipart/form-data"
+                                id="brandForm">
+
+                            {% csrf_token %}
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Brand Name
+
+                                </label>
+
+                                {{ forms.name }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Slug
+
+                                </label>
+
+                                {{ forms.slug }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Logo
+
+                                </label>
+
+                                {{ forms.logo }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Brand Image
+
+                                </label>
+
+                                {{ forms.image }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Description
+
+                                </label>
+
+                                {{ forms.description }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
+                                    Display Order
+
+                                </label>
+
+                                {{ forms.order }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <div class="form-check">
+
+                                    {{ forms.is_active }}
+
+                                    <label class="form-check-label ms-2">
+
+                                        Active Brand
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <div class="form-check">
+
+                                    {{ forms.is_mobile }}
+
+                                    <label class="form-check-label ms-2">
+
+                                        Show in Mobile Bests
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <div class="form-check">
+
+                                    {{ forms.is_laptop }}
+
+                                    <label class="form-check-label ms-2">
+
+                                        Show in Best Laptops
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <div class="banner-form-footer">
+
+                                <a
+                                        href="{% url 'brand_management' %}"
+                                        class="btn btn-outline-danger cancel">
+
+                                    <i class="bi bi-x-circle"></i>
+
+                                    Cancel
+
+                                </a>
+
+                                <button
+                                        type="submit"
+                                        class="btn btn-success banner-save-btn">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
+                                    {% if brand %}
+
+                                        Update Brand
+
+                                    {% else %}
+
+                                        Create Brand
+
+                                    {% endif %}
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- =========================
+            PREVIEW
+            ========================== -->
+
+            <div class="col-lg-4">
+
+                <div class="banner-preview-card">
+
+                    <div class="banner-preview-header">
+
+                        <div class="d-flex align-items-center">
+
+                            <i class="bi bi-card-image me-2"></i>
+
+                            <span>
+
+                            Brand Preview
+
+                        </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="banner-preview-body">
+
+                        <div class="banner-preview-wrapper">
+
+                            <img
+                                    src="{% if brand and brand.logo %}{{ brand.logo.url }}{% else %}{% static 'images/no-image.png' %}{% endif %}"
+                                    id="previewImage"
+                                    class="preview-image preview-clickable"
+                                    alt="Brand Logo">
+
+                        </div>
+
+                        <h5 class="banner-preview-title">
+
+                            {% if brand %}
+
+                                {{ brand.name }}
+
+                            {% else %}
+
+                                Brand Name
+
+                            {% endif %}
+
+                        </h5>
+
+                        <p class="banner-preview-text">
+
+                            {% if brand %}
+
+                                {{ brand.description|truncatechars:80 }}
+
+                            {% else %}
+
+                                Brand Description
+
+                            {% endif %}
+
+                        </p>
+
+                        {% if brand and not brand.is_active %}
+
+                            <div class="mt-2">
+
+                                <span class="badge bg-danger">
+
+                                    Inactive Brand
+
+                                </span>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             TABLE
+        ========================== -->
+
+        <div class="banner-table-card mt-5">
+
+            <div class="banner-table-header">
+
+                <div>
+
+                    <h3 class="banner-table-title">
+
+                        <i class="bi bi-images me-2"></i>
+
+                        Brand Management
+
+                    </h3>
+
+                    <p class="banner-table-subtitle">
+
+                        Manage your homepage brands.
+
+                    </p>
+
+                </div>
+
+                <div class="banner-table-count">
+
+                    {{ paginator.count }} Total Brands
+
+                </div>
+
+            </div>
+
+            <div class="banner-table-body">
+
+                <div class="table-responsive">
+
+                    <table class="table banner-table align-middle mb-0">
+
+                        <thead>
+
+                        <tr>
+
+                            <th width="120">
+                                Logo
+                            </th>
+
+                            <th>
+                                Name
+                            </th>
+
+                            <th>
+                                Slug
+                            </th>
+
+                            <th width="120">
+                                Display
+                            </th>
+
+                            <th width="80">
+                                Order
+                            </th>
+
+                            <th width="100">
+                                Status
+                            </th>
+
+                            <th width="170"
+                                class="text-center">
+
+                                Actions
+
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {% for brand_item in brands %}
+
+                            <tr>
+
+                                <td>
+
+                                    {% if brand_item.logo %}
+
+                                    <img
+                                            src="{{ brand_item.logo.url }}"
+                                            class="banner-table-image preview-clickable"
+                                            alt="{{ brand_item.name }}">
+
+                                    {% else %}
+
+                                        <span class="text-muted">---</span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    <div class="banner-name">
+
+                                        {{ brand_item.name }}
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    {{ brand_item.slug }}
+
+                                </td>
+
+                                <td>
+
+                                    {% if brand_item.is_mobile %}
+
+                                        <span class="badge bg-success">
+
+                    Mobile
+
+                </span>
+
+                                    {% endif %}
+
+                                    {% if brand_item.is_laptop %}
+
+                                        <span class="badge bg-info">
+
+                    Laptop
+
+                </span>
+
+                                    {% endif %}
+
+                                    {% if not brand_item.is_mobile and not brand_item.is_laptop %}
+
+                                        <span class="text-muted">---</span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {{ brand_item.order }}
+
+                                </td>
+
+                                <td>
+
+                                    {% if brand_item.is_active %}
+
+                                        <span class="badge bg-success">
+
+                    Active
+
+                </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-danger">
+
+                    Inactive
+
+                </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    <div class="banner-actions">
+
+                                        <a
+                                                href="{% url 'brand_edit' brand_item.id %}"
+                                                class="btn btn-outline-success banner-action-btn">
+
+                                            <i class="bi bi-pencil-square"></i>
+
+                                        </a>
+
+                                        <a
+                                                href="{% url 'delete_brand' brand_item.id %}"
+                                                class="btn btn-outline-danger banner-btn-action delete-banner">
+
+                                            <i class="bi bi-trash3"></i>
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td colspan="7">
+
+                                    <div class="banner-empty">
+
+                                        <i class="bi bi-shield-half"></i>
+
+                                        <h4>
+
+                                            No Brand Found
+
+                                        </h4>
+
+                                        <p>
+
+                                            Create your first brand.
+
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             PAGINATION
+        ========================== -->
+
+        {% if is_paginated %}
+
+            <nav class="banner-pagination">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if page_obj.has_previous %}
+
+                        <li class="page-item">
+
+                            <a
+                                    class="page-link"
+                                    href="?page={{ page_obj.previous_page_number }}">
+
+                                Previous
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                    {% for page in paginator.page_range %}
+
+                        <li class="page-item {% if page == page_obj.number %}active{% endif %}">
+
+                            <a
+                                    class="page-link"
+                                    href="?page={{ page }}">
+
+                                {{ page }}
+
+                            </a>
+
+                        </li>
+
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+
+                        <li class="page-item">
+
+                            <a
+                                    class="page-link"
+                                    href="?page={{ page_obj.next_page_number }}">
+
+                                Next
+
+                            </a>
+
+                        </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+        {% endif %}
+
+        <div class="image-preview-modal" id="imagePreviewModal">
+
+            <span class="close-preview">
+
+                <i class="bi bi-x-lg"></i>
+
+            </span>
+
+            <img
+                    id="previewModalImage"
+                    class="preview-modal-image"
+                    src="">
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block custom_js %}
+
+    <script src="{% static 'js/dashboard/admin/new_banner_site.js' %}"></script>
+
+{% endblock %}

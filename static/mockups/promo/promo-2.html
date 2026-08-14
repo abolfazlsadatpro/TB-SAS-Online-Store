@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promo 2 — Dark Glow</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    /* ===== پیشنهاد ۲ — Dark Glow ===== */
+    .promo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .promo-card{
+        position:relative;border-radius:14px;overflow:hidden;height:170px;
+        background:#143526;cursor:pointer;transition:.3s;
+        box-shadow:0 14px 30px -14px rgba(14,40,30,.45);
+    }
+    .promo-card::before{
+        content:"";position:absolute;inset:0;
+        background:
+            radial-gradient(circle at 80% 20%,rgba(46,204,143,.25),transparent 50%),
+            radial-gradient(circle at 15% 90%,rgba(25,135,84,.2),transparent 45%);
+        transition:.3s;
+    }
+    .promo-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -16px rgba(14,40,30,.55)}
+    .promo-card img{
+        position:absolute;right:8px;bottom:0;height:80%;max-width:55%;
+        object-fit:contain;filter:drop-shadow(0 10px 20px rgba(0,0,0,.4));
+        transition:.4s;
+    }
+    .promo-card:hover img{transform:scale(1.06) rotate(-2deg)}
+    .promo-text{position:absolute;left:18px;top:50%;transform:translateY(-50%);z-index:2;color:#fff}
+    .promo-text .tag{
+        display:inline-block;background:rgba(46,204,143,.2);
+        border:1px solid rgba(46,204,143,.4);color:#3ee6a0;
+        font-size:10px;font-weight:800;letter-spacing:1px;
+        padding:3px 9px;border-radius:20px;margin-bottom:8px;
+    }
+    .promo-text h4{font-size:16px;font-weight:800;margin-bottom:4px}
+    .promo-text small{color:rgba(255,255,255,.6);font-size:11.5px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="promo-grid">
+        <div class="promo-card">
+            <div class="promo-text">
+                <span class="tag">NEW</span>
+                <h4>New Season</h4>
+                <small>Fresh styles for you</small>
+            </div>
+            <img src="Advertisemenet%201.png" alt="">
+        </div>
+        <div class="promo-card">
+            <div class="promo-text">
+                <span class="tag">HOT</span>
+                <h4>Hot Deals</h4>
+                <small>Limited time offer</small>
+            </div>
+            <img src="Advertisemenet%202.png" alt="">
+        </div>
+        <div class="promo-card">
+            <div class="promo-text">
+                <span class="tag">SALE</span>
+                <h4>Big Sale</h4>
+                <small>Up to 40% off</small>
+            </div>
+            <img src="Advertisemenet%203.png" alt="">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

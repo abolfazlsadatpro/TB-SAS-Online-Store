@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from store.models import VoteProduct
 from django import forms
-from .models import ContactMessage
+from .models import ContactMessage, AboutUsSection
 
 
 class VoteSubmitForm(ModelForm):
@@ -22,4 +22,19 @@ class ContactMessageForm(forms.ModelForm):
             'email',
             'subject',
             'message'
+        )
+
+
+class AboutUsSectionForm(forms.ModelForm):
+    class Meta:
+        model = AboutUsSection
+
+        fields = (
+            'section_type',
+            'title',
+            'content',
+            'icon',
+            'image',
+            'display_order',
+            'is_active',
         )

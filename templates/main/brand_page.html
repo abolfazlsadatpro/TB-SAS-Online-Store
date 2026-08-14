@@ -1,0 +1,204 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+
+{% block title %}{{ brand.name }} — Products{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/brand_page.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="brand-page">
+
+    <div class="container">
+
+        <!-- BRAND HEADER -->
+
+        <div class="brand-header">
+
+            <div class="brand-header-logo">
+
+                {% if brand.logo %}
+
+                <img
+                        src="{{ brand.logo.url }}"
+                        alt="{{ brand.name }}"
+                >
+
+                {% endif %}
+
+            </div>
+
+            <div class="brand-header-text">
+
+                <h1>
+                    {{ brand.name }}
+                </h1>
+
+                {% if brand.description %}
+
+                <p>
+                    {{ brand.description }}
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- CATEGORY TABS -->
+
+        <div class="brand-cat-tabs">
+
+            <a
+                    href="{% url 'brand_page' brand.slug %}"
+                    class="brand-cat-tab {% if not current_cat %}active{% endif %}"
+            >
+                <i class="fa-solid fa-boxes-stacked"></i>
+                All Products
+            </a>
+
+            <a
+                    href="{% url 'brand_page' brand.slug %}?cat=mobile"
+                    class="brand-cat-tab {% if current_cat == 'mobile' %}active{% endif %}"
+            >
+                <i class="fa-solid fa-mobile-screen"></i>
+                Mobile
+            </a>
+
+            <a
+                    href="{% url 'brand_page' brand.slug %}?cat=laptop"
+                    class="brand-cat-tab {% if current_cat == 'laptop' %}active{% endif %}"
+            >
+                <i class="fa-solid fa-laptop"></i>
+                Laptop
+            </a>
+
+        </div>
+
+        <!-- PRODUCTS -->
+
+        {% if products %}
+
+        <div class="brand-products">
+
+            <div class="brand-products-head">
+
+                <h2>
+                    <i class="fa-solid fa-box-open"></i>
+                    {{ products|length }} Product{{ products|pluralize }}
+                </h2>
+
+            </div>
+
+            <div class="brand-products-grid">
+
+                {% for product in products %}
+
+                <a
+                        href="{% url 'product_detail' product.id %}"
+                        class="brand-product-card"
+                >
+
+                    <div class="brand-product-image">
+
+                        {% if product.main_image %}
+
+                        <img
+                                src="{{ product.main_image.url }}"
+                                alt="{{ product.name }}"
+                                loading="lazy"
+                        >
+
+                        {% endif %}
+
+                        {% if product.has_discount %}
+
+                        <span class="brand-product-badge">
+                            -{{ product.discount_percent|floatformat:0 }}%
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                    <div class="brand-product-body">
+
+                        <h3>
+                            {{ product.name }}
+                        </h3>
+
+                        <p class="brand-product-cat">
+                            <i class="fa-solid fa-tag"></i>
+                            {{ product.category.name }}
+                        </p>
+
+                        <div class="brand-product-price">
+
+                            {% if product.has_discount %}
+
+                            <span class="old-price">
+                                ${{ product.price }}
+                            </span>
+
+                            <span class="new-price">
+                                ${{ product.discount_price }}
+                            </span>
+
+                            {% else %}
+
+                            <span class="new-price">
+                                ${{ product.price }}
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY -->
+
+        <div class="brand-empty">
+
+            <div class="brand-empty-icon">
+                <i class="fa-regular fa-box-open"></i>
+            </div>
+
+            <h2>
+                No Products Available
+            </h2>
+
+            <p>
+                There are currently no products from {{ brand.name }}. Check back soon!
+            </p>
+
+            <a
+                    href="{% url 'products' %}"
+                    class="brand-shopping-btn"
+            >
+                <i class="fa-solid fa-bag-shopping"></i>
+                Browse All Products
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

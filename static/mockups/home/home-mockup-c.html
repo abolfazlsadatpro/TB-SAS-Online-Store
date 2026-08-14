@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Mockup C — 3D Tilt</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f8f5;color:#143120}
+    .page{max-width:1300px;margin:0 auto;padding:20px}
+
+    /* ===== HERO — 3D perspective ===== */
+    .hero{
+        height:440px;border-radius:28px;position:relative;overflow:hidden;
+        background:linear-gradient(135deg,#0b5134,#198754);
+        margin-bottom:40px;
+        transform-style:preserve-3d;
+        box-shadow:0 30px 60px -20px rgba(13,62,41,.5);
+    }
+    .hero::before{
+        content:"";position:absolute;inset:0;
+        background:
+            radial-gradient(circle at 15% 85%,rgba(46,204,143,.4),transparent 40%),
+            radial-gradient(circle at 85% 15%,rgba(255,255,255,.12),transparent 45%);
+    }
+    .hero-inner{position:relative;z-index:2;height:100%;display:flex;align-items:center;padding:0 60px;color:#fff}
+    .hero-left{max-width:480px}
+    .hero-badge{
+        display:inline-block;background:rgba(255,255,255,.14);
+        border:1px solid rgba(255,255,255,.3);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+        padding:8px 18px;border-radius:30px;font-size:13px;font-weight:700;margin-bottom:18px;
+    }
+    .hero-left h1{font-size:44px;font-weight:800;line-height:1.2;margin-bottom:14px}
+    .hero-left p{font-size:16px;opacity:.85;margin-bottom:26px}
+    .hero-cta{
+        display:inline-flex;gap:10px;align-items:center;
+        background:#fff;color:#0b5134;font-weight:800;
+        padding:15px 30px;border-radius:14px;text-decoration:none;
+        box-shadow:0 10px 25px -8px rgba(0,0,0,.3);transition:.25s;
+    }
+    .hero-cta:hover{transform:translateY(-3px)}
+
+    /* ===== SECTION HEAD ===== */
+    .section-head{display:flex;justify-content:space-between;align-items:center;margin:50px 0 24px}
+    .section-head h2{font-size:25px;font-weight:800;display:flex;align-items:center;gap:12px}
+    .section-head h2 i{color:#198754}
+    .view-all{color:#198754;font-weight:700;font-size:14px;text-decoration:none;display:inline-flex;gap:7px;align-items:center;padding:9px 16px;border-radius:12px;background:rgba(25,135,84,.08);transition:.2s}
+    .view-all:hover{background:rgba(25,135,84,.15)}
+
+    /* ===== DEAL CARDS — 3D tilt ===== */
+    .deals{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+    .tilt-card{
+        perspective:900px;
+    }
+    .card3d{
+        position:relative;
+        background:#fff;
+        border:1px solid rgba(25,135,84,.12);
+        border-radius:22px;
+        padding:18px;
+        transform-style:preserve-3d;
+        box-shadow:
+            0 1px 0 #fff inset,
+            0 20px 40px -18px rgba(13,62,41,.25),
+            8px 8px 0 rgba(25,135,84,.07);
+        transition:transform .3s cubic-bezier(.22,.9,.3,1),box-shadow .3s;
+    }
+    .tilt-card:hover .card3d{
+        transform:rotateX(6deg) rotateY(-6deg) translateY(-8px);
+        box-shadow:
+            0 1px 0 #fff inset,
+            0 30px 50px -20px rgba(13,62,41,.35),
+            14px 14px 0 rgba(25,135,84,.12);
+    }
+    .card-img{
+        height:150px;border-radius:16px;
+        background:linear-gradient(145deg,#f1faf4,#e0efe6);
+        display:flex;align-items:center;justify-content:center;
+        font-size:58px;color:#198754;margin-bottom:14px;
+        transform:translateZ(24px);
+        transition:.3s;
+    }
+    .tilt-card:hover .card-img{transform:translateZ(40px) scale(1.05)}
+    .card-badge{
+        position:absolute;top:14px;left:14px;z-index:5;
+        background:linear-gradient(135deg,#e6484d,#c92a2f);color:#fff;
+        font-size:12px;font-weight:800;padding:5px 11px;border-radius:9px;
+        box-shadow:0 6px 14px -4px rgba(201,42,47,.5);
+    }
+    .card3d h4{font-size:15px;font-weight:700;margin-bottom:8px;transform:translateZ(16px)}
+    .card-price{display:flex;gap:10px;align-items:baseline;transform:translateZ(16px)}
+    .card-price .n{color:#198754;font-size:20px;font-weight:800}
+    .card-price .o{color:#a9b5ae;font-size:14px;text-decoration:line-through}
+
+    /* ===== BRAND PILLS ===== */
+    .brands{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:26px 0}
+    .pill{
+        display:flex;align-items:center;gap:12px;
+        padding:13px 24px;border-radius:50px;
+        background:#fff;border:1.5px solid rgba(25,135,84,.2);
+        text-decoration:none;color:#143120;font-weight:700;font-size:14px;
+        transition:.25s;
+    }
+    .pill i{color:#198754;font-size:20px}
+    .pill:hover{
+        background:linear-gradient(135deg,#198754,#16a34a);color:#fff;
+        border-color:transparent;transform:translateY(-3px);
+        box-shadow:0 12px 24px -10px rgba(21,115,71,.5);
+    }
+    .pill:hover i{color:#fff}
+
+    /* ===== PROMO ===== */
+    .promos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:40px 0}
+    .ptile{
+        height:160px;border-radius:22px;position:relative;overflow:hidden;
+        background:linear-gradient(145deg,#dff3e7,#b9e4cc);
+        display:flex;align-items:center;justify-content:center;
+        font-size:46px;color:#198754;
+        box-shadow:0 14px 30px -14px rgba(13,62,41,.2),0 6px 0 rgba(25,135,84,.08);
+        transition:.3s;
+    }
+    .ptile:hover{transform:translateY(-5px)}
+    .ptile::after{
+        content:"";position:absolute;inset:0;
+        background:radial-gradient(300px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.4),transparent 40%);
+        opacity:0;transition:.3s;
+    }
+    .ptile:hover::after{opacity:1}
+
+    /* ===== SLIDER ===== */
+    .slider{display:flex;gap:16px;overflow-x:auto;padding:8px 4px 16px;scrollbar-width:none}
+    .slider::-webkit-scrollbar{display:none}
+    .scard{
+        flex:0 0 205px;background:#fff;border:1px solid rgba(25,135,84,.1);
+        border-radius:18px;padding:14px;transition:.3s;
+        box-shadow:0 8px 20px -12px rgba(13,62,41,.15);
+    }
+    .scard:hover{transform:translateY(-6px);box-shadow:0 18px 34px -14px rgba(13,62,41,.22)}
+    .scard-img{height:125px;border-radius:12px;background:linear-gradient(145deg,#f4faf6,#e6f2ea);display:flex;align-items:center;justify-content:center;font-size:44px;color:#198754;margin-bottom:10px}
+    .scard h5{font-size:14px;font-weight:700;margin-bottom:6px}
+    .scard .p{color:#198754;font-weight:800;font-size:16px}
+
+    /* ===== FOOT ===== */
+    .foot{text-align:center;padding:40px 0;color:#8aa496;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-left">
+                <span class="hero-badge">✦ New Season — Fresh Tech</span>
+                <h1>Smart Tech.<br>Smart Savings.</h1>
+                <p>Premium devices from Apple, Samsung, MSI & more — all at unbeatable prices.</p>
+                <a href="#" class="hero-cta"><i class="fa-solid fa-bolt"></i> Shop Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEALS -->
+    <div class="section-head">
+        <h2><i class="fa-solid fa-fire"></i> Today's Deals</h2>
+        <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="deals">
+        <div class="tilt-card"><div class="card3d">
+            <span class="card-badge">-12%</span>
+            <div class="card-img"><i class="fa-solid fa-mobile-screen"></i></div>
+            <h4>Galaxy S25 Ultra</h4>
+            <div class="card-price"><span class="n">$1,149</span><span class="o">$1,299</span></div>
+        </div></div>
+        <div class="tilt-card"><div class="card3d">
+            <span class="card-badge">-7%</span>
+            <div class="card-img"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <h4>iPhone 16 Pro Max</h4>
+            <div class="card-price"><span class="n">$1,199</span><span class="o">$1,299</span></div>
+        </div></div>
+        <div class="tilt-card"><div class="card3d">
+            <span class="card-badge">-12%</span>
+            <div class="card-img"><i class="fa-solid fa-laptop"></i></div>
+            <h4>Xiaomi 15 Pro</h4>
+            <div class="card-price"><span class="n">$699</span><span class="o">$799</span></div>
+        </div></div>
+        <div class="tilt-card"><div class="card3d">
+            <span class="card-badge">-10%</span>
+            <div class="card-img"><i class="fa-solid fa-laptop-code"></i></div>
+            <h4>MSI Katana 15</h4>
+            <div class="card-price"><span class="n">$1,349</span><span class="o">$1,499</span></div>
+        </div></div>
+    </div>
+
+    <!-- MOBILE -->
+    <div class="section-head"><h2><i class="fa-solid fa-mobile-screen"></i> Mobile Bests</h2></div>
+    <div class="brands">
+        <a href="#" class="pill"><i class="fa-brands fa-apple"></i> Apple</a>
+        <a href="#" class="pill"><i class="fa-solid fa-mobile"></i> Samsung</a>
+        <a href="#" class="pill"><i class="fa-solid fa-tablet-screen-button"></i> Xiaomi</a>
+        <a href="#" class="pill"><i class="fa-solid fa-phone"></i> Nokia</a>
+        <a href="#" class="pill"><i class="fa-solid fa-sim-card"></i> Honor</a>
+    </div>
+
+    <!-- PROMOS -->
+    <div class="promos">
+        <div class="ptile"><i class="fa-solid fa-headphones"></i></div>
+        <div class="ptile"><i class="fa-solid fa-watch"></i></div>
+        <div class="ptile"><i class="fa-solid fa-gamepad"></i></div>
+    </div>
+
+    <!-- LATEST -->
+    <div class="section-head">
+        <h2><i class="fa-solid fa-box-open"></i> Latest Products</h2>
+        <a href="#" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="slider">
+        <div class="scard"><div class="scard-img"><i class="fa-solid fa-mobile-screen"></i></div><h5>Galaxy S25 Ultra</h5><div class="p">$1,149</div></div>
+        <div class="scard"><div class="scard-img"><i class="fa-solid fa-mobile-screen-button"></i></div><h5>iPhone 16 Pro Max</h5><div class="p">$1,199</div></div>
+        <div class="scard"><div class="scard-img"><i class="fa-solid fa-laptop"></i></div><h5>Xiaomi 15 Pro</h5><div class="p">$699</div></div>
+        <div class="scard"><div class="scard-img"><i class="fa-solid fa-laptop-code"></i></div><h5>MSI Katana 15</h5><div class="p">$1,349</div></div>
+        <div class="scard"><div class="scard-img"><i class="fa-solid fa-memory"></i></div><h5>Acer Nitro 16</h5><div class="p">$1,199</div></div>
+    </div>
+
+    <!-- LAPTOP -->
+    <div class="section-head"><h2><i class="fa-solid fa-laptop"></i> Best Laptops</h2></div>
+    <div class="brands">
+        <a href="#" class="pill"><i class="fa-brands fa-apple"></i> Apple</a>
+        <a href="#" class="pill"><i class="fa-solid fa-laptop"></i> MSI</a>
+        <a href="#" class="pill"><i class="fa-solid fa-laptop-code"></i> Acer</a>
+        <a href="#" class="pill"><i class="fa-solid fa-display"></i> Lenovo</a>
+        <a href="#" class="pill"><i class="fa-solid fa-microchip"></i> ASUS</a>
+        <a href="#" class="pill"><i class="fa-solid fa-desktop"></i> HP</a>
+    </div>
+
+    <div class="foot">© 2026 TBSAS — All rights reserved.</div>
+
+</div>
+
+</body>
+</html>

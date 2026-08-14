@@ -1,5 +1,5 @@
 from django.contrib import messages
-from store.models import VoteProduct, CommentVote, Product, Wishlist
+from store.models import VoteProduct, CommentVote, Product, Wishlist, Brand, AboutUsSection, SettingSite
 from store.forms import VoteSubmitForm
 from django.shortcuts import render
 from django.db.models import Avg, Count, Q
@@ -30,6 +30,14 @@ def home_page(request):
 
         "best_seller_products": get_best_seller_products(),
 
+        "brands": get_brands(),
+
+        "mobile_brands": get_mobile_brands(),
+
+        "laptop_brands": get_laptop_brands(),
+
+        "promo_banners": get_promo_banners(),
+
     }
 
     return render(
@@ -39,11 +47,75 @@ def home_page(request):
     )
 
 
+CATEGORY_FILTERS = {
+    "mobile": "Phone",
+    "laptop": "Laptop_update",
+}
+
+
+def brand_page(request, slug):
+    brand = get_object_or_404(
+        Brand,
+        slug=slug,
+        is_active=True
+    )
+
+    cat = request.GET.get("cat", "")
+
+    products = (
+        Product.objects
+        .filter(
+            brand=brand.name,
+            is_active=True,
+            is_available=True,
+        )
+        .select_related("category")
+        .prefetch_related("colors", "images")
+        .order_by("-created_at")
+    )
+
+    current_cat = ""
+
+    if cat in CATEGORY_FILTERS:
+        current_cat = cat
+        products = products.filter(
+            category__name=CATEGORY_FILTERS[cat]
+        )
+
+    return render(
+        request,
+        "main/brand_page.html",
+        {
+            "brand": brand,
+            "products": products,
+            "current_cat": current_cat,
+        }
+    )
+
+
 def about_page(request):
-    return render(request, 'main/about_us.html')
+    settings = SettingSite.load()
+
+    sections = AboutUsSection.objects.filter(
+        is_active=True
+    ).order_by(
+        "display_order",
+        "id"
+    )
+
+    return render(
+        request,
+        'main/about_us.html',
+        {
+            "settings": settings,
+            "about_sections": sections,
+        }
+    )
 
 
 def contact_page(request):
+    form = ContactMessageForm()
+
     if request.method == 'POST':
 
         data = request.POST.copy()
@@ -336,13 +408,10 @@ def vote_comment(request):
 @login_required
 @require_POST
 def add_to_wishlist(request, id):
-    print(request.user)
-    print(id)
     product = get_object_or_404(
         Product,
         id=id
     )
-    print(product)
 
     wishlist = Wishlist.objects.filter(
         user=request.user,
@@ -355,7 +424,9 @@ def add_to_wishlist(request, id):
         return JsonResponse({
             "success": True,
             "action": "removed",
-            "total": request.user.total_wishlist
+            "total": Wishlist.objects.filter(
+                user=request.user
+            ).count()
         })
 
     Wishlist.objects.create(
@@ -366,7 +437,9 @@ def add_to_wishlist(request, id):
     return JsonResponse({
         "success": True,
         "action": "added",
-        "total": request.user.total_wishlist
+        "total": Wishlist.objects.filter(
+            user=request.user
+        ).count()
     })
 
 
@@ -399,8 +472,31 @@ def wishlist(request):
         .order_by("-created_at")
     )
 
+    wishlist_ids = [item.product_id for item in wishlists]
+
+    discount_count = sum(
+        1 for item in wishlists
+        if item.product.has_discount
+    )
+
+    total_value = sum(
+        item.product.final_price
+        for item in wishlists
+    )
+
+    popular_products = (
+        Product.objects
+        .filter(is_active=True, is_available=True)
+        .exclude(id__in=wishlist_ids)
+        .order_by("-views_count")[:8]
+    )
+
     context = {
         "wishlists": wishlists,
+        "wishlist_ids": wishlist_ids,
+        "discount_count": discount_count,
+        "total_value": total_value,
+        "popular_products": popular_products,
     }
 
     return render(

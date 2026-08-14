@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brands 2 — Circle Orbs</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-title{text-align:center;font-size:24px;font-weight:800;margin-bottom:8px;color:#1b2b22}
+    .sec-sub{text-align:center;color:#8aa496;font-size:13px;margin-bottom:30px}
+
+    /* ===== پیشنهاد ۲ — Circle Orbs ===== */
+    .brands-row{display:flex;justify-content:center;gap:34px;flex-wrap:wrap}
+    .brand-orb{
+        display:flex;flex-direction:column;align-items:center;gap:12px;
+        text-decoration:none;color:#1b2b22;
+    }
+    .orb{
+        width:130px;height:130px;border-radius:50%;
+        background:linear-gradient(145deg,#fff,#e8f5ee);
+        border:2px solid rgba(25,135,84,.15);
+        display:flex;align-items:center;justify-content:center;
+        padding:18px;
+        box-shadow:
+            0 14px 30px -12px rgba(13,62,41,.25),
+            0 5px 0 rgba(25,135,84,.1);
+        transition:.3s;
+    }
+    .orb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:50%}
+    .brand-orb:hover .orb{
+        transform:translateY(-8px) scale(1.05);
+        border-color:#198754;
+        box-shadow:
+            0 20px 40px -14px rgba(13,62,41,.35),
+            0 8px 0 rgba(25,135,84,.15);
+    }
+    .brand-orb span{font-size:14px;font-weight:700;color:#3d4f46}
+    .brand-orb:hover span{color:#198754}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <h2 class="sec-title">Mobile Bests</h2>
+    <p class="sec-sub">Top mobile brands loved by our customers</p>
+
+    <div class="brands-row">
+        <a href="#" class="brand-orb"><div class="orb"><img src="samsung.webp" alt=""></div><span>Samsung</span></a>
+        <a href="#" class="brand-orb"><div class="orb"><img src="apple.webp" alt=""></div><span>Apple</span></a>
+        <a href="#" class="brand-orb"><div class="orb"><img src="xiaomi.webp" alt=""></div><span>Xiaomi</span></a>
+        <a href="#" class="brand-orb"><div class="orb"><img src="honor.webp" alt=""></div><span>Honor</span></a>
+        <a href="#" class="brand-orb"><div class="orb" style="background:#fff;border:2px solid #e8ede9"><img src="nokia.webp" alt=""></div><span>Nokia</span></a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -8,12 +8,13 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import ListView, DetailView
 from store.untils import get_tuple_status, STATUS_CHOICES
 from admin_dashboard.forms import OrderStatusForm, CategoryForm, ProductForm, ProductColorFormSet, \
-    ProductColorEditFormSet, BannerForm, ProductImageFormSet, ProductSpecificationFormSet
+    ProductColorEditFormSet, BannerForm, ProductImageFormSet, ProductSpecificationFormSet, BrandForm
 from store.models import Order, OrderItem, Customer, VoteProduct, ContactMessage, Category, Product, \
-    BannerMain
+    BannerMain, Brand, AboutUsSection
 from users.models import PersonUser
 from store.models import SettingSite
 from admin_dashboard.forms import SettingSiteForm
+from store.forms import AboutUsSectionForm
 from django.db import transaction
 from django.db import IntegrityError
 
@@ -354,6 +355,72 @@ def category_delete(request, pk):
 
 @login_required(login_url="/")
 @never_cache
+def about_us_sections(request):
+    sections = AboutUsSection.objects.all()
+
+    if request.method == "POST":
+        form = AboutUsSectionForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "About Us section added successfully.")
+            return redirect("about_us_management")
+
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f"{field.capitalize()} : {error}")
+
+    else:
+        form = AboutUsSectionForm()
+
+    context = {
+        "form": form,
+        "sections": sections,
+    }
+
+    return render(request, "dashboard_admin/about_us_management.html", context)
+
+
+@login_required(login_url="/")
+@never_cache
+def about_us_section_edit(request, id):
+    section = get_object_or_404(AboutUsSection, id=id)
+
+    if request.method == "POST":
+        form = AboutUsSectionForm(request.POST, request.FILES, instance=section)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "About Us section updated successfully.")
+            return redirect("about_us_management")
+
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(request, f"{field.capitalize()} : {error}")
+
+    else:
+        form = AboutUsSectionForm(instance=section)
+
+    context = {
+        "form": form,
+        "section": section,
+        "sections": AboutUsSection.objects.all(),
+    }
+
+    return render(request, "dashboard_admin/about_us_management.html", context)
+
+
+@login_required(login_url="/")
+@never_cache
+def about_us_section_delete(request, id):
+    section = get_object_or_404(AboutUsSection, id=id)
+    section.delete()
+    messages.success(request, "About Us section deleted successfully.")
+    return redirect("about_us_management")
+
+
+@login_required(login_url="/")
+@never_cache
 def product_add(request, id=None):
     if id:
         product = get_object_or_404(Product, id=id)
@@ -571,6 +638,11 @@ class BannerManagement(ListView):
             "-id"
         )
 
+        banner_type = self.request.GET.get("type", "all")
+
+        if banner_type in ("slider", "promo"):
+            qs = qs.filter(banner_type=banner_type)
+
         q = self.request.GET.get("q")
 
         if q:
@@ -598,6 +670,14 @@ class BannerManagement(ListView):
         context["forms"] = BannerForm(instance=banner)
 
         context["banners"] = context["page_obj"]
+
+        context["current_type"] = self.request.GET.get("type", "all")
+
+        context["type_counts"] = {
+            "all": BannerMain.objects.count(),
+            "slider": BannerMain.objects.filter(banner_type="slider").count(),
+            "promo": BannerMain.objects.filter(banner_type="promo").count(),
+        }
 
         return context
 
@@ -633,6 +713,104 @@ class BannerManagement(ListView):
                 )
 
             return redirect("banner_management")
+
+        self.object_list = self.get_queryset()
+
+        context = self.get_context_data()
+
+        context["forms"] = form
+
+        return self.render_to_response(context)
+
+
+def delete_brand(request, pk):
+    brand = get_object_or_404(Brand, id=pk)
+    brand.delete()
+    return redirect("brand_management")
+
+
+class BrandManagement(ListView):
+    model = Brand
+    template_name = "dashboard_admin/brand_management.html"
+    context_object_name = "brands"
+    paginate_by = 10
+
+    def get_queryset(self):
+        qs = Brand.objects.all().order_by(
+            "order",
+            "name"
+        )
+
+        brand_type = self.request.GET.get("type", "all")
+
+        if brand_type == "mobile":
+            qs = qs.filter(is_mobile=True)
+        elif brand_type == "laptop":
+            qs = qs.filter(is_laptop=True)
+
+        q = self.request.GET.get("q")
+
+        if q:
+            qs = qs.filter(
+                Q(name__icontains=q) |
+                Q(description__icontains=q)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        brand = None
+
+        if "id" in self.kwargs:
+            brand = get_object_or_404(
+                Brand,
+                id=self.kwargs["id"]
+            )
+
+        context["brand"] = brand
+        context["forms"] = BrandForm(instance=brand)
+        context["brands"] = context["page_obj"]
+        context["current_type"] = self.request.GET.get("type", "all")
+        context["type_counts"] = {
+            "all": Brand.objects.count(),
+            "mobile": Brand.objects.filter(is_mobile=True).count(),
+            "laptop": Brand.objects.filter(is_laptop=True).count(),
+        }
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        brand = None
+
+        if "id" in self.kwargs:
+            brand = get_object_or_404(
+                Brand,
+                id=self.kwargs["id"]
+            )
+
+        form = BrandForm(
+            request.POST,
+            request.FILES,
+            instance=brand
+        )
+
+        if form.is_valid():
+            form.save()
+
+            if brand:
+                messages.success(
+                    request,
+                    "Brand updated successfully."
+                )
+            else:
+                messages.success(
+                    request,
+                    "Brand created successfully."
+                )
+
+            return redirect("brand_management")
 
         self.object_list = self.get_queryset()
 

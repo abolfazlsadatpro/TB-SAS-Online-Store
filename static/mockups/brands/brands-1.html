@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brands 1 — Big Cards</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-title{text-align:center;font-size:24px;font-weight:800;margin-bottom:8px;color:#1b2b22}
+    .sec-sub{text-align:center;color:#8aa496;font-size:13px;margin-bottom:30px}
+
+    /* ===== پیشنهاد ۱ — Big Cards ===== */
+    .brands-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px}
+    .brand-card{
+        background:#fff;border:1px solid #eef1ef;border-radius:16px;
+        padding:20px 14px;text-align:center;text-decoration:none;color:#1b2b22;
+        transition:.3s;
+    }
+    .brand-card:hover{
+        transform:translateY(-6px);border-color:#198754;
+        box-shadow:0 16px 34px -16px rgba(21,115,71,.3);
+    }
+    .brand-img{
+        height:130px;display:flex;align-items:center;justify-content:center;
+        background:linear-gradient(145deg,#f4faf6,#e6f2ea);
+        border-radius:12px;margin-bottom:14px;padding:12px;
+    }
+    .brand-img img{max-width:85%;max-height:100%;object-fit:contain;transition:.3s}
+    .brand-card:hover .brand-img img{transform:scale(1.06)}
+    .brand-card h5{font-size:15px;font-weight:700;margin-bottom:4px}
+    .brand-card small{color:#8aa496;font-size:11.5px}
+    .brand-arrow{
+        display:inline-flex;align-items:center;justify-content:center;
+        width:28px;height:28px;border-radius:50%;
+        background:rgba(25,135,84,.08);color:#198754;font-size:11px;
+        margin-top:8px;opacity:0;transform:translateY(6px);transition:.3s;
+    }
+    .brand-card:hover .brand-arrow{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <h2 class="sec-title">Mobile Bests</h2>
+    <p class="sec-sub">Top mobile brands loved by our customers</p>
+
+    <div class="brands-grid">
+        <a href="#" class="brand-card">
+            <div class="brand-img"><img src="samsung.webp" alt=""></div>
+            <h5>Samsung</h5>
+            <small>Galaxy S25 Ultra</small>
+            <div class="brand-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+        <a href="#" class="brand-card">
+            <div class="brand-img"><img src="apple.webp" alt=""></div>
+            <h5>Apple</h5>
+            <small>iPhone 16 Pro Max</small>
+            <div class="brand-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+        <a href="#" class="brand-card">
+            <div class="brand-img"><img src="xiaomi.webp" alt=""></div>
+            <h5>Xiaomi</h5>
+            <small>Mi 15 Pro</small>
+            <div class="brand-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+        <a href="#" class="brand-card">
+            <div class="brand-img"><img src="honor.webp" alt=""></div>
+            <h5>Honor</h5>
+            <small>Magic 7</small>
+            <div class="brand-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+        <a href="#" class="brand-card">
+            <div class="brand-img" style="background:#fff;border:1px solid #eef1ef"><img src="nokia.webp" alt=""></div>
+            <h5>Nokia</h5>
+            <small>Classic quality</small>
+            <div class="brand-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

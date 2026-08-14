@@ -354,6 +354,38 @@ class ContactMessage(models.Model):
         return self.subject
 
 
+class AboutUsSection(models.Model):
+    SECTION_TYPES = (
+        ("hero", "Hero"),
+        ("mission", "Mission / Text"),
+        ("stat", "Stat"),
+        ("feature", "Feature"),
+        ("team", "Team Member"),
+        ("custom", "Custom"),
+    )
+
+    section_type = models.CharField(
+        max_length=20, choices=SECTION_TYPES, default="custom"
+    )
+    title = models.CharField(max_length=200)
+    content = models.TextField(blank=True)
+    icon = models.CharField(max_length=50, blank=True, help_text="e.g. fa-solid fa-rocket")
+    image = models.ImageField(upload_to="about_us/", blank=True, null=True)
+    display_order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["display_order", "id"]
+
+    def __str__(self):
+        return f"{self.get_section_type_display()} - {self.title}"
+
+
+class BannerType(models.TextChoices):
+    SLIDER = "slider", "Slider"
+    PROMO = "promo", "Promo"
+
+
 class BannerMain(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
@@ -364,6 +396,12 @@ class BannerMain(models.Model):
     show_button = models.BooleanField(default=True)
     open_in_new_tab = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
+    banner_type = models.CharField(
+        max_length=10,
+        choices=BannerType.choices,
+        default=BannerType.SLIDER,
+        verbose_name="Type",
+    )
 
     class Meta:
         ordering = ["order"]
@@ -461,6 +499,23 @@ class SettingSite(models.Model):
     enable_guest_checkout = models.BooleanField(default=True)
 
     # ==========================
+    # Home Page Section Titles
+    # ==========================
+
+    home_mobile_title = models.CharField(
+        max_length=100,
+        blank=True,
+        default="Mobile Bests",
+        verbose_name="Mobile Section Title",
+    )
+    home_laptop_title = models.CharField(
+        max_length=100,
+        blank=True,
+        default="Best Laptops",
+        verbose_name="Laptop Section Title",
+    )
+
+    # ==========================
     # Date & Time
     # ==========================
 
@@ -478,6 +533,24 @@ class SettingSite(models.Model):
 
     def __str__(self):
         return self.website_name
+
+
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    logo = models.ImageField(upload_to="brands/logos/", blank=True, null=True)
+    image = models.ImageField(upload_to="brands/images/", blank=True, null=True)
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+    is_mobile = models.BooleanField(default=False, verbose_name="Show in Mobile Bests")
+    is_laptop = models.BooleanField(default=False, verbose_name="Show in Best Laptops")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
 
 
 class Wishlist(models.Model):

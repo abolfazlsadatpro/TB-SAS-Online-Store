@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products 5 — Minimal Focus</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .sec-head h2{font-size:21px;font-weight:800;color:#1b2b22}
+    .sec-head .all{color:#198754;font-size:13px;font-weight:600;text-decoration:none}
+    .sec-sub{color:#8aa496;font-size:12.5px;margin-bottom:24px}
+
+    .slider{display:flex;gap:20px;overflow-x:auto;padding:8px 4px 20px;scrollbar-width:none}
+    .slider::-webkit-scrollbar{display:none}
+
+    .card{
+        flex:0 0 185px;text-decoration:none;color:#1b2b22;text-align:center;transition:.3s;
+    }
+    .card-img{
+        position:relative;height:170px;border-radius:18px;
+        background:linear-gradient(145deg,#f4faf6,#e8f2ec);
+        display:flex;align-items:center;justify-content:center;padding:12px;margin-bottom:12px;
+        transition:.3s;
+    }
+    .card-img img{max-width:82%;max-height:100%;object-fit:contain;transition:.35s}
+    .card:hover .card-img{background:linear-gradient(145deg,#ecf8f1,#dceee2);box-shadow:0 16px 34px -16px rgba(20,40,30,.2)}
+    .card:hover .card-img img{transform:scale(1.05) translateY(-4px)}
+    .card-tag{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#e6484d,#c92a2f);color:#fff;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:5px}
+    .card h5{font-size:13.5px;font-weight:700;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-price{display:flex;align-items:baseline;gap:7px;justify-content:center}
+    .card-price .new{font-size:16px;font-weight:800;color:#198754}
+    .card-price .old{font-size:12px;color:#a9b5ae;text-decoration:line-through}
+
+    .foot-note{text-align:center;padding:20px 0;color:#a9b5ae;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="sec-head">
+        <h2>Latest Products</h2>
+        <a href="#" class="all">View All →</a>
+    </div>
+    <p class="sec-sub">Stay up to date with our newest arrivals</p>
+
+    <div class="slider">
+        <a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-12%</span><img src="samsung-galaxy-s25-ultra.webp" alt=""></div>
+            <h5>Galaxy S25 Ultra</h5>
+            <div class="card-price"><span class="new">$1,149</span><span class="old">$1,299</span></div>
+        </a>
+        <a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-7%</span><img src="apple-iphone-16-pro-max.webp" alt=""></div>
+            <h5>iPhone 16 Pro Max</h5>
+            <div class="card-price"><span class="new">$1,199</span><span class="old">$1,299</span></div>
+        </a>
+        <a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-12%</span><img src="xiaomi-15-pro.webp" alt=""></div>
+            <h5>Xiaomi 15 Pro</h5>
+            <div class="card-price"><span class="new">$699</span><span class="old">$799</span></div>
+        </a>
+        <a href="#" class="card">
+            <div class="card-img"><img src="msi-katana-15.webp" alt=""></div>
+            <h5>MSI Katana 15</h5>
+            <div class="card-price"><span class="new">$1,349</span></div>
+        </a>
+        <a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-10%</span><img src="lenovo-legion-5.webp" alt=""></div>
+            <h5>Lenovo Legion 5</h5>
+            <div class="card-price"><span class="new">$1,249</span><span class="old">$1,399</span></div>
+        </a>
+    </div>
+
+    <div class="foot-note">© 2026 TBSAS</div>
+</div>
+
+</body>
+</html>

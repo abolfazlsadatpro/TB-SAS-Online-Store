@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slider 3 — Modern with Actions</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .sec-head h2{font-size:21px;font-weight:800;color:#1b2b22}
+    .sec-head .all{color:#198754;font-size:13px;font-weight:600;text-decoration:none}
+    .sec-sub{color:#8aa496;font-size:12.5px;margin-bottom:20px}
+
+    .slider-box{
+        position:relative;background:#fff;border:1px solid #e8ede9;border-radius:16px;
+        padding:18px 52px;overflow:hidden;
+    }
+    .slider{display:flex;gap:18px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.9,.3,1)}
+    .slide{
+        flex:0 0 calc(25% - 13.5px);background:#fff;border-radius:13px;overflow:hidden;
+        border:1px solid #eef1ef;transition:.3s;text-decoration:none;color:#1b2b22;
+    }
+    .slide:hover{transform:translateY(-5px);box-shadow:0 16px 32px -16px rgba(20,40,30,.3);border-color:#cfe5d8}
+    .slide-img{
+        position:relative;height:150px;background:linear-gradient(145deg,#f4faf6,#e8f2ec);
+        display:flex;align-items:center;justify-content:center;padding:12px;margin-bottom:10px;
+    }
+    .slide-img img{max-width:85%;max-height:100%;object-fit:contain;transition:.3s}
+    .slide:hover .slide-img img{transform:scale(1.06)}
+    .slide-tag{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#e6484d,#c92a2f);color:#fff;font-size:10px;font-weight:800;padding:3px 7px;border-radius:4px}
+    .slide-wish{
+        position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;
+        background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;
+        color:#8aa496;font-size:13px;opacity:0;transition:.25s;cursor:pointer;
+    }
+    .slide:hover .slide-wish{opacity:1}
+    .slide-wish:hover{color:#e6484d}
+    .slide-body{padding:0 13px 13px}
+    .slide-body h5{font-size:12.5px;font-weight:600;color:#3d4f46;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .slide-price{display:flex;align-items:baseline;gap:6px;margin-bottom:10px}
+    .slide-price .new{font-size:15px;font-weight:800;color:#1b2b22}
+    .slide-price .old{font-size:11.5px;color:#a9b5ae;text-decoration:line-through}
+    .slide-btn{
+        width:100%;padding:8px;border:1px solid #198754;background:#fff;color:#198754;
+        border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;transition:.2s;
+        display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    }
+    .slide-btn:hover{background:#198754;color:#fff}
+
+    .arr{
+        position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+        width:40px;height:40px;border-radius:12px;border:1px solid #d8e4dc;
+        background:#fff;color:#198754;font-size:14px;cursor:pointer;transition:.2s;
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 6px 16px -8px rgba(20,40,30,.3);
+    }
+    .arr:hover{background:#198754;color:#fff;border-color:#198754}
+    .arr.prev{left:8px}
+    .arr.next{right:8px}
+    .arr.disabled{opacity:.3;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="sec-head">
+        <h2>Latest Products</h2>
+        <a href="#" class="all">View All →</a>
+    </div>
+    <p class="sec-sub">Our newest arrivals — updated weekly</p>
+
+    <div class="slider-box">
+        <button class="arr prev" id="pv"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="slider" id="tr">
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-tag">-12%</span><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="samsung-galaxy-s25-ultra.webp"></div><div class="slide-body"><h5>Galaxy S25 Ultra</h5><div class="slide-price"><span class="new">$1,149</span><span class="old">$1,299</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-tag">-7%</span><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="apple-iphone-16-pro-max.webp"></div><div class="slide-body"><h5>iPhone 16 Pro Max</h5><div class="slide-price"><span class="new">$1,199</span><span class="old">$1,299</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-tag">-12%</span><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="xiaomi-15-pro.webp"></div><div class="slide-body"><h5>Xiaomi 15 Pro</h5><div class="slide-price"><span class="new">$699</span><span class="old">$799</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-tag">-14%</span><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="poco-f7-pro.webp"></div><div class="slide-body"><h5>Poco F7 Pro</h5><div class="slide-price"><span class="new">$429</span><span class="old">$499</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="honor-magic-7.webp"></div><div class="slide-body"><h5>Honor Magic 7</h5><div class="slide-price"><span class="new">$899</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-tag">-10%</span><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="msi-katana-15.webp"></div><div class="slide-body"><h5>MSI Katana 15</h5><div class="slide-price"><span class="new">$1,349</span><span class="old">$1,499</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="acer-nitro-16.webp"></div><div class="slide-body"><h5>Acer Nitro 16</h5><div class="slide-price"><span class="new">$1,199</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+            <a href="#" class="slide"><div class="slide-img"><span class="slide-tag">-10%</span><span class="slide-wish"><i class="fa-regular fa-heart"></i></span><img src="lenovo-legion-5.webp"></div><div class="slide-body"><h5>Lenovo Legion 5</h5><div class="slide-price"><span class="new">$1,249</span><span class="old">$1,399</span></div><button class="slide-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button></div></a>
+        </div>
+        <button class="arr next" id="nx"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<script>
+    const tr = document.getElementById('tr'), pv = document.getElementById('pv'), nx = document.getElementById('nx');
+    const per = 4; let idx = 0; const max = tr.children.length - per;
+    function update(){ tr.style.transform = 'translateX(-' + (idx * (100/per)) + '%)'; pv.classList.toggle('disabled', idx<=0); nx.classList.toggle('disabled', idx>=max); }
+    pv.onclick = () => { if(idx>0){idx--;update();} };
+    nx.onclick = () => { if(idx<max){idx++;update();} };
+    update();
+</script>
+
+</body>
+</html>

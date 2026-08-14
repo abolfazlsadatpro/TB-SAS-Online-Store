@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Footer Mockup C — Modern Minimal</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f6faf7;display:flex;flex-direction:column;min-height:100vh}
+    .fake-content{flex:1;display:flex;align-items:center;justify-content:center;color:#9db8aa;font-size:20px;letter-spacing:2px}
+    .fake-content i{margin-right:10px;color:#198754}
+
+    /* ===== MODERN MINIMAL ===== */
+    .main-footer{
+        background:linear-gradient(175deg,#0b5134 0%,#0e5c3d 45%,#145a3e 100%);
+        color:#e9f7ef;
+        margin:20px;
+        border-radius:26px;
+        position:relative;
+        overflow:hidden;
+        box-shadow:0 -10px 40px -12px rgba(13,62,41,.4);
+    }
+    .main-footer::before{
+        content:"";position:absolute;top:-140px;left:50%;transform:translateX(-50%);
+        width:700px;height:300px;
+        background:radial-gradient(ellipse,rgba(120,220,170,.18),transparent 65%);
+        pointer-events:none;
+    }
+    .container{max-width:1200px;margin:0 auto;padding:0 30px;position:relative;z-index:1}
+
+    /* TOP BAR — centered brand */
+    .footer-top{
+        display:flex;flex-direction:column;align-items:center;gap:6px;
+        padding:34px 30px 0;
+        text-align:center;
+    }
+    .footer-logo{height:92px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.3))}
+    .brand-tagline{font-size:13px;color:rgba(233,247,239,.6);letter-spacing:3px;text-transform:uppercase;margin-top:4px}
+
+    .footer-line{border:none;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);margin:24px 0 30px}
+
+    /* LINKS — centered cols */
+    .footer-links{
+        display:flex;justify-content:center;flex-wrap:wrap;gap:60px;padding:0 0 26px;
+    }
+    .footer-col{min-width:140px;text-align:center}
+    .footer-col h3{
+        font-size:15px;font-weight:700;margin-bottom:14px;color:#fff;
+        letter-spacing:.5px;text-transform:uppercase;font-size:13px;
+    }
+    .footer-col a{
+        display:block;color:rgba(233,247,239,.75);font-size:14px;
+        text-decoration:none;margin-bottom:10px;transition:.2s;
+    }
+    .footer-col a:hover{color:#7fe3a9}
+
+    /* BOTTOM — centered */
+    .footer-bottom{
+        display:flex;flex-direction:column;align-items:center;gap:26px;
+        padding:10px 0 30px;
+    }
+    .footer-social .social-icons{display:flex;gap:10px}
+    .social-icons a{
+        display:inline-flex;align-items:center;justify-content:center;
+        width:42px;height:42px;border-radius:50%;
+        background:rgba(255,255,255,.08);
+        border:1px solid rgba(255,255,255,.15);
+        -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+        color:#fff;font-size:17px;transition:.25s;
+    }
+    .social-icons a:hover{transform:translateY(-4px);background:rgba(255,255,255,.2);color:#7fe3a9}
+
+    .footer-contact{
+        display:flex;gap:28px;flex-wrap:wrap;justify-content:center;
+        font-size:14px;color:rgba(233,247,239,.8);
+    }
+    .footer-contact p{display:flex;align-items:center;gap:8px}
+    .footer-contact i{color:#7fe3a9}
+
+    .footer-app{display:flex;gap:12px;align-items:center}
+    .footer-app h4{font-size:14px;font-weight:600;margin-right:4px;color:rgba(233,247,239,.85)}
+    .footer-app img{height:42px;border-radius:10px;box-shadow:0 8px 18px rgba(0,0,0,.3)}
+
+    .footer-legal{
+        border-top:1px solid rgba(255,255,255,.12);
+        padding:16px 30px;
+        text-align:center;font-size:13px;color:rgba(233,247,239,.6);
+    }
+    .footer-legal strong{color:#7fe3a9}
+    .footer-legal span{color:rgba(233,247,239,.45);margin:0 8px}
+</style>
+</head>
+<body>
+
+<div class="fake-content"><i class="fa-solid fa-store"></i> Page Content Area</div>
+
+<footer class="main-footer">
+    <div class="footer-top">
+        <img src="../../images/logo_tb_sas.png" class="footer-logo" alt="TBSAS">
+        <div class="brand-tagline">Everything You Need, All In One Place</div>
+    </div>
+    <hr class="footer-line">
+    <div class="container">
+        <div class="footer-links">
+            <div class="footer-col">
+                <h3>Terms &amp; Policies</h3>
+                <a href="#">Terms &amp; Conditions</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Customer Reviews</a>
+                <a href="#">Why TBSAS?</a>
+            </div>
+            <div class="footer-col">
+                <h3>After Purchase</h3>
+                <a href="#">Registry Guarantee</a>
+                <a href="#">Return Policy</a>
+                <a href="#">Registry FAQ</a>
+                <a href="#">Order Tracking</a>
+                <a href="#">Return Guide</a>
+            </div>
+            <div class="footer-col">
+                <h3>Before Purchase</h3>
+                <a href="#">Buying Guide</a>
+                <a href="#">Purchase Methods</a>
+                <a href="#">7-Day Guarantee</a>
+                <a href="#">Shipping &amp; Costs</a>
+            </div>
+            <div class="footer-col">
+                <h3>Company</h3>
+                <a href="#">About US</a>
+                <a href="#">Our Goals &amp; Commitments</a>
+                <a href="#">FAQ</a>
+                <a href="#">Physical Stores</a>
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-contact">
+                <p><i class="fa-solid fa-phone"></i> 09053295969</p>
+                <p><i class="fa-solid fa-envelope"></i> tb_sas@gmail.com</p>
+            </div>
+            <div class="footer-social">
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-app">
+                <h4>Download Our App</h4>
+                <img src="../../images/app-google_play.png" alt="Google Play">
+                <img src="../../images/app-store-logo.png" alt="App Store">
+            </div>
+        </div>
+    </div>
+    <div class="footer-legal">
+        © 2026 <strong>TBSAS</strong> — All rights reserved.
+    </div>
+</footer>
+
+</body>
+</html>

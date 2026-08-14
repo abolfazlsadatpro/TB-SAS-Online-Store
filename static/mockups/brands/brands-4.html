@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brands 4 — Floating Tiles</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-title{text-align:center;font-size:24px;font-weight:800;margin-bottom:8px;color:#1b2b22}
+    .sec-sub{text-align:center;color:#8aa496;font-size:13px;margin-bottom:30px}
+
+    /* ===== پیشنهاد ۴ — Floating Tiles (بدون کادر) ===== */
+    .brands-float{
+        display:flex;justify-content:center;align-items:flex-end;gap:26px;
+        padding:0 10px;
+    }
+    .brand-float{
+        display:flex;flex-direction:column;align-items:center;gap:10px;
+        text-decoration:none;color:#1b2b22;
+    }
+    .float-ico{
+        width:120px;height:120px;border-radius:28px;
+        background:linear-gradient(145deg,#fff,#ecf6ef);
+        display:flex;align-items:center;justify-content:center;
+        padding:16px;
+        box-shadow:
+            0 20px 40px -16px rgba(13,62,41,.28),
+            0 0 0 1px rgba(25,135,84,.06);
+        transition:.35s cubic-bezier(.22,.9,.3,1);
+    }
+    .float-ico img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(13,62,41,.18));transition:.35s}
+    .brand-float:nth-child(2) .float-ico{width:130px;height:130px}
+    .brand-float:nth-child(4) .float-ico{width:130px;height:130px}
+    .brand-float:hover .float-ico{
+        transform:translateY(-12px) rotate(-2deg);
+        box-shadow:0 30px 55px -18px rgba(13,62,41,.4);
+    }
+    .brand-float:hover .float-ico img{transform:scale(1.08) rotate(2deg)}
+    .brand-float span{
+        font-size:14px;font-weight:700;color:#3d4f46;
+        padding-bottom:4px;position:relative;transition:.25s;
+    }
+    .brand-float span::after{
+        content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+        width:0;height:2px;background:#198754;border-radius:2px;transition:.3s;
+    }
+    .brand-float:hover span{color:#198754}
+    .brand-float:hover span::after{width:100%}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <h2 class="sec-title">Mobile Bests</h2>
+    <p class="sec-sub">Top mobile brands loved by our customers</p>
+
+    <div class="brands-float">
+        <a href="#" class="brand-float"><div class="float-ico"><img src="samsung.webp" alt=""></div><span>Samsung</span></a>
+        <a href="#" class="brand-float"><div class="float-ico"><img src="apple.webp" alt=""></div><span>Apple</span></a>
+        <a href="#" class="brand-float"><div class="float-ico"><img src="xiaomi.webp" alt=""></div><span>Xiaomi</span></a>
+        <a href="#" class="brand-float"><div class="float-ico"><img src="honor.webp" alt=""></div><span>Honor</span></a>
+        <a href="#" class="brand-float"><div class="float-ico"><img src="nokia.webp" alt=""></div><span>Nokia</span></a>
+    </div>
+</div>
+
+</body>
+</html>

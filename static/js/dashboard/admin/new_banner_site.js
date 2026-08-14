@@ -149,3 +149,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+
+/*=====================================
+    BANNER TYPE TOGGLE
+=====================================*/
+
+(function () {
+
+    const typeSelect = document.querySelector('select[name="banner_type"]');
+
+    if (!typeSelect) return;
+
+    function applyType(type) {
+
+        const isSlider = type === "slider";
+
+        document.querySelectorAll('[data-banner-type="slider"]')
+            .forEach(el => {
+
+                if (isSlider) {
+                    el.style.display = "";
+                } else {
+                    el.style.display = "none";
+                }
+
+            });
+
+    }
+
+    applyType(typeSelect.value);
+
+    typeSelect.addEventListener("change", function () {
+
+        applyType(this.value);
+
+    });
+
+})();

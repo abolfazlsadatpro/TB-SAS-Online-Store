@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header Mockup B — White Modern</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f6faf7}
+
+    /* ===== WHITE MODERN ===== */
+    .site-header{
+        position:relative;
+        margin:16px;
+        z-index:999;
+    }
+
+    .custom-navbar{
+        background:#fff;
+        border-radius:22px;
+        padding:14px 18px;
+        border:1px solid rgba(25,135,84,.12);
+        box-shadow:0 16px 38px -20px rgba(13,62,41,.25);
+    }
+
+    .nav-top{
+        display:flex;
+        align-items:center;
+        gap:20px;
+        max-width:1200px;
+        margin:0 auto;
+    }
+
+    .nav-logo img{
+        height:56px;
+    }
+
+    /* SEARCH — soft green */
+    .nav-search{
+        flex:1;
+        max-width:620px;
+        position:relative;
+    }
+
+    .nav-search input{
+        width:100%;
+        padding:13px 18px 13px 46px;
+        border-radius:30px;
+        border:1px solid #d8e8de;
+        background:#f4faf6;
+        color:#143120;
+        outline:none;
+        font-size:15px;
+        transition:.25s;
+    }
+
+    .nav-search input::placeholder{color:#8aa496}
+    .nav-search input:focus{border-color:#198754;background:#fff;box-shadow:0 0 0 4px rgba(25,135,84,.1)}
+
+    .search-icon{
+        position:absolute;
+        left:17px;
+        top:50%;
+        transform:translateY(-50%);
+        color:#198754;
+        font-size:15px;
+    }
+
+    .nav-actions{
+        display:flex;
+        align-items:center;
+        gap:14px;
+        margin-left:auto;
+    }
+
+    /* AUTH — outlined pills */
+    .auth-box{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        background:#fff;
+        border:1.5px solid #198754;
+        border-radius:30px;
+        padding:8px 18px;
+    }
+
+    .auth-box a{
+        color:#198754;
+        text-decoration:none;
+        font-size:14px;
+        font-weight:700;
+        transition:.2s;
+    }
+
+    .auth-box a:hover{color:#0e5c3d}
+
+    .auth-box .divider{
+        width:1.5px;
+        height:18px;
+        background:#198754;
+        border-radius:2px;
+    }
+
+    /* CART — green solid */
+    .nav-cart{
+        position:relative;
+    }
+
+    .cart-link{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        background:linear-gradient(135deg,#198754,#16a34a);
+        border-radius:30px;
+        padding:9px 20px;
+        color:#fff;
+        text-decoration:none;
+        box-shadow:0 6px 16px -6px rgba(21,115,71,.5);
+        transition:.25s;
+    }
+
+    .cart-link:hover{transform:translateY(-2px);box-shadow:0 10px 20px -8px rgba(21,115,71,.55)}
+
+    .cart-link i{font-size:17px}
+    .cart-text{font-size:14px;font-weight:700}
+
+    .cart-badge{
+        position:absolute;
+        top:-7px;
+        right:-7px;
+        min-width:22px;
+        height:22px;
+        border-radius:50%;
+        background:#e6484d;
+        color:#fff;
+        font-size:12px;
+        font-weight:800;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:2px solid #fff;
+    }
+
+    /* ===== CATEGORY BAR — white card ===== */
+    .category-bar{
+        background:#fff;
+        border:1px solid rgba(25,135,84,.1);
+        border-radius:16px;
+        margin:12px 6px 0;
+        padding:6px 10px;
+        box-shadow:0 10px 26px -18px rgba(13,62,41,.3);
+    }
+
+    .category-bar .container{
+        display:flex;
+        align-items:center;
+    }
+
+    .mega-btn{
+        background:#fff;
+        border:1.5px solid #198754;
+        color:#198754;
+        padding:9px 22px;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:700;
+        font-size:14px;
+        display:inline-flex;
+        align-items:center;
+        gap:10px;
+        transition:.2s;
+    }
+
+    .mega-btn:hover{background:#eef7f1;transform:translateY(-2px)}
+
+    .mega-category{position:relative}
+
+    .mega-menu{
+        position:absolute;
+        top:calc(100% + 10px);
+        left:0;
+        width:650px;
+        background:#fff;
+        border-radius:16px;
+        box-shadow:0 24px 50px -20px rgba(13,62,41,.3);
+        padding:14px;
+        display:none;
+        z-index:9999;
+        border:1px solid rgba(25,135,84,.1);
+    }
+
+    .mega-category:hover .mega-menu{display:block}
+
+    .mega-main{list-style:none;padding:0;margin:0}
+
+    .mega-main li{
+        padding:10px 12px;
+        font-weight:700;
+        cursor:pointer;
+        position:relative;
+        border-radius:10px;
+        transition:.15s;
+        font-size:14.5px;
+        color:#143120;
+    }
+
+    .mega-main li:hover{background:#eef7f1;color:#198754}
+
+    .mega-sub{
+        position:absolute;
+        top:0;
+        left:100%;
+        width:220px;
+        background:#fff;
+        border-radius:12px;
+        box-shadow:0 16px 36px -14px rgba(13,62,41,.3);
+        padding:10px;
+        display:none;
+        border:1px solid rgba(25,135,84,.08);
+    }
+
+    .has-sub:hover .mega-sub{display:block}
+
+    .mega-sub a{
+        display:block;
+        padding:7px 10px;
+        text-decoration:none;
+        color:#333;
+        font-size:13.5px;
+        border-radius:8px;
+        transition:.15s;
+    }
+
+    .mega-sub a:hover{color:#198754;background:#f0f9f3}
+
+    .fake-content{
+        margin:24px 16px;
+        height:380px;
+        border-radius:18px;
+        background:#fff;
+        border:1px dashed #cfe5d8;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#9db8aa;
+        font-size:18px;
+    }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <nav class="custom-navbar">
+        <div class="nav-top">
+
+            <a class="nav-logo" href="#">
+                <img src="../../images/logo_tb_sas.png" alt="TBSAS">
+            </a>
+
+            <div class="nav-search">
+                <i class="fa fa-search search-icon"></i>
+                <input type="text" placeholder="Search products...">
+            </div>
+
+            <div class="nav-actions">
+                <div class="auth-box">
+                    <a href="#">Login</a>
+                    <span class="divider"></span>
+                    <a href="#">Register</a>
+                </div>
+
+                <div class="nav-cart">
+                    <a href="#" class="cart-link">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span class="cart-text">Cart</span>
+                    </a>
+                    <span class="cart-badge">3</span>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="category-bar">
+        <div class="container">
+            <div class="mega-category">
+                <div class="mega-btn">
+                    <i class="fa fa-bars"></i> Product Categories
+                </div>
+                <div class="mega-menu">
+                    <ul class="mega-main">
+                        <li class="has-sub">Phones &amp; Tablets
+                            <div class="mega-sub">
+                                <a href="#">Smartphones</a>
+                                <a href="#">Tablets</a>
+                                <a href="#">Accessories</a>
+                            </div>
+                        </li>
+                        <li class="has-sub">Laptops
+                            <div class="mega-sub">
+                                <a href="#">Gaming</a>
+                                <a href="#">Business</a>
+                            </div>
+                        </li>
+                        <li>Audio</li>
+                        <li>Accessories</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="fake-content">Page Content Area</div>
+
+</body>
+</html>

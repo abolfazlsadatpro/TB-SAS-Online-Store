@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Mockup B — Mono Luxury</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#fafbfa;color:#1c2b22}
+    .page{max-width:1300px;margin:0 auto;padding:20px}
+
+    /* ===== HERO — dark luxury ===== */
+    .hero{
+        height:430px;border-radius:28px;position:relative;overflow:hidden;
+        background:#0f1f17;
+        display:flex;align-items:center;padding:50px 60px;
+        margin-bottom:40px;
+        box-shadow:0 30px 60px -20px rgba(0,0,0,.4);
+    }
+    .hero::before{
+        content:"";position:absolute;inset:0;
+        background:
+            radial-gradient(circle at 80% 20%,rgba(46,204,143,.2),transparent 45%),
+            radial-gradient(circle at 20% 90%,rgba(25,135,84,.15),transparent 40%);
+    }
+    .hero-content{position:relative;z-index:2;color:#fff;max-width:500px}
+    .hero-kicker{
+        display:inline-flex;align-items:center;gap:8px;
+        font-size:12px;font-weight:700;letter-spacing:3px;
+        color:#2ecc8f;text-transform:uppercase;margin-bottom:18px;
+    }
+    .hero-kicker::before{content:"";width:30px;height:2px;background:#2ecc8f}
+    .hero-content h1{font-size:42px;font-weight:800;line-height:1.15;margin-bottom:16px}
+    .hero-content p{font-size:15px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:28px}
+    .hero-btn{
+        display:inline-flex;align-items:center;gap:12px;
+        border:1px solid rgba(46,204,143,.6);color:#2ecc8f;
+        padding:14px 28px;border-radius:8px;
+        font-weight:700;text-decoration:none;
+        transition:.3s;letter-spacing:.5px;
+    }
+    .hero-btn:hover{background:#2ecc8f;color:#0f1f17;border-color:#2ecc8f}
+
+    /* ===== SECTION HEAD ===== */
+    .section-head{display:flex;justify-content:space-between;align-items:baseline;margin:50px 0 22px}
+    .section-head h2{font-size:24px;font-weight:800;letter-spacing:-.5px}
+    .section-head h2::after{content:"";display:block;width:36px;height:3px;background:#198754;border-radius:3px;margin-top:8px}
+    .view-all{color:#7a8f83;font-size:13px;font-weight:600;text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:.2s}
+    .view-all:hover{color:#198754}
+
+    /* ===== DEALS — minimal cards ===== */
+    .deals{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .deal{
+        background:#fff;border:1px solid #e8ede9;border-radius:14px;
+        padding:20px;transition:.3s;position:relative;
+    }
+    .deal:hover{border-color:#198754;box-shadow:0 16px 34px -16px rgba(13,62,41,.18)}
+    .deal-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:50px;color:#198754;margin-bottom:12px}
+    .deal-tag{
+        position:absolute;top:14px;right:14px;
+        font-size:11px;font-weight:800;letter-spacing:.5px;
+        color:#c92a2f;border:1px solid #f0c4c4;
+        padding:4px 9px;border-radius:5px;background:#fff;
+    }
+    .deal h4{font-size:14.5px;font-weight:700;margin-bottom:10px}
+    .deal .price{display:flex;gap:10px;align-items:baseline}
+    .deal .price .n{font-size:19px;font-weight:800;color:#143120}
+    .deal .price .o{font-size:13px;color:#a9b5ae;text-decoration:line-through}
+
+    /* ===== BRANDS — minimal row ===== */
+    .brands{display:flex;justify-content:space-between;gap:10px;margin:26px 0}
+    .brand{
+        flex:1;text-decoration:none;color:#1c2b22;
+        display:flex;flex-direction:column;align-items:center;gap:10px;
+        padding:22px 10px;border-radius:14px;
+        background:#fff;border:1px solid #e8ede9;
+        transition:.3s;
+    }
+    .brand:hover{border-color:#198754;transform:translateY(-4px)}
+    .brand i{font-size:34px;color:#198754}
+    .brand span{font-size:13px;font-weight:700}
+
+    /* ===== PROMO — full width ===== */
+    .promo{
+        height:170px;border-radius:16px;margin:40px 0;position:relative;overflow:hidden;
+        background:linear-gradient(90deg,#0f1f17 0%,#143526 60%,#1d4a33 100%);
+        display:flex;align-items:center;padding:0 50px;color:#fff;
+    }
+    .promo h3{font-size:24px;font-weight:800;margin-bottom:6px}
+    .promo p{font-size:13px;color:rgba(255,255,255,.55)}
+    .promo .cta{
+        margin-left:auto;display:inline-flex;align-items:center;gap:10px;
+        background:#2ecc8f;color:#0f1f17;font-weight:800;
+        padding:13px 26px;border-radius:8px;text-decoration:none;font-size:14px;
+        transition:.3s;
+    }
+    .promo .cta:hover{transform:translateX(4px)}
+
+    /* ===== SLIDER ===== */
+    .slider{display:flex;gap:14px;overflow-x:auto;padding:6px 2px 16px;scrollbar-width:none}
+    .slider::-webkit-scrollbar{display:none}
+    .mini{
+        flex:0 0 200px;background:#fff;border:1px solid #e8ede9;
+        border-radius:14px;padding:16px;transition:.3s;
+    }
+    .mini:hover{border-color:#198754;transform:translateY(-5px)}
+    .mini-img{height:120px;display:flex;align-items:center;justify-content:center;font-size:42px;color:#198754;background:#f6faf7;border-radius:10px;margin-bottom:10px}
+    .mini h5{font-size:13.5px;font-weight:700;margin-bottom:6px}
+    .mini .p{font-size:16px;font-weight:800;color:#143120}
+
+    /* ===== FOOT NOTE ===== */
+    .foot{text-align:center;padding:40px 0;color:#a9b5ae;font-size:12px;letter-spacing:1px}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-content">
+            <span class="hero-kicker">Summer Collection 2026</span>
+            <h1>Luxury Tech.<br>Honest Prices.</h1>
+            <p>Hand-picked products from the world's most trusted brands — delivered to your door.</p>
+            <a href="#" class="hero-btn">Explore Collection <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+    </div>
+
+    <!-- DEALS -->
+    <div class="section-head">
+        <h2>Today's Deals</h2>
+        <a href="#" class="view-all">View all →</a>
+    </div>
+    <div class="deals">
+        <div class="deal">
+            <span class="deal-tag">-12%</span>
+            <div class="deal-img"><i class="fa-solid fa-mobile-screen"></i></div>
+            <h4>Galaxy S25 Ultra</h4>
+            <div class="price"><span class="n">$1,149</span><span class="o">$1,299</span></div>
+        </div>
+        <div class="deal">
+            <span class="deal-tag">-7%</span>
+            <div class="deal-img"><i class="fa-solid fa-mobile-screen-button"></i></div>
+            <h4>iPhone 16 Pro Max</h4>
+            <div class="price"><span class="n">$1,199</span><span class="o">$1,299</span></div>
+        </div>
+        <div class="deal">
+            <span class="deal-tag">-12%</span>
+            <div class="deal-img"><i class="fa-solid fa-laptop"></i></div>
+            <h4>Xiaomi 15 Pro</h4>
+            <div class="price"><span class="n">$699</span><span class="o">$799</span></div>
+        </div>
+        <div class="deal">
+            <span class="deal-tag">-10%</span>
+            <div class="deal-img"><i class="fa-solid fa-laptop-code"></i></div>
+            <h4>MSI Katana 15</h4>
+            <div class="price"><span class="n">$1,349</span><span class="o">$1,499</span></div>
+        </div>
+    </div>
+
+    <!-- MOBILE BRANDS -->
+    <div class="section-head"><h2>Mobile Bests</h2></div>
+    <div class="brands">
+        <a href="#" class="brand"><i class="fa-brands fa-apple"></i><span>Apple</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-mobile"></i><span>Samsung</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-tablet-screen-button"></i><span>Xiaomi</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-phone"></i><span>Nokia</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-sim-card"></i><span>Honor</span></a>
+    </div>
+
+    <!-- PROMO -->
+    <div class="promo">
+        <div>
+            <h3>Selected Accessories</h3>
+            <p>Complete your setup with our top-rated gear.</p>
+        </div>
+        <a href="#" class="cta">Shop Now <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <!-- LATEST -->
+    <div class="section-head">
+        <h2>Latest Products</h2>
+        <a href="#" class="view-all">View all →</a>
+    </div>
+    <div class="slider">
+        <div class="mini"><div class="mini-img"><i class="fa-solid fa-mobile-screen"></i></div><h5>Galaxy S25 Ultra</h5><div class="p">$1,149</div></div>
+        <div class="mini"><div class="mini-img"><i class="fa-solid fa-mobile-screen-button"></i></div><h5>iPhone 16 Pro Max</h5><div class="p">$1,199</div></div>
+        <div class="mini"><div class="mini-img"><i class="fa-solid fa-laptop"></i></div><h5>Xiaomi 15 Pro</h5><div class="p">$699</div></div>
+        <div class="mini"><div class="mini-img"><i class="fa-solid fa-laptop-code"></i></div><h5>MSI Katana 15</h5><div class="p">$1,349</div></div>
+        <div class="mini"><div class="mini-img"><i class="fa-solid fa-memory"></i></div><h5>Acer Nitro 16</h5><div class="p">$1,199</div></div>
+    </div>
+
+    <!-- LAPTOP BRANDS -->
+    <div class="section-head"><h2>Best Laptops</h2></div>
+    <div class="brands">
+        <a href="#" class="brand"><i class="fa-brands fa-apple"></i><span>Apple</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-laptop"></i><span>MSI</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-laptop-code"></i><span>Acer</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-display"></i><span>Lenovo</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-microchip"></i><span>ASUS</span></a>
+        <a href="#" class="brand"><i class="fa-solid fa-desktop"></i><span>HP</span></a>
+    </div>
+
+    <div class="foot">© 2026 TBSAS</div>
+
+</div>
+
+</body>
+</html>

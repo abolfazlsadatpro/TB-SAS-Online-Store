@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offers 3 — 3D Tilt</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .special-offers{
+        background:linear-gradient(135deg,#0b5134,#16a34a);border-radius:16px;
+        padding:24px 20px;position:relative;overflow:hidden;
+        box-shadow:0 18px 40px -18px rgba(10,77,51,.45);
+    }
+    .offers-header{
+        display:flex;justify-content:space-between;align-items:center;
+        margin-bottom:22px;position:relative;z-index:2;color:#fff;
+    }
+    .offers-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800}
+    .offers-title .fire{color:#ffd166}
+    .offers-title small{font-weight:400;font-size:12px;opacity:.7}
+    .offers-all{color:rgba(255,255,255,.85);font-size:13px;font-weight:600;text-decoration:none}
+    .offers-all:hover{text-decoration:underline}
+    .offers-nav{position:absolute;top:28px;right:20px;z-index:3;display:flex;gap:8px}
+    .nav-btn{
+        width:34px;height:34px;border-radius:50%;
+        border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);
+        color:#fff;font-size:12px;cursor:pointer;transition:.2s;
+    }
+    .nav-btn:hover{background:rgba(255,255,255,.3)}
+
+    .offers-track{
+        display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;
+        padding:10px 4px;position:relative;z-index:2;perspective:900px;
+    }
+    .offers-track::-webkit-scrollbar{display:none}
+
+    .tilt{flex:0 0 200px;perspective:900px}
+    .offer-card{
+        background:#fff;border-radius:12px;padding:12px;position:relative;
+        transform-style:preserve-3d;transition:transform .3s;
+        box-shadow:0 8px 24px -12px rgba(0,0,0,.3);
+    }
+    .tilt:hover .offer-card{transform:rotateX(8deg) rotateY(-8deg) translateY(-6px)}
+    .offer-tag{
+        position:absolute;top:10px;left:10px;z-index:2;
+        background:linear-gradient(135deg,#e6484d,#c92a2f);color:#fff;
+        font-size:11px;font-weight:800;padding:4px 9px;border-radius:5px;
+        transform:translateZ(30px);
+    }
+    .offer-img{
+        height:110px;background:#fafcfb;border-radius:9px;
+        display:flex;align-items:center;justify-content:center;margin-bottom:10px;
+        transition:.3s;transform:translateZ(20px);
+    }
+    .tilt:hover .offer-img{transform:translateZ(40px) scale(1.04)}
+    .offer-img img{max-width:85%;max-height:100%;object-fit:contain}
+    .offer-card h5{
+        font-size:12.5px;font-weight:600;color:#3d4f46;
+        margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+        transform:translateZ(15px);
+    }
+    .offer-price{display:flex;align-items:baseline;gap:7px;transform:translateZ(15px)}
+    .offer-price .new{font-size:16px;font-weight:800;color:#1b2b22}
+    .offer-price .old{font-size:12px;color:#a9b5ae;text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="special-offers">
+        <div class="offers-header">
+            <div class="offers-title">
+                <i class="fa-solid fa-fire fire"></i>
+                Flash Deals
+                <small>· 6 products</small>
+            </div>
+            <a href="#" class="offers-all">View All →</a>
+        </div>
+        <div class="offers-nav">
+            <button class="nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        <div class="offers-track">
+            <div class="tilt"><div class="offer-card"><span class="offer-tag">-10%</span><div class="offer-img"><img src="apple-iphone-16-pro-max_Natural%20Titanium.webp" alt=""></div><h5>iPhone 16 Pro Max</h5><div class="offer-price"><span class="new">$1,199</span><span class="old">$1,299</span></div></div></div>
+            <div class="tilt"><div class="offer-card"><span class="offer-tag">-12%</span><div class="offer-img"><img src="xiaomi-15-pro_Black.webp" alt=""></div><h5>Xiaomi 15 Pro</h5><div class="offer-price"><span class="new">$699</span><span class="old">$799</span></div></div></div>
+            <div class="tilt"><div class="offer-card"><span class="offer-tag">-14%</span><div class="offer-img"><img src="poco-f7-pro_Blue.webp" alt=""></div><h5>Poco F7 Pro</h5><div class="offer-price"><span class="new">$429</span><span class="old">$499</span></div></div></div>
+            <div class="tilt"><div class="offer-card"><span class="offer-tag">-10%</span><div class="offer-img"><img src="msi-katana-15_Black.webp" alt=""></div><h5>MSI Katana 15</h5><div class="offer-price"><span class="new">$1,349</span><span class="old">$1,499</span></div></div></div>
+            <div class="tilt"><div class="offer-card"><span class="offer-tag">-10%</span><div class="offer-img"><img src="lenovo-legion-5_Phantom%20Grey.webp" alt=""></div><h5>Lenovo Legion 5</h5><div class="offer-price"><span class="new">$1,249</span><span class="old">$1,399</span></div></div></div>
+            <div class="tilt"><div class="offer-card"><span class="offer-tag">-11%</span><div class="offer-img"><img src="hp-pavilion-15_Silver.webp" alt=""></div><h5>HP Pavilion 15</h5><div class="offer-price"><span class="new">$799</span><span class="old">$899</span></div></div></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

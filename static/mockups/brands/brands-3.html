@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brands 3 — Horizontal Strip</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-title{text-align:center;font-size:24px;font-weight:800;margin-bottom:8px;color:#1b2b22}
+    .sec-sub{text-align:center;color:#8aa496;font-size:13px;margin-bottom:30px}
+
+    /* ===== پیشنهاد ۳ — Horizontal Strip ===== */
+    .strip{
+        background:#fff;border:1px solid #eef1ef;border-radius:16px;
+        display:flex;justify-content:space-between;align-items:center;
+        padding:20px 26px;gap:10px;
+    }
+    .brand-link{
+        flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;
+        text-decoration:none;color:#1b2b22;padding:12px 6px;border-radius:12px;
+        transition:.25s;position:relative;
+    }
+    .brand-link:hover{background:#f6faf7}
+    .brand-link::after{
+        content:"";position:absolute;right:0;top:20%;bottom:20%;width:1px;
+        background:#eef1ef;
+    }
+    .brand-link:last-child::after{display:none}
+    .brand-logo{
+        height:52px;display:flex;align-items:center;justify-content:center;
+    }
+    .brand-logo img{max-height:100%;max-width:90px;object-fit:contain;filter:grayscale(40%);transition:.25s}
+    .brand-link:hover .brand-logo img{filter:none;transform:scale(1.08)}
+    .brand-link .bname{font-size:13px;font-weight:700;color:#3d4f46}
+    .brand-link:hover .bname{color:#198754}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <h2 class="sec-title">Mobile Bests</h2>
+    <p class="sec-sub">Top mobile brands loved by our customers</p>
+
+    <div class="strip">
+        <a href="#" class="brand-link"><div class="brand-logo"><img src="samsung.webp" alt=""></div><span class="bname">Samsung</span></a>
+        <a href="#" class="brand-link"><div class="brand-logo"><img src="apple.webp" alt=""></div><span class="bname">Apple</span></a>
+        <a href="#" class="brand-link"><div class="brand-logo"><img src="xiaomi.webp" alt=""></div><span class="bname">Xiaomi</span></a>
+        <a href="#" class="brand-link"><div class="brand-logo"><img src="honor.webp" alt=""></div><span class="bname">Honor</span></a>
+        <a href="#" class="brand-link"><div class="brand-logo"><img src="nokia.webp" alt=""></div><span class="bname">Nokia</span></a>
+    </div>
+</div>
+
+</body>
+</html>

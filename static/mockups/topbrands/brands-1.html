@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top Brands 1 — White Strip</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .brand-section{
+        background:#fff;border:1px solid #e8ede9;border-radius:16px;
+        padding:22px;position:relative;overflow:hidden;
+    }
+    .brand-title{
+        display:flex;align-items:center;gap:10px;margin-bottom:18px;
+    }
+    .brand-title h3{font-size:19px;font-weight:800;color:#1b2b22;margin:0}
+    .brand-title i{color:#198754;font-size:18px}
+
+    .brand-slider-wrapper{position:relative;padding:0 44px}
+    .brand-slider{
+        display:flex;gap:14px;align-items:center;
+        overflow:hidden;transition:transform .45s cubic-bezier(.22,.9,.3,1);
+    }
+    .brand-item{
+        flex:0 0 calc(100%/6 - 11.7px);
+        height:64px;border-radius:12px;
+        display:flex;align-items:center;justify-content:center;
+        border:1px solid #f0f2f1;background:#fafcfb;
+        transition:.25s;text-decoration:none;padding:10px;
+    }
+    .brand-item:hover{border-color:#198754;background:#f6faf7}
+    .brand-item img{max-width:85%;max-height:80%;object-fit:contain}
+
+    .bbtn{
+        position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+        width:34px;height:34px;border-radius:50%;
+        background:#fff;border:1px solid #d8e4dc;color:#198754;
+        font-size:12px;cursor:pointer;transition:.2s;
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 4px 12px -6px rgba(20,40,30,.2);
+    }
+    .bbtn:hover{background:#198754;color:#fff;border-color:#198754}
+    .bbtn.left{left:2px}
+    .bbtn.right{right:2px}
+    .bbtn.disabled{opacity:.3;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="brand-section">
+        <div class="brand-title">
+            <i class="fa-solid fa-check-circle text-4xl"></i>
+            <h3>Top Brands</h3>
+        </div>
+        <div class="brand-slider-wrapper">
+            <button class="bbtn left" id="pv"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="brand-slider" id="tr">
+                <a href="#" class="brand-item"><img src="Logo_SAMSUNG.webp" alt="Samsung"></a>
+                <a href="#" class="brand-item"><img src="Logo_Apple.webp" alt="Apple"></a>
+                <a href="#" class="brand-item"><img src="Logo_Xiaomi.webp" alt="Xiaomi"></a>
+                <a href="#" class="brand-item"><img src="Logo_NOKIA.webp" alt="Nokia"></a>
+                <a href="#" class="brand-item"><img src="Logo_AUSU.webp" alt="ASUS"></a>
+                <a href="#" class="brand-item"><img src="Logo_JBL.webp" alt="JBL"></a>
+                <a href="#" class="brand-item"><img src="Logo_PHILIPS.webp" alt="Philips"></a>
+                <a href="#" class="brand-item"><img src="Logo_SONY.webp" alt="Sony"></a>
+                <a href="#" class="brand-item"><img src="Logo_LG.webp" alt="LG"></a>
+                <a href="#" class="brand-item"><img src="Logo_HUAWEl.webp" alt="Huawei"></a>
+                <a href="#" class="brand-item"><img src="Logo_ADATA.webp" alt="Adata"></a>
+                <a href="#" class="brand-item"><img src="Logo_TP-LINK.webp" alt="TP-Link"></a>
+            </div>
+            <button class="bbtn right" id="nx"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tr = document.getElementById('tr'), pv = document.getElementById('pv'), nx = document.getElementById('nx');
+    const per = 6; let idx = 0; const max = tr.children.length - per;
+    function update(){
+        tr.style.transform = 'translateX(-' + (idx * (100/per)) + '%)';
+        pv.classList.toggle('disabled', idx <= 0);
+        nx.classList.toggle('disabled', idx >= max);
+    }
+    pv.onclick = () => { if(idx > 0){ idx--; update(); } };
+    nx.onclick = () => { if(idx < max){ idx++; update(); } };
+    update();
+</script>
+</body>
+</html>

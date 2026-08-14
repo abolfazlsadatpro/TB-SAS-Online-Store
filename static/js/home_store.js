@@ -4,52 +4,82 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // ==================
-    // SPECIAL OFFERS SLIDER
+    // SPECIAL OFFERS SLIDER — smart buttons
     // ==================
-    const specialSlider = document.getElementById("specialSlider");
-    const btnLeftSpecial = document.getElementById("slideLeftSpecial");
-    const btnRightSpecial = document.getElementById("slideRightSpecial");
+    const specialTrack = document.getElementById("specialTrack");
+    const specialPrev = document.getElementById("specialPrev");
+    const specialNext = document.getElementById("specialNext");
 
-    if (specialSlider && btnLeftSpecial && btnRightSpecial) {
+    if (specialTrack && specialPrev && specialNext) {
 
         function updateSpecialButtons() {
-            btnLeftSpecial.style.display = specialSlider.scrollLeft <= 0 ? "none" : "block";
-            btnRightSpecial.style.display =
-                specialSlider.scrollLeft + specialSlider.clientWidth >= specialSlider.scrollWidth - 5
-                    ? "none"
-                    : "block";
+            const maxScroll = specialTrack.scrollWidth - specialTrack.clientWidth;
+            specialPrev.classList.toggle("hidden", specialTrack.scrollLeft <= 5);
+            specialNext.classList.toggle("hidden", specialTrack.scrollLeft >= maxScroll - 5);
         }
 
-        btnRightSpecial.onclick = () => specialSlider.scrollBy({left: 300, behavior: "smooth"});
-        btnLeftSpecial.onclick = () => specialSlider.scrollBy({left: -300, behavior: "smooth"});
+        specialPrev.addEventListener("click", () => {
+            specialTrack.scrollBy({left: -220, behavior: "smooth"});
+        });
 
-        specialSlider.addEventListener("scroll", updateSpecialButtons);
+        specialNext.addEventListener("click", () => {
+            specialTrack.scrollBy({left: 220, behavior: "smooth"});
+        });
+
+        specialTrack.addEventListener("scroll", updateSpecialButtons);
+        window.addEventListener("resize", updateSpecialButtons);
         updateSpecialButtons();
     }
 
 
     // ==================
-    // TOOLS SLIDER
+    // LATEST PRODUCTS SLIDER — smart scroll (touch-friendly)
     // ==================
-    const slider = document.getElementById("productSlider");
-    const btnLeft = document.getElementById("slideLeft");
-    const btnRight = document.getElementById("slideRight");
+    const latestSlider = document.getElementById("productSlider");
+    const latestPrev = document.getElementById("latestPrev");
+    const latestNext = document.getElementById("latestNext");
 
-    if (slider && btnLeft && btnRight) {
+    if (latestSlider && latestPrev && latestNext) {
 
-        function updateToolsButtons() {
-            btnLeft.style.display = slider.scrollLeft <= 0 ? "none" : "block";
-            btnRight.style.display =
-                slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 5
-                    ? "none"
-                    : "block";
+        function latestStep() {
+            const card = latestSlider.querySelector(".product-card");
+            if (!card) return 220;
+            const style = getComputedStyle(latestSlider);
+            const gap = parseFloat(style.gap) || parseFloat(getComputedStyle(card).marginRight) || 0;
+            return card.getBoundingClientRect().width + gap;
         }
 
-        btnRight.onclick = () => slider.scrollBy({left: 300, behavior: "smooth"});
-        btnLeft.onclick = () => slider.scrollBy({left: -300, behavior: "smooth"});
+        function updateLatestButtons() {
+            const maxScroll = latestSlider.scrollWidth - latestSlider.clientWidth;
+            const atStart = latestSlider.scrollLeft <= 2;
+            const atEnd = latestSlider.scrollLeft >= maxScroll - 2;
+            latestPrev.classList.toggle("disabled", atStart || maxScroll <= 0);
+            latestNext.classList.toggle("disabled", atEnd || maxScroll <= 0);
+        }
 
-        slider.addEventListener("scroll", updateToolsButtons);
-        updateToolsButtons();
+        function smoothScrollTo(el, target) {
+            el.scrollTo({left: target, behavior: "smooth"});
+        }
+
+        function latestMove(dir) {
+            const maxScroll = latestSlider.scrollWidth - latestSlider.clientWidth;
+            const target = Math.max(0, Math.min(latestSlider.scrollLeft + dir * latestStep(), maxScroll));
+            smoothScrollTo(latestSlider, target);
+            setTimeout(updateLatestButtons, 400);
+        }
+
+        latestPrev.addEventListener("click", () => latestMove(-1));
+        latestNext.addEventListener("click", () => latestMove(1));
+
+        latestSlider.addEventListener("scrollend", updateLatestButtons, {passive: true});
+
+        latestSlider.addEventListener("scroll", updateLatestButtons);
+        window.addEventListener("resize", updateLatestButtons);
+        window.addEventListener("load", updateLatestButtons);
+        document.fonts?.ready?.then(updateLatestButtons);
+        setTimeout(updateLatestButtons, 300);
+        updateLatestButtons();
+        setInterval(updateLatestButtons, 600);
     }
 
 
@@ -106,26 +136,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!brandSlider || !btnL || !btnR) return;
 
-    function updateBrandButtons() {
-        btnL.style.display = brandSlider.scrollLeft <= 0 ? "none" : "block";
-        btnR.style.display =
-            brandSlider.scrollLeft + brandSlider.clientWidth >= brandSlider.scrollWidth - 10
-                ? "none"
-                : "block";
+    function brandStep() {
+        const card = brandSlider.querySelector("a");
+        if (!card) return 220;
+        const style = getComputedStyle(brandSlider);
+        const gap = parseFloat(style.gap) || parseFloat(getComputedStyle(card).marginRight) || 0;
+        return card.getBoundingClientRect().width + gap;
     }
 
-    btnL.addEventListener("click", () => {
-        brandSlider.scrollBy({left: -300, behavior: "smooth"});
-    });
+    function updateBrandButtons() {
+        const maxScroll = brandSlider.scrollWidth - brandSlider.clientWidth;
+        const atStart = brandSlider.scrollLeft <= 2;
+        const atEnd = brandSlider.scrollLeft >= maxScroll - 2;
+        btnL.classList.toggle("disabled", atStart || maxScroll <= 0);
+        btnR.classList.toggle("disabled", atEnd || maxScroll <= 0);
+    }
 
-    btnR.addEventListener("click", () => {
-        brandSlider.scrollBy({left: 300, behavior: "smooth"});
-    });
+    function smoothScrollToBrand(el, target) {
+        el.scrollTo({left: target, behavior: "smooth"});
+    }
+
+    function brandMove(dir) {
+        const maxScroll = brandSlider.scrollWidth - brandSlider.clientWidth;
+        const target = Math.max(0, Math.min(brandSlider.scrollLeft + dir * brandStep(), maxScroll));
+        smoothScrollToBrand(brandSlider, target);
+        setTimeout(updateBrandButtons, 400);
+    }
+
+    btnL.addEventListener("click", () => brandMove(-1));
+    btnR.addEventListener("click", () => brandMove(1));
 
     brandSlider.addEventListener("scroll", updateBrandButtons);
+    brandSlider.addEventListener("scrollend", updateBrandButtons, {passive: true});
     window.addEventListener("resize", updateBrandButtons);
-
+    window.addEventListener("load", updateBrandButtons);
+    document.fonts?.ready?.then(updateBrandButtons);
+    setTimeout(updateBrandButtons, 300);
     updateBrandButtons();
+    setInterval(updateBrandButtons, 600);
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -136,19 +184,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!accessorySlider || !accessoryLeft || !accessoryRight) return;
 
-    function updateAccessoryButtons() {
-        accessoryLeft.style.display = accessorySlider.scrollLeft <= 0 ? "none" : "block";
-        accessoryRight.style.display =
-            accessorySlider.scrollLeft + accessorySlider.clientWidth >= accessorySlider.scrollWidth - 5
-                ? "none"
-                : "block";
+    function accessoryStep() {
+        const card = accessorySlider.querySelector(".accessory-card");
+        if (!card) return 220;
+        const style = getComputedStyle(accessorySlider);
+        const gap = parseFloat(style.gap) || parseFloat(getComputedStyle(card).marginRight) || 0;
+        return card.getBoundingClientRect().width + gap;
     }
 
-    accessoryRight.onclick = () => accessorySlider.scrollBy({left: 300, behavior: "smooth"});
-    accessoryLeft.onclick = () => accessorySlider.scrollBy({left: -300, behavior: "smooth"});
+    function updateAccessoryButtons() {
+        const maxScroll = accessorySlider.scrollWidth - accessorySlider.clientWidth;
+        const atStart = accessorySlider.scrollLeft <= 2;
+        const atEnd = accessorySlider.scrollLeft >= maxScroll - 2;
+        accessoryLeft.classList.toggle("disabled", atStart || maxScroll <= 0);
+        accessoryRight.classList.toggle("disabled", atEnd || maxScroll <= 0);
+    }
+
+    function smoothScrollToAcc(el, target) {
+        el.scrollTo({left: target, behavior: "smooth"});
+    }
+
+    function accessoryMove(dir) {
+        const maxScroll = accessorySlider.scrollWidth - accessorySlider.clientWidth;
+        const target = Math.max(0, Math.min(accessorySlider.scrollLeft + dir * accessoryStep(), maxScroll));
+        smoothScrollToAcc(accessorySlider, target);
+        setTimeout(updateAccessoryButtons, 400);
+    }
+
+    accessoryLeft.onclick = () => accessoryMove(-1);
+    accessoryRight.onclick = () => accessoryMove(1);
 
     accessorySlider.addEventListener("scroll", updateAccessoryButtons);
+    accessorySlider.addEventListener("scrollend", updateAccessoryButtons, {passive: true});
+    window.addEventListener("resize", updateAccessoryButtons);
+    window.addEventListener("load", updateAccessoryButtons);
+    document.fonts?.ready?.then(updateAccessoryButtons);
+    setTimeout(updateAccessoryButtons, 300);
     updateAccessoryButtons();
+    setInterval(updateAccessoryButtons, 600);
 });
 
 

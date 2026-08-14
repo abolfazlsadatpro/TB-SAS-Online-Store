@@ -2,7 +2,8 @@ from django.urls import path
 from .views import dashboard_admin, ListOrders, new_order_site, InboxManager, VoteManager, \
     sign_out_admin, CategoryManagement, product_add, ProductList, setting_site, LastUsers, \
     DetailOrderView, order_status_update, search_customers_item, change_publish_vote, category_delete, product_delete, \
-    delete_banner, BannerManagement, inbox_seen, search_product_item
+    delete_banner, BannerManagement, inbox_seen, search_product_item, BrandManagement, delete_brand, \
+    about_us_sections, about_us_section_edit, about_us_section_delete
 from . import views
 
 urlpatterns = [
@@ -23,9 +24,17 @@ urlpatterns = [
     path('delete_banner/<int:pk>', delete_banner, name='delete_banner'),
     path("banner_management/<int:id>/", BannerManagement.as_view(), name="banner_edit"),
 
+    path('brand_management/', BrandManagement.as_view(), name='brand_management'),
+    path('delete_brand/<int:pk>', delete_brand, name='delete_brand'),
+    path("brand_management/<int:id>/", BrandManagement.as_view(), name="brand_edit"),
+
     path('category_management/', CategoryManagement.as_view(), name='category_management'),
     path('category_management/<int:id>/', CategoryManagement.as_view(), name='category_edit'),
     path('category_delete/<int:pk>', category_delete, name='category_delete'),
+
+    path('about_us_management/', about_us_sections, name='about_us_management'),
+    path('about_us_management/<int:id>/', about_us_section_edit, name='about_us_section_edit'),
+    path('about_us_section_delete/<int:id>/', about_us_section_delete, name='about_us_section_delete'),
 
     path("product_add/", product_add, name="product_add"),
     path("product_add/<int:id>/", product_add, name="product_edit"),

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slider C — Clean Minimal</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:20px}
+    .carousel-wrap{max-width:1300px;margin:0 auto;position:relative}
+
+    .carousel-item img{height:600px;object-fit:cover;width:100%}
+
+    /* ===== دکمه‌ها — Clean Circle ===== */
+    .carousel-control-prev,.carousel-control-next{
+        width:48px;height:48px;top:50%;transform:translateY(-50%);bottom:auto;
+        background:#fff;border:1px solid #ddd;border-radius:50%;opacity:1;margin:0 20px;
+        box-shadow:0 6px 18px -6px rgba(0,0,0,.3);transition:.22s;
+    }
+    .carousel-control-prev:hover,.carousel-control-next:hover{
+        background:#f0faf4;border-color:#198754;transform:translateY(-50%) scale(1.1);
+    }
+    .carousel-control-prev-icon,.carousel-control-next-icon{
+        width:20px;height:20px;filter:invert(40%) sepia(50%) saturate(400%) hue-rotate(95deg);
+    }
+
+    /* ===== متن — مینیمال با خط زیر ===== */
+    .carousel-caption{
+        left:8%;right:auto;text-align:left;background:none;padding:0;
+        top:52%;transform:translateY(-50%);bottom:auto;max-width:480px;
+    }
+    .carousel-caption h1{
+        font-size:42px;font-weight:800;letter-spacing:-.5px;margin-bottom:12px;
+        text-shadow:0 3px 18px rgba(0,0,0,.45);
+        position:relative;padding-bottom:16px;
+    }
+    .carousel-caption h1::after{
+        content:"";position:absolute;left:0;bottom:0;width:56px;height:4px;
+        background:#7fe3a9;border-radius:4px;
+        box-shadow:0 2px 10px rgba(0,0,0,.3);
+    }
+    .carousel-caption p{
+        font-size:16px;color:rgba(255,255,255,.95);line-height:1.75;
+        text-shadow:0 2px 10px rgba(0,0,0,.4);margin:18px 0 24px;
+    }
+    .carousel-caption .btn{
+        display:inline-flex;align-items:center;gap:9px;
+        background:#198754;color:#fff;font-weight:800;
+        padding:14px 30px;border-radius:8px;border:none;
+        box-shadow:0 10px 24px -8px rgba(25,135,84,.5);transition:.2s;font-size:15px;
+    }
+    .carousel-caption .btn:hover{background:#157347;transform:translateY(-3px)}
+
+    .carousel-indicators{bottom:18px}
+    .carousel-indicators [data-bs-target]{
+        width:24px;height:4px;border-radius:4px;border:none;
+        background:rgba(255,255,255,.45);opacity:1;transition:.3s;margin:0 3px;
+    }
+    .carousel-indicators .active{background:#31c3a9;width:36px}
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+
+    <div id="homeSlider" class="carousel slide" data-bs-ride="carousel">
+
+        <div class="carousel-inner">
+
+            <div class="carousel-item active">
+                <img src="slider1.jpeg" class="d-block w-100" alt="offer">
+                <div class="carousel-caption">
+                    <h1>Big Offer</h1>
+                    <p>Shop the best deals on phones, laptops & accessories.</p>
+                    <a href="#" class="btn btn-success"><i class="fa-solid fa-bolt"></i> Shop Now</a>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="slider2.jpeg" class="d-block w-100" alt="Men's clothing">
+                <div class="carousel-caption">
+                    <h1>Men's Clothing</h1>
+                    <p>New season styles at unbeatable prices.</p>
+                    <a href="#" class="btn btn-success"><i class="fa-solid fa-bolt"></i> Shop Now</a>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                <img src="slider3_4M3kc5Z.jpeg" class="d-block w-100" alt="Women's clothing">
+                <div class="carousel-caption">
+                    <h1>Women's Clothing</h1>
+                    <p>Elegant looks for every occasion.</p>
+                    <a href="#" class="btn btn-success"><i class="fa-solid fa-bolt"></i> Shop Now</a>
+                </div>
+            </div>
+
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeSlider" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button class="carousel-control-next" type="button" data-bs-target="#homeSlider" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slider A — Clean Separation</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .product-slider-wrapper{
+        position:relative;background:#fff;border:1px solid #e8ede9;border-radius:16px;
+        padding:18px 52px;overflow:hidden;
+    }
+    .slider-header{
+        display:flex;justify-content:space-between;align-items:center;
+        margin-bottom:16px;padding:0 4px;
+    }
+    .slider-header h3{font-size:20px;font-weight:800;color:#1b2b22;margin:0}
+    .slider-header a{font-size:13px;text-decoration:none;color:#198754;font-weight:700}
+    .slider-header a:hover{text-decoration:underline}
+
+    .product-slider{display:flex;gap:16px;overflow:hidden;transition:transform .45s cubic-bezier(.22,.9,.3,1)}
+
+    /* کارت: عکس روی پس‌زمینه خنثی — بدون باکس کرمی */
+    .product-card{
+        flex:0 0 calc(20% - 12.8px);
+        text-align:center;text-decoration:none;color:#1b2b22;
+    }
+    .product-img{
+        position:relative;height:170px;
+        background:#f8f9f8; /* خنثی، باز، نزدیک به سفید */
+        border:1px solid #eef1ef; /* خط جداکننده ظریف */
+        border-radius:12px;
+        display:flex;align-items:center;justify-content:center;
+        padding:16px;margin-bottom:12px;
+    }
+    .product-img img{max-width:82%;max-height:100%;object-fit:contain}
+    /* تفکیک با خط زیر عکس */
+    .product-card::after{
+        content:"";display:block;width:70%;height:1px;
+        background:#eef1ef;margin:0 auto 9px;
+    }
+    /* قلب */
+    .wish-btn{
+        position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;
+        background:#fff;border:1px solid #e8ede9;color:#a9b5ae;
+        display:flex;align-items:center;justify-content:center;
+        font-size:13px;cursor:pointer;transition:.2s;
+    }
+    .wish-btn:hover{color:#e6484d;border-color:#e6484d;transform:scale(1.1)}
+
+    .product-card h5{font-size:13px;font-weight:600;color:#3d4f46;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .product-price{display:flex;align-items:baseline;gap:6px;justify-content:center}
+    .product-price .new{font-size:15px;font-weight:800;color:#1b2b22}
+    .product-price .old{font-size:11.5px;color:#a9b5ae;text-decoration:line-through}
+
+    .arr{
+        position:absolute;top:55%;transform:translateY(-50%);z-index:5;
+        width:36px;height:36px;border-radius:50%;border:1px solid #d8e4dc;
+        background:#fff;color:#198754;font-size:13px;cursor:pointer;transition:.2s;
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 4px 12px -6px rgba(20,40,30,.2);
+    }
+    .arr:hover{background:#198754;color:#fff;border-color:#198754}
+    .arr.prev{left:8px}
+    .arr.next{right:8px}
+    .arr.disabled{opacity:.3;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="product-slider-wrapper">
+        <div class="slider-header">
+            <h3>Latest Products</h3>
+            <a href="#">View All →</a>
+        </div>
+        <button class="arr prev" id="pv"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="product-slider" id="tr">
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="samsung-galaxy-s25-ultra.webp">
+                </div>
+                <h5>Galaxy S25 Ultra 512GB</h5>
+                <div class="product-price"><span class="new">$1,149</span><span class="old">$1,299</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="apple-iphone-16-pro-max.webp">
+                </div>
+                <h5>iPhone 16 Pro Max 256GB</h5>
+                <div class="product-price"><span class="new">$1,199</span><span class="old">$1,299</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="xiaomi-15-pro.webp">
+                </div>
+                <h5>Xiaomi 15 Pro 256GB</h5>
+                <div class="product-price"><span class="new">$699</span><span class="old">$799</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="poco-f7-pro.webp">
+                </div>
+                <h5>Poco F7 Pro 256GB</h5>
+                <div class="product-price"><span class="new">$429</span><span class="old">$499</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="honor-magic-7.webp">
+                </div>
+                <h5>Honor Magic 7 256GB</h5>
+                <div class="product-price"><span class="new">$899</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="msi-katana-15.webp">
+                </div>
+                <h5>MSI Katana 15 i7</h5>
+                <div class="product-price"><span class="new">$1,349</span><span class="old">$1,499</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="acer-nitro-16.webp">
+                </div>
+                <h5>Acer Nitro 16 R7</h5>
+                <div class="product-price"><span class="new">$1,199</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="lenovo-legion-5.webp">
+                </div>
+                <h5>Lenovo Legion 5 i9</h5>
+                <div class="product-price"><span class="new">$1,249</span><span class="old">$1,399</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="asus-rog-zephyrus.webp">
+                </div>
+                <h5>ROG Zephyrus 16</h5>
+                <div class="product-price"><span class="new">$1,799</span></div>
+            </a>
+            <a href="#" class="product-card">
+                <div class="product-img">
+                    <span class="wish-btn"><i class="fa-regular fa-heart"></i></span>
+                    <img src="hp-pavilion-15.webp">
+                </div>
+                <h5>HP Pavilion 15 i5</h5>
+                <div class="product-price"><span class="new">$799</span><span class="old">$899</span></div>
+            </a>
+        </div>
+        <button class="arr next" id="nx"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+</div>
+
+<script>
+    const tr = document.getElementById('tr'), pv = document.getElementById('pv'), nx = document.getElementById('nx');
+    const per = 5; let idx = 0; const max = tr.children.length - per;
+    function update(){
+        tr.style.transform = 'translateX(-' + (idx * (100/per)) + '%)';
+        pv.classList.toggle('disabled', idx <= 0);
+        nx.classList.toggle('disabled', idx >= max);
+    }
+    pv.onclick = () => { if(idx > 0){ idx--; update(); } };
+    nx.onclick = () => { if(idx < max){ idx++; update(); } };
+    update();
+</script>
+</body>
+</html>

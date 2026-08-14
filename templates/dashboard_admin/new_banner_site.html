@@ -50,6 +50,56 @@
         </div>
 
         <!-- =========================
+             TYPE TABS
+        ========================== -->
+
+        <ul class="nav nav-pills banner-type-tabs mb-4">
+
+            <li class="nav-item">
+
+                <a
+                        class="nav-link {% if current_type == 'all' %}active{% endif %}"
+                        href="?type=all">
+
+                    All
+
+                    <span class="badge bg-secondary ms-1">{{ type_counts.all }}</span>
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a
+                        class="nav-link {% if current_type == 'slider' %}active{% endif %}"
+                        href="?type=slider">
+
+                    Slider
+
+                    <span class="badge bg-secondary ms-1">{{ type_counts.slider }}</span>
+
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+
+                <a
+                        class="nav-link {% if current_type == 'promo' %}active{% endif %}"
+                        href="?type=promo">
+
+                    Promo
+
+                    <span class="badge bg-secondary ms-1">{{ type_counts.promo }}</span>
+
+                </a>
+
+            </li>
+
+        </ul>
+
+        <!-- =========================
              CONTENT
         ========================== -->
 
@@ -96,6 +146,18 @@
 
                                 <label class="banner-label">
 
+                                    Type
+
+                                </label>
+
+                                {{ forms.banner_type }}
+
+                            </div>
+
+                            <div class="mb-4">
+
+                                <label class="banner-label">
+
                                     Banner Title
 
                                 </label>
@@ -104,15 +166,75 @@
 
                             </div>
 
-                            <div class="mb-4">
+                            <div data-banner-type="slider">
 
-                                <label class="banner-label">
+                                <div class="mb-4">
 
-                                    Description
+                                    <label class="banner-label">
 
-                                </label>
+                                        Description
 
-                                {{ forms.description }}
+                                    </label>
+
+                                    {{ forms.description }}
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <label class="banner-label">
+
+                                        Button Text
+
+                                    </label>
+
+                                    {{ forms.button_text }}
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <label class="banner-label">
+
+                                        Button Link
+
+                                    </label>
+
+                                    {{ forms.button_link }}
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <div class="form-check">
+
+                                        {{ forms.show_button }}
+
+                                        <label class="form-check-label ms-2">
+
+                                            Show Button
+
+                                        </label>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <div class="form-check">
+
+                                        {{ forms.open_in_new_tab }}
+
+                                        <label class="form-check-label ms-2">
+
+                                            Open In New Tab
+
+                                        </label>
+
+                                    </div>
+
+                                </div>
 
                             </div>
 
@@ -125,63 +247,6 @@
                                 </label>
 
                                 {{ forms.picture }}
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <label class="banner-label">
-
-                                    Button Text
-
-                                </label>
-
-                                {{ forms.button_text }}
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <label class="banner-label">
-
-                                    Button Link
-
-                                </label>
-
-                                {{ forms.button_link }}
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <div class="form-check">
-
-                                    {{ forms.show_button }}
-
-                                    <label class="form-check-label ms-2">
-
-                                        Show Button
-
-                                    </label>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="mb-4">
-
-                                <div class="form-check">
-
-                                    {{ forms.open_in_new_tab }}
-
-                                    <label class="form-check-label ms-2">
-
-                                        Open In New Tab
-
-                                    </label>
-
-                                </div>
 
                             </div>
 
@@ -431,6 +496,10 @@
                                 Title
                             </th>
 
+                            <th width="100">
+                                Type
+                            </th>
+
                             <th width="80">
                                 Order
                             </th>
@@ -488,6 +557,16 @@
                                         {{ banner_item.title }}
 
                                     </div>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="badge {% if banner_item.banner_type == 'slider' %}bg-success{% else %}bg-info{% endif %}">
+
+                                        {{ banner_item.get_banner_type_display }}
+
+                                    </span>
 
                                 </td>
 
@@ -623,7 +702,7 @@
 
                             <tr>
 
-                                <td colspan="9">
+                                <td colspan="10">
 
                                     <div class="banner-empty">
 

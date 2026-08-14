@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from store.models import Product, ProductColor, BannerMain, ProductImage, ProductSpecification, Category, Order
+from store.models import Product, ProductColor, BannerMain, ProductImage, ProductSpecification, Category, Order, Brand
 from store.untils import get_tuple_status
 from store.models import SettingSite
 
@@ -377,6 +377,12 @@ class BannerForm(forms.ModelForm):
 
         widgets = {
 
+            "banner_type": forms.Select(
+                attrs={
+                    "class": "form-select banner-input",
+                }
+            ),
+
             "title": forms.TextInput(
                 attrs={
                     "class": "form-control banner-input",
@@ -425,6 +431,66 @@ class BannerForm(forms.ModelForm):
                 }
             ),
 
+        }
+
+
+class BrandForm(forms.ModelForm):
+    class Meta:
+        model = Brand
+
+        fields = "__all__"
+
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "placeholder": "Enter brand name"
+                }
+            ),
+            "slug": forms.TextInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "placeholder": "brand-slug"
+                }
+            ),
+            "logo": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control banner-file"
+                }
+            ),
+            "image": forms.ClearableFileInput(
+                attrs={
+                    "class": "form-control banner-file"
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control banner-textarea",
+                    "rows": 3,
+                    "placeholder": "Write brand description..."
+                }
+            ),
+            "order": forms.NumberInput(
+                attrs={
+                    "class": "form-control banner-input",
+                    "min": "0"
+                }
+            ),
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
+            "is_mobile": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
+            "is_laptop": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input"
+                }
+            ),
         }
 
 

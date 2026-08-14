@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products 2 — 3D Tilt</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f7f5;padding:30px}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .sec-head h2{font-size:21px;font-weight:800;color:#1b2b22}
+    .sec-head .all{color:#198754;font-size:13px;font-weight:600;text-decoration:none}
+    .sec-sub{color:#8aa496;font-size:12.5px;margin-bottom:24px}
+
+    .slider{display:flex;gap:16px;overflow-x:auto;padding:10px 4px 24px;scrollbar-width:none;perspective:900px}
+    .slider::-webkit-scrollbar{display:none}
+
+    .tilt{flex:0 0 205px;perspective:900px}
+    .card{
+        background:#fff;border-radius:14px;overflow:hidden;
+        border:1px solid #eef1ef;text-decoration:none;color:#1b2b22;
+        transform-style:preserve-3d;transition:transform .3s;
+        box-shadow:0 8px 24px -12px rgba(20,40,30,.2);
+    }
+    .tilt:hover .card{transform:rotateX(7deg) rotateY(-7deg) translateY(-8px);box-shadow:0 24px 44px -18px rgba(20,40,30,.35)}
+    .card-img{
+        position:relative;height:150px;background:linear-gradient(145deg,#f4faf6,#e8f2ec);
+        display:flex;align-items:center;justify-content:center;padding:14px;
+    }
+    .card-img img{max-width:85%;max-height:100%;object-fit:contain;transform:translateZ(24px);transition:.3s}
+    .tilt:hover .card-img img{transform:translateZ(40px) scale(1.05)}
+    .card-tag{
+        position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#e6484d,#c92a2f);
+        color:#fff;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:5px;transform:translateZ(30px);
+    }
+    .card-body{padding:13px 14px}
+    .card-body h5{font-size:13px;font-weight:600;color:#3d4f46;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:translateZ(15px)}
+    .card-price{display:flex;align-items:baseline;gap:7px;margin-bottom:11px;transform:translateZ(15px)}
+    .card-price .new{font-size:16px;font-weight:800;color:#1b2b22}
+    .card-price .old{font-size:12px;color:#a9b5ae;text-decoration:line-through}
+    .card-btn{
+        width:100%;padding:9px;border:none;background:linear-gradient(135deg,#198754,#16a34a);
+        color:#fff;border-radius:9px;font-weight:700;font-size:12.5px;cursor:pointer;transition:.22s;
+        display:inline-flex;align-items:center;justify-content:center;gap:7px;transform:translateZ(18px);
+    }
+    .card-btn:hover{filter:brightness(1.1)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="sec-head">
+        <h2>Latest Products</h2>
+        <a href="#" class="all">View All →</a>
+    </div>
+    <p class="sec-sub">Stay up to date with our newest arrivals</p>
+
+    <div class="slider">
+        <div class="tilt"><a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-12%</span><img src="samsung-galaxy-s25-ultra.webp" alt=""></div>
+            <div class="card-body"><h5>Galaxy S25 Ultra</h5><div class="card-price"><span class="new">$1,149</span><span class="old">$1,299</span></div><button class="card-btn">Add to Cart</button></div>
+        </a></div>
+        <div class="tilt"><a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-7%</span><img src="apple-iphone-16-pro-max.webp" alt=""></div>
+            <div class="card-body"><h5>iPhone 16 Pro Max</h5><div class="card-price"><span class="new">$1,199</span><span class="old">$1,299</span></div><button class="card-btn">Add to Cart</button></div>
+        </a></div>
+        <div class="tilt"><a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-12%</span><img src="xiaomi-15-pro.webp" alt=""></div>
+            <div class="card-body"><h5>Xiaomi 15 Pro</h5><div class="card-price"><span class="new">$699</span><span class="old">$799</span></div><button class="card-btn">Add to Cart</button></div>
+        </a></div>
+        <div class="tilt"><a href="#" class="card">
+            <div class="card-img"><span class="card-tag">-14%</span><img src="poco-f7-pro.webp" alt=""></div>
+            <div class="card-body"><h5>Poco F7 Pro</h5><div class="card-price"><span class="new">$429</span><span class="old">$499</span></div><button class="card-btn">Add to Cart</button></div>
+        </a></div>
+        <div class="tilt"><a href="#" class="card">
+            <div class="card-img"><img src="msi-katana-15.webp" alt=""></div>
+            <div class="card-body"><h5>MSI Katana 15</h5><div class="card-price"><span class="new">$1,349</span></div><button class="card-btn">Add to Cart</button></div>
+        </a></div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top Brands — Neon Arcade</title>
+<link rel="stylesheet" href="boot.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#070a12;padding:30px;min-height:100vh}
+    .wrap{max-width:1300px;margin:0 auto}
+
+    .brand-section{
+        background:
+            radial-gradient(600px 200px at 10% -10%, rgba(34,211,238,.09), transparent 60%),
+            radial-gradient(500px 180px at 95% 110%, rgba(232,121,249,.07), transparent 60%),
+            #0b1020;
+        border:1px solid rgba(56,189,248,.18);
+        border-radius:20px;padding:28px;position:relative;overflow:hidden;
+        box-shadow:0 26px 60px -30px rgba(0,0,0,.8), inset 0 0 60px rgba(56,189,248,.03);
+    }
+    .brand-section::before{
+        content:"";position:absolute;top:-70px;left:30%;
+        width:140px;height:140px;border-radius:50%;
+        background:radial-gradient(circle,rgba(34,211,238,.14),transparent 65%);
+        filter:blur(10px);
+    }
+
+    .brand-title{
+        display:flex;align-items:center;gap:14px;margin-bottom:24px;position:relative;z-index:2;
+    }
+    .brand-title h3{
+        font-family:'Orbitron','Segoe UI',sans-serif;
+        font-size:21px;font-weight:800;letter-spacing:2.5px;margin:0;
+        background:linear-gradient(95deg,#67e8f9 10%,#e879f9 90%);
+        -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+        filter:drop-shadow(0 0 14px rgba(103,232,249,.35));
+    }
+    .brand-title .pulse{
+        width:9px;height:9px;border-radius:50%;background:#34d399;
+        box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:ping 2s infinite;
+    }
+    @keyframes ping{
+        0%{box-shadow:0 0 0 0 rgba(52,211,153,.55)}
+        70%{box-shadow:0 0 0 9px rgba(52,211,153,0)}
+        100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
+    }
+
+    .brand-slider-wrapper{position:relative;z-index:2}
+    .brand-slider{display:flex;overflow:hidden;transition:transform .45s cubic-bezier(.22,.9,.3,1)}
+    .brand-item{
+        flex:0 0 calc(100%/6);
+        height:64px;display:flex;align-items:center;justify-content:center;
+        padding:10px;text-decoration:none;position:relative;
+        border:1px solid rgba(56,189,248,.22);border-radius:12px;
+        background:linear-gradient(160deg,rgba(34,211,238,.07),rgba(232,121,249,.05));
+        margin-right:12px;transition:.25s;overflow:hidden;
+    }
+    .brand-item::before{
+        content:"";position:absolute;top:0;left:-80%;
+        width:60%;height:100%;
+        background:linear-gradient(100deg,transparent,rgba(255,255,255,.14),transparent);
+        transform:skewX(-20deg);transition:left .5s;
+    }
+    .brand-item:hover::before{left:120%}
+    .brand-item:hover{border-color:rgba(103,232,249,.65);box-shadow:0 0 22px rgba(34,211,238,.22)}
+    .brand-item img{
+        max-width:80%;max-height:70%;object-fit:contain;transition:.3s;
+        filter:brightness(0) invert(1) drop-shadow(0 0 0 rgba(103,232,249,0));
+    }
+    .brand-item:hover img{
+        filter:brightness(0) invert(1) drop-shadow(0 0 10px rgba(103,232,249,.9));
+        transform:scale(1.08);
+    }
+
+    .bbtn{
+        position:absolute;top:50%;transform:translateY(-50%);z-index:6;
+        width:38px;height:38px;border-radius:12px;
+        background:rgba(11,16,32,.85);border:1px solid rgba(56,189,248,.35);
+        color:#67e8f9;font-size:13px;cursor:pointer;transition:.25s;
+        display:flex;align-items:center;justify-content:center;
+        -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    }
+    .bbtn:hover{
+        background:rgba(34,211,238,.15);border-color:#67e8f9;
+        box-shadow:0 0 18px rgba(34,211,238,.4);
+    }
+    .bbtn.left{left:-14px}
+    .bbtn.right{right:-14px}
+    .bbtn.disabled{opacity:.25;pointer-events:none}
+
+    @media(max-width:768px){ .brand-item{flex-basis:33.33%} }
+    @media(max-width:480px){ .brand-item{flex-basis:50%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="brand-section">
+        <div class="brand-title">
+            <span class="pulse"></span>
+            <h3>TOP BRANDS</h3>
+        </div>
+        <div class="brand-slider-wrapper">
+            <button class="bbtn left" id="pv"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="brand-slider" id="tr">
+                <a href="#" class="brand-item"><img src="Logo_SAMSUNG.webp" alt="Samsung"></a>
+                <a href="#" class="brand-item"><img src="Logo_Apple.webp" alt="Apple"></a>
+                <a href="#" class="brand-item"><img src="Logo_Xiaomi.webp" alt="Xiaomi"></a>
+                <a href="#" class="brand-item"><img src="Logo_NOKIA.webp" alt="Nokia"></a>
+                <a href="#" class="brand-item"><img src="Logo_AUSU.webp" alt="ASUS"></a>
+                <a href="#" class="brand-item"><img src="Logo_JBL.webp" alt="JBL"></a>
+                <a href="#" class="brand-item"><img src="Logo_SONY.webp" alt="Sony"></a>
+                <a href="#" class="brand-item"><img src="Logo_LG.webp" alt="LG"></a>
+                <a href="#" class="brand-item"><img src="Logo_HUAWEl.webp" alt="Huawei"></a>
+                <a href="#" class="brand-item"><img src="Logo_TP-LINK.webp" alt="TP-Link"></a>
+            </div>
+            <button class="bbtn right" id="nx"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tr = document.getElementById('tr'), pv = document.getElementById('pv'), nx = document.getElementById('nx');
+    let idx = 0;
+    const per = (tr.clientWidth > 0 && tr.children[0].getBoundingClientRect().width > 0)
+        ? Math.max(1, Math.round(tr.clientWidth / tr.children[0].getBoundingClientRect().width)) : 6;
+    const max = tr.children.length - per;
+    function update(){
+        if (idx > max) idx = max;
+        tr.style.transform = 'translateX(-' + (idx * (100/per)) + '%)';
+        pv.classList.toggle('disabled', idx <= 0);
+        nx.classList.toggle('disabled', idx >= max);
+    }
+    pv.onclick = () => { if (idx > 0){ idx--; update(); } };
+    nx.onclick = () => { if (idx < max){ idx++; update(); } };
+    window.addEventListener('resize', update);
+    update();
+</script>
+</body>
+</html>

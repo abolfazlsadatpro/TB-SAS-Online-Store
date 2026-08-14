@@ -58,6 +58,50 @@
             </div>
         </div>
     </section>
+
+    <!-- About Us Sections Management -->
+    <section class="about-sections">
+        <div class="container">
+            <h2 class="text-center mb-4">Site About Us Sections</h2>
+            <p class="text-center text-muted mb-4">
+                These sections are managed from the admin panel.
+                <a href="{% url 'about' %}" class="link-primary">View admin</a> to add, edit, or remove sections.
+            </p>
+
+            {% if about_sections %}
+                <div class="row g-4">
+                    {% for section in about_sections %}
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                {% if section.image %}
+                                    <img src="{{ section.image.url }}" class="card-img-top" alt="{{ section.title }}" style="height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div class="card-img-placeholder" style="height: 150px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; color: #6c757d;">
+                                        <i class="bi bi-image fs-4"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ section.title }}</h5>
+                                    <p class="card-text">{{ section.content|truncatewords:20 }}</p>
+                                    <p class="card-text small">
+                                        <strong>Type:</strong> {{ section.get_section_type_display }}<br>
+                                        <strong>Order:</strong> {{ section.display_order }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state text-center py-5">
+                    <i class="bi bi-file-earmark-text fs-3 mb-3"></i>
+                    <h4>No Sections Found</h4>
+                    <p>Add your first About Us section from the admin panel.</p>
+                    <a href="{% url 'about' %}" class="btn btn-primary mt-3">Go to Admin</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
 {% endblock %}
 
 
