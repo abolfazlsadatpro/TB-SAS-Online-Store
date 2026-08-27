@@ -3,10 +3,125 @@
 {% block title %}
     Products
 {% endblock %}
-{% load static %}
+{% load static custom_filters_stor %}
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/products.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sort-bar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/filter.css' %}">
+    <style>
+        /* Premium skeleton styles */
+        .skeleton-item.product-card {
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .skeleton-item.product-card:hover {
+            transform: translateY(-4px);
+            background: var(--fl-bg);
+        }
+        .skeleton-loader {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .skeleton-item {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton-item.product-card {
+            width: 220px;
+            height: 300px;
+        }
+        .skeleton-item.product-title {
+            width: 180px;
+            height: 20px;
+            margin: 10px 0;
+        }
+        .skeleton-item.product-price {
+            width: 100px;
+            height: 15px;
+        }
+        .skeleton-item.product-rating {
+            width: 80px;
+            height: 15px;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #198754;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Clear all filters button */
+        .clear-all-filters {
+            margin-left: 10px;
+            padding: 5px 10px;
+            font-size: 13px;
+        }
+        .clear-all-filters:hover {
+            background: #f8f9fa;
+            text-decoration: none;
+        }
+
+        /* Show more/less button */
+        .filter-show-toggle {
+            margin-top: 10px;
+            text-align: center;
+            cursor: pointer;
+            color: #198754;
+            font-size: 13px;
+        }
+        .filter-show-toggle:hover {
+            text-decoration: underline;
+        }
+
+        /* Active filters badge enhancement */
+        .filter-badge {
+            background: #198754;
+            color: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        /* Enhanced focus states for accessibility */
+        .filter-link:focus-visible,
+        .filter-check:focus-visible,
+        .filter-toggle:focus-visible,
+        .sort-btn:focus-visible,
+        .page-btn:focus-visible,
+        .clear-all-filters:focus-visible {
+            outline: 2px solid #198754;
+            outline-offset: 2px;
+        }
+    </style>
 {% endblock %}
 
 
@@ -27,231 +142,273 @@
                 <strong>Mobile Phones</strong>
             </div>
 
+            <!-- QUICK VIEW MODAL -->
+            {% include "main/includes/quick_view_modal.html" %}
+
             <div class="products-layout">
 
                 <!-- FILTER SIDEBAR -->
-                <aside class="filters sticky-filter">
+                <aside class="filters filters--design-custom sticky-filter" id="filterSidebar">
 
-                    <h3>Filters</h3>
+                    <header class="filters-header">
+                        <h3>Filters</h3>
+                        <button type="button" class="btn-close-filters" id="closeFilters" aria-label="Close filters">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
 
-                    <!-- PRICE -->
-                    <div class="filter-group">
-                        <h4>Price</h4>
+                    <form id="filterForm" method="GET" action="{% url 'products' %}">
 
-                        <div class="price-range">
-                            <input type="range" min="100" max="2000" value="2000" id="priceRange">
-                            <div class="price-values">
-                                <span>$100</span>
-                                <span id="priceValue">$2000</span>
+                        <!-- BRAND FILTER -->
+                        {% if brands %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-tag"></i> Brand
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
+                            <div class="filter-content">
+                                {% for brand in brands %}
+                                <label class="filter-check">
+                                    <input
+                                        type="checkbox"
+                                        class="brand-filter"
+                                        name="brand"
+                                        value="{{ brand.name }}"
+                                        {% if brand.name in current_brands %}checked{% endif %}
+                                        onchange="submitFilterForm()"
+                                    >
+                                    <span>{{ brand.name }}</span>
+                                </label>
+                                {% endfor %}
                             </div>
                         </div>
-                    </div>
+                        {% endif %}
 
+                        <!-- PRICE RANGE FILTER -->
+                        {% if price_range.min_price is not None and price_range.max_price is not None %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-dollar-sign"></i> Price Range
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
 
-                    <!-- BRAND (COLLAPSIBLE) -->
-                    <div class="filter-group">
-
-                        <div class="filter-toggle" onclick="toggleFilter(this)">
-                            <span>Brand</span>
-                            <i class="fa-solid fa-chevron-down"></i>
+                            <div class="filter-content">
+                                <div class="price-range-wrap">
+                                    <div class="price-inputs">
+                                        <input type="number" name="price_min" id="priceMinInput" value="{{ price_min|default:price_range.min_price|default:0 }}" min="{{ price_range.min_price|default:0 }}" max="{{ price_range.max_price|default:9999 }}" placeholder="Min" onchange="syncPriceRange(); submitFilterFormDebounced()">
+                                        <span class="price-separator">–</span>
+                                        <input type="number" name="price_max" id="priceMaxInput" value="{{ price_max|default:price_range.max_price|default:9999 }}" min="{{ price_range.min_price|default:0 }}" max="{{ price_range.max_price|default:9999 }}" placeholder="Max" onchange="syncPriceRange(); submitFilterFormDebounced()">
+                                    </div>
+                                    <input
+                                        type="range"
+                                        id="priceRange"
+                                        name="price_max"
+                                        min="{{ price_range.min_price|default:0 }}"
+                                        max="{{ price_range.max_price|default:9999 }}"
+                                        value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                        oninput="updatePriceDisplay(this.value); updatePriceInputFromRange(this.value)"
+                                    >
+                                    <div class="price-values">
+                                        <span id="priceMinLabel">${{ price_range.min_price|default:0 }}</span>
+                                        <span id="priceValue">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        {% endif %}
 
-                        <div class="filter-content">
-                            <label><input type="checkbox"> Apple</label>
-                            <label><input type="checkbox"> Samsung</label>
-                            <label><input type="checkbox"> Xiaomi</label>
-                            <label><input type="checkbox"> Huawei</label>
+                        <!-- COLOR FILTER -->
+                        {% with color_attr=filter_attributes_dict|dict_get:'color' %}
+                        {% if color_attr %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="{{ color_attr.icon|default:'fa-solid fa-palette' }}"></i> {{ color_attr.display_name }}
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
+
+                            <div class="filter-content filter-colors">
+                                {% for attr_value in color_attr.filter_values %}
+                                <label class="filter-check filter-check-color">
+                                    <input
+                                        type="checkbox"
+                                        name="attr_color"
+                                        value="{{ attr_value.value }}"
+                                        {% if 'color' in attr_filters and attr_value.value in attr_filters|dict_get:'color' %}checked{% endif %}
+                                        onchange="submitFilterForm()"
+                                    >
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
                         </div>
+                        {% endif %}
+                        {% endwith %}
 
-                    </div>
+                        <!-- RAM FILTER -->
+                        {% with ram_attr=filter_attributes_dict|dict_get:'ram' %}
+                        {% if ram_attr %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="{{ ram_attr.icon|default:'fa-solid fa-microchip' }}"></i> {{ ram_attr.display_name }}
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in ram_attr.filter_values %}
+                                <label class="filter-check">
+                                    <input
+                                        type="checkbox"
+                                        name="attr_ram"
+                                        value="{{ attr_value.value }}"
+                                        {% if 'ram' in attr_filters and attr_value.value in attr_filters|dict_get:'ram' %}checked{% endif %}
+                                        onchange="submitFilterForm()"
+                                    >
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- STORAGE FILTER -->
+                        {% with storage_attr=filter_attributes_dict|dict_get:'storage' %}
+                        {% if storage_attr %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="{{ storage_attr.icon|default:'fa-solid fa-memory' }}"></i> {{ storage_attr.display_name }}
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in storage_attr.filter_values %}
+                                <label class="filter-check">
+                                    <input
+                                        type="checkbox"
+                                        name="attr_storage"
+                                        value="{{ attr_value.value }}"
+                                        {% if 'storage' in attr_filters and attr_value.value in attr_filters|dict_get:'storage' %}checked{% endif %}
+                                        onchange="submitFilterForm()"
+                                    >
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- CONDITION FILTER -->
+                        {% with condition_attr=filter_attributes_dict|dict_get:'condition' %}
+                        {% if condition_attr %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="{{ condition_attr.icon|default:'fa-solid fa-tag' }}"></i> {{ condition_attr.display_name }}
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in condition_attr.filter_values %}
+                                <label class="filter-check">
+                                    <input
+                                        type="radio"
+                                        name="attr_condition"
+                                        value="{{ attr_value.value }}"
+                                        {% if 'condition' in attr_filters and attr_value.value in attr_filters|dict_get:'condition' %}checked{% endif %}
+                                        onchange="submitFilterForm()"
+                                        data-radio-group="attr_condition"
+                                    >
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- SCREEN SIZE FILTER -->
+                        {% with screen_attr=filter_attributes_dict|dict_get:'screen-size' %}
+                        {% if screen_attr %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="{{ screen_attr.icon|default:'fa-solid fa-mobile-screen' }}"></i> {{ screen_attr.display_name }}
+                                </span>
+                                <span class="filter-toggle-icon">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in screen_attr.filter_values %}
+                                <label class="filter-check">
+                                    <input
+                                        type="radio"
+                                        name="attr_screen-size"
+                                        value="{{ attr_value.value }}"
+                                        {% if 'screen-size' in attr_filters and attr_value.value in attr_filters|dict_get:'screen-size' %}checked{% endif %}
+                                        onchange="submitFilterForm()"
+                                        data-radio-group="attr_screen-size"
+                                    >
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endwith %}
+
+                        <!-- HIDDEN INPUTS FOR PAGINATION & SORT -->
+                        <input type="hidden" name="page" id="pageInput" value="1">
+                        <input type="hidden" name="sort" id="sortInput" value="{{ current_sort }}">
+                        {% if search_q %}
+                        <input type="hidden" name="q" value="{{ search_q }}">
+                        {% endif %}
+
+                    </form>
 
                 </aside>
+
+                <!-- MOBILE FILTER TOGGLE BUTTON -->
+                <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle" aria-label="Open filters">
+                    <i class="fa-solid fa-filter"></i>
+                    <span>Filters</span>
+                    {% if current_cat or current_brands or price_min or price_max or attr_filters %}
+                    <span class="filter-badge" id="filterBadge">{{ total_active_filters }}</span>
+                    {% endif %}
+                </button>
 
                 <!-- PRODUCTS AREA -->
                 <div class="products-content">
 
-                    <!-- SORT BAR -->
-                    <div class="sort-bar">
+                    <div id="productsContainer">
 
-                        <span>Sort by:</span>
-
-                        <button>Most Popular</button>
-                        <button>Newest</button>
-                        <button>Cheapest</button>
-                        <button>Most Expensive</button>
-                        <button>Most Discount</button>
-                        <button>Best Selling</button>
-
-                        <div class="product-count">
-                            248 Products
-                        </div>
-
-                    </div>
-
-                    <!-- PRODUCTS GRID -->
-                    <div class="products-grid">
-
-                        <!-- CARD -->
-                        <div class="product-card">
-                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
-                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">520.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
-                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">2000.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
-                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">1800.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
-                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">$700.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
-                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">520.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
-                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">2000.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
-                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">1800.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
-                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">$700.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
-                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">520.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
-                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">2000.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
-                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">1800.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
-                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">$700.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
-                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">520.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
-                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">2000.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
-                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">1800.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
-                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">$700.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/POCO Mi X7 PRO.webp' %}" alt="">
-                            <h4>Poco X7 Pro mobile phone, 512 GB capacity, 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">520.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
-                            <h4>Apple iPhone 17 Pro Max CH Dual SIM 256GB 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">2000.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
-                            <h4>Samsung Galaxy S25 Ultra dual SIM mobile phone, 1TB storage, 12GB RAM</h4>
-
-                            <div class="rating">★★★★★</div>
-
-                            <div class="price">1800.00</div>
-                        </div>
-                        <div class="product-card">
-                            <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
-                            <h4>Xiaomi 15T dual SIM mobile phone with 512 GB storage and 12 GB RAM</h4>
-
-                            <div class="rating">★★★★☆</div>
-
-                            <div class="price">$700.00</div>
-                        </div>
+                        {% include "main/products_ajax.html" %}
 
                     </div>
 
@@ -263,9 +420,101 @@
 
     </section>
 
-
 {% endblock %}
+
 
 {% block custom_js %}
     <script src="{% static 'js/products.js' %}"></script>
-{% endblock %}
+    <script>
+        // Filter form handling
+        let filterSubmitTimeout;
+
+        function setFilterValue(name, value) {
+            const input = document.querySelector(`input[name="${name}"]`);
+            if (input) {
+                input.value = value;
+            }
+            // Update active states
+            document.querySelectorAll(`[data-${name}]`).forEach(el => {
+                el.classList.toggle('active', el.dataset[name] === value);
+            });
+            submitFilterForm();
+        }
+
+        function submitFilterForm() {
+            clearTimeout(filterSubmitTimeout);
+            filterSubmitTimeout = setTimeout(() => {
+                document.getElementById('pageInput').value = '1';
+                document.getElementById('filterForm').submit();
+            }, 100);
+        }
+
+        function submitFilterFormDebounced() {
+            clearTimeout(filterSubmitTimeout);
+            filterSubmitTimeout = setTimeout(() => {
+                document.getElementById('pageInput').value = '1';
+                document.getElementById('filterForm').submit();
+            }, 300);
+        }
+
+        function updatePriceDisplay(value) {
+            document.getElementById('priceValue').textContent = '$' + parseInt(value).toLocaleString();
+        }
+
+        // Mobile filter sidebar toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('filterSidebar');
+            const toggleBtn = document.getElementById('mobileFilterToggle');
+            const closeBtn = document.getElementById('closeFilters');
+            const overlay = document.getElementById('filterOverlay');
+
+            if (toggleBtn && sidebar) {
+                toggleBtn.addEventListener('click', () => {
+                    sidebar.classList.add('open');
+                    if (overlay) overlay.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            if (closeBtn && sidebar) {
+                closeBtn.addEventListener('click', () => {
+                    sidebar.classList.remove('open');
+                    if (overlay) overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('open');
+                    overlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+            }
+
+            // Toggle filter groups
+            document.querySelectorAll('.filter-toggle[data-toggle]').forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const group = toggle.closest('.filter-group');
+                    group.classList.toggle('open');
+                });
+            });
+
+            // Radio button exclusive selection handling
+            document.querySelectorAll('input[type="radio"][data-radio-group]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const groupName = this.dataset.radioGroup;
+                    document.querySelectorAll(`input[data-radio-group="${groupName}"]`).forEach(r => {
+                        r.parentElement.classList.toggle('active', r.checked);
+                    });
+                });
+            });
+
+            // Checkbox active state
+            document.querySelectorAll('.filter-check input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    this.parentElement.classList.toggle('active', this.checked);
+                });
+            });
+        });
+    {% endblock %}

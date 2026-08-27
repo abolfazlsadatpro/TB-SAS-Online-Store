@@ -373,15 +373,29 @@
 
                     <div class="price">
 
-                        {{ product.final_price }}
+                        {{ product.annotated_final_price }}
 
                     </div>
 
-                    <button class="mini-cart-btn">
+                    <div class="qty-row">
+
+                        <div class="qty-stepper">
+
+                            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity">&#8722;</button>
+
+                            <span class="qty-value" data-min="1">1</span>
+
+                            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="mini-cart-btn" data-cart="buybox">
 
                         <i class="fa-solid fa-cart-shopping"></i>
 
-                        Add to Cart
+                        <span class="cart-label">Add to Cart</span>
 
                     </button>
 
@@ -953,11 +967,25 @@
 
                     </div>
 
-                    <button class="mini-cart-btn">
+                    <div class="qty-row">
+
+                        <div class="qty-stepper">
+
+                            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity">&#8722;</button>
+
+                            <span class="qty-value" data-min="1">1</span>
+
+                            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="mini-cart-btn" data-cart="minicard">
 
                         <i class="fa-solid fa-cart-shopping"></i>
 
-                        Add to Cart
+                        <span class="cart-label">Add to Cart</span>
 
                     </button>
 
@@ -970,6 +998,24 @@
     </section>
 
 </main>
+
+<!-- WISHLIST TOAST -->
+<div class="wishlist-toast" id="wishlistToast">
+
+    <div class="wishlist-toast-icon">
+        <i class="fa-solid fa-heart"></i>
+    </div>
+
+    <div class="wishlist-toast-content">
+        <h5>Product added to Wishlist</h5>
+        <p>You can view your wishlist anytime.</p>
+        <a href="{% url 'wishlist' %}" class="wishlist-link">
+            <i class="fa-regular fa-heart"></i>
+            <span id="wishlistToastCount"></span>
+        </a>
+    </div>
+
+</div>
 
 {% endblock %}
 

@@ -3,12 +3,17 @@
 =========================== */
 .product-page {
     direction: ltr;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .product-layout {
     display: flex;
     gap: 25px;
     align-items: flex-start;
+    width: 100%;
 }
 
 /* ---------------------------
@@ -265,11 +270,10 @@
 }
 
 .detail-right, .details-right {
-    width: 260px;
+    width: 280px;
     position: sticky;
-    top: 150px;
-    margin-left: 20px;
-    flex: 0 0 260px;
+    top: 120px;
+    flex: 0 0 280px;
 }
 
 .mini-product-card {
@@ -278,8 +282,7 @@
     border-radius: 16px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
     text-align: left;
-    margin-left: -37px;
-    margin-right: 12px;
+    width: 100%;
 }
 
 .mini-product-card img {
@@ -1797,4 +1800,362 @@ body.cat-hidden .tabs {
     flex-direction:column;
 
     gap:8px;
+}
+
+/* ==================================================
+   QTY STEPPER + ADD-TO-CART FEEDBACK
+   ================================================== */
+.qty-row {
+    display: flex;
+    justify-content: flex-start;
+    margin: 12px 0;
+}
+
+.qty-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.qty-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: #f8f9fa;
+    color: #198754;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+}
+
+.qty-btn:hover:not(:disabled) {
+    background: #e9ecef;
+}
+
+.qty-btn:active:not(:disabled) {
+    background: #198754;
+    color: #fff;
+}
+
+.qty-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.qty-value {
+    min-width: 44px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529;
+    padding: 0 4px;
+    user-select: none;
+}
+
+/* add-to-cart feedback */
+.mini-cart-btn.has-feedback {
+    pointer-events: none;
+    transform: scale(.97);
+    box-shadow: 0 4px 14px rgba(25, 135, 84, .35);
+    transition: transform .12s ease, box-shadow .2s ease;
+}
+
+.mini-cart-btn.is-success {
+    background: #157347;
+    pointer-events: auto;
+}
+
+@keyframes cart-bounce {
+    0%   { transform: translateX(0); }
+    35%  { transform: translateX(-4px); }
+    70%  { transform: translateX(4px); }
+    100% { transform: translateX(0); }
+}
+
+.mini-cart-btn.bounce i {
+    animation: cart-bounce .45s ease;
+}
+
+.cart-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100000;
+    background: #198754;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+    opacity: 0;
+    transform: translateY(-14px);
+    transition: opacity .25s ease, transform .25s ease;
+    direction: ltr;
+}
+
+.cart-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==================================================
+   QTY ROW TOGGLE (show on add-to-cart click)
+   ================================================== */
+.qty-row {
+    display: none;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    margin: 12px 0;
+}
+
+.qty-row.open,
+.qty-row--visible {
+    display: flex;
+    opacity: 1;
+    max-height: 60px;
+    margin: 12px 0;
+    pointer-events: auto;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    to {
+        opacity: 1;
+        max-height: 60px;
+        margin: 12px 0;
+    }
+}
+
+/* Trash icon state for qty-minus when qty === 1 */
+.qty-btn.trash {
+    background: #fff0f0;
+    color: #dc3545;
+}
+.qty-btn.trash:hover:not(:disabled) {
+    background: #ffe0e0;
+    color: #dc3545;
+}
+.qty-btn.trash:active:not(:disabled) {
+    background: #dc3545;
+    color: #fff;
+}
+.qty-btn.trash svg,
+.qty-btn.trash i {
+    pointer-events: none;
+}
+
+/* ==================================================
+   COMMENTS SLIDER
+   ================================================== */
+.reviews-slider {
+    position: relative;
+}
+
+.reviews-nav {
+    position: absolute;
+    top: -6px;
+    right: 0;
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+}
+
+.reviews-nav-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    background: #fff;
+    color: #198754;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background .15s ease, opacity .15s ease;
+}
+
+.reviews-nav-btn:hover:not(:disabled) {
+    background: #198754;
+    color: #fff;
+}
+
+.reviews-nav-btn:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.reviews-list {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 18px 4px 8px 0;
+    scrollbar-color: #198754 #eee;
+    direction: ltr;
+}
+
+.reviews-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.reviews-list::-webkit-scrollbar-thumb {
+    background: #198754;
+    border-radius: 8px;
+}
+
+.reviews-list::-webkit-scrollbar-track {
+    background: #eee;
+    border-radius: 8px;
+}
+
+.reviews-list .comment-card {
+    flex: 0 0 345px;
+    box-sizing: border-box;
+}
+
+/* ==================================================
+   RESPONSIVE
+   ================================================== */
+@media (max-width: 992px) {
+    .qty-stepper {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .qty-btn {
+        flex: 1;
+        height: 48px;
+    }
+}
+
+@media (max-width: 500px) {
+    .reviews-nav {
+        position: static;
+        justify-content: flex-end;
+        margin-bottom: 8px;
+    }
+    .reviews-list .comment-card {
+        flex-basis: 82vw;
+    }
+    .cart-toast {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+        text-align: center;
+    }
+}
+
+/* ==================================================
+   WISHLIST TOAST (self-contained, no --wl-* vars)
+   ================================================== */
+.wishlist-toast {
+    position: fixed;
+    top: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    min-width: 420px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 25px;
+    background: #fff;
+    border: 1px solid #e6eef0;
+    border-radius: 20px;
+    box-shadow:
+        0 1px 0 #fff inset,
+        0 30px 60px -20px rgba(13, 62, 41, .35),
+        10px 10px 0 rgba(25, 135, 84, .12);
+    opacity: 0;
+    pointer-events: none;
+    transition: all .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+.wishlist-toast.show {
+    top: 75px;
+    opacity: 1;
+    pointer-events: auto;
+    animation: dropToast .7s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes dropToast {
+    0% { top: -150px; opacity: 0; }
+    70% { top: 90px; }
+    100% { top: 75px; opacity: 1; }
+}
+
+.wishlist-toast-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: linear-gradient(145deg, #f0f9f3, #dcefe4);
+    border: 1px solid rgba(25, 135, 84, .14);
+    color: #198754;
+    font-size: 26px;
+}
+
+.wishlist-toast-content {
+    flex: 1;
+}
+
+.wishlist-toast-content h5 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+    color: #152b21;
+}
+
+.wishlist-toast-content p {
+    margin: 8px 0;
+    color: #6b7a72;
+    font-size: 14px;
+}
+
+.wishlist-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: #198754;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background .2s ease;
+}
+
+.wishlist-link:hover {
+    background: #157347;
+    color: #fff;
+}
+
+@media (max-width: 500px) {
+    .wishlist-toast {
+        min-width: 0;
+        width: calc(100% - 24px);
+        left: 12px;
+        transform: none;
+        gap: 14px;
+        padding: 16px 18px;
+    }
+    .wishlist-toast.show {
+        top: 60px;
+    }
 }

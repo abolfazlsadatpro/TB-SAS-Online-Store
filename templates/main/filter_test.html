@@ -1,0 +1,657 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+
+{% block title %}
+Filter Variants Test
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
+<link rel="stylesheet" href="{% static 'css/sort-bar-designs.css' %}">
+<link rel="stylesheet" href="{% static 'css/filter-designs.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="filter-test-page">
+    <div class="container">
+        <h2 class="mb-4">Filter Variants Test (Real Data)</h2>
+        <p class="mb-4">Below are five different styling options for the filter sidebar. Review each and decide which you prefer for the products page.</p>
+
+        <div class="row g-4">
+            <!-- Variant 1: Elevated Cards (current) -->
+            <div class="col-12">
+                <h3>Variant 1: Elevated Cards (current)</h3>
+                <aside class="filters filters--design1 sticky-filter" id="filterSidebar1">
+                    <header class="filters-header">
+                        <h3>Filters</h3>
+                        <button type="button" class="btn-close-filters" id="closeFilters1" aria-label="Close filters">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+
+                    <form id="filterForm1" method="GET" action="{% url 'products' %}">
+                        <!-- Same filters as products page -->
+                        {% if categories %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-folder-tree"></i> Category
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <button type="button" class="filter-link {% if not current_cat %}active{% endif %}"
+                                        data-category="" onclick="setFilterValue('category', '')">
+                                    All Categories
+                                </button>
+
+                                {% for cat in categories %}
+                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}" onclick="setFilterValue('category', '{{ cat.slug }}')">
+                                    {{ cat.name }}
+                                </button>
+
+                                {% for child in cat.children.all %}
+                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}" onclick="setFilterValue('category', '{{ child.slug }}')">
+                                    &nbsp;&nbsp;{{ child.name }}
+                                </button>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if brands %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-tag"></i> Brand
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for brand in brands %}
+                                <label class="filter-check">
+                                    <input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"
+                                           {% if brand.name in current_brands %}checked{% endif %}
+                                           onchange="submitFilterForm()">
+                                    <span>{{ brand.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if price_range.min_price is not None and price_range.max_price is not None %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-dollar-sign"></i> Price
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <div class="price-range-wrap">
+                                    <input type="range" id="priceRange1" name="price_max"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           oninput="updatePriceDisplay1(this.value); submitFilterFormDebounced1()">
+                                    <input type="hidden" name="price_min" id="priceMinInput1" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <div class="price-values">
+                                        <span id="priceMinLabel1">${{ price_range.min_price|default:0 }}</span>
+                                        <span id="priceValue1">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if filter_attributes %}
+                        {% for attr in filter_attributes %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {{ attr.display_name }}
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in attr.filter_values %}
+                                <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
+                                    <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
+                                           name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
+                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           onchange="submitFilterForm()"
+                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                    >
+                                    {% if attr.filter_type == 'color' and attr_value.color_code %}
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% else %}
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% endif %}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <input type="hidden" name="page" id="pageInput1" value="1">
+                        <input type="hidden" name="sort" id="sortInput1" value="{{ current_sort }}">
+                        {% if search_q %}
+                        <input type="hidden" name="q" value="{{ search_q }}">
+                        {% endif %}
+                    </form>
+                </aside>
+            </div>
+
+            <!-- Variant 2: Glassmorphism -->
+            <div class="col-12 mt-5">
+                <h3>Variant 2: Glassmorphism</h3>
+                <aside class="filters filters--design1-glass sticky-filter" id="filterSidebar2">
+                    <header class="filters-header">
+                        <h3>Filters</h3>
+                        <button type="button" class="btn-close-filters" id="closeFilters2" aria-label="Close filters">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+
+                    <form id="filterForm2" method="GET" action="{% url 'products' %}">
+                        {% if categories %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-folder-tree"></i> Category
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <button type="button" class="filter-link {% if not current_cat %}active{% endif %}"
+                                        data-category="" onclick="setFilterValue2('category', '')">
+                                    All Categories
+                                </button>
+
+                                {% for cat in categories %}
+                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}" onclick="setFilterValue2('category', '{{ cat.slug }}')">
+                                    {{ cat.name }}
+                                </button>
+
+                                {% for child in cat.children.all %}
+                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}" onclick="setFilterValue2('category', '{{ child.slug }}')">
+                                    &nbsp;&nbsp;{{ child.name }}
+                                </button>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if brands %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-tag"></i> Brand
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for brand in brands %}
+                                <label class="filter-check">
+                                    <input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"
+                                           {% if brand.name in current_brands %}checked{% endif %}
+                                           onchange="submitFilterForm2()">
+                                    <span>{{ brand.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if price_range.min_price is not None and price_range.max_price is not None %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-dollar-sign"></i> Price
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <div class="price-range-wrap">
+                                    <input type="range" id="priceRange2" name="price_max"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           oninput="updatePriceDisplay2(this.value); submitFilterFormDebounced2()">
+                                    <input type="hidden" name="price_min" id="priceMinInput2" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <div class="price-values">
+                                        <span id="priceMinLabel2">${{ price_range.min_price|default:0 }}</span>
+                                        <span id="priceValue2">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if filter_attributes %}
+                        {% for attr in filter_attributes %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {{ attr.display_name }}
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in attr.filter_values %}
+                                <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
+                                    <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
+                                           name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
+                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           onchange="submitFilterForm2()"
+                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                    >
+                                    {% if attr.filter_type == 'color' and attr_value.color_code %}
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% else %}
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% endif %}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <input type="hidden" name="page" id="pageInput2" value="1">
+                        <input type="hidden" name="sort" id="sortInput2" value="{{ current_sort }}">
+                        {% if search_q %}
+                        <input type="hidden" name="q" value="{{ search_q }}">
+                        {% endif %}
+                    </form>
+                </aside>
+            </div>
+
+            <!-- Variant 3: Accent Sidebar -->
+            <div class="col-12 mt-5">
+                <h3>Variant 3: Accent Sidebar</h3>
+                <aside class="filters filters--design1-accent sticky-filter" id="filterSidebar3">
+                    <header class="filters-header">
+                        <h3>Filters</h3>
+                        <button type="button" class="btn-close-filters" id="closeFilters3" aria-label="Close filters">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+
+                    <form id="filterForm3" method="GET" action="{% url 'products' %}">
+                        {% if categories %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-folder-tree"></i> Category
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <button type="button" class="filter-link {% if not current_cat %}active{% endif %}"
+                                        data-category="" onclick="setFilterValue3('category', '')">
+                                    All Categories
+                                </button>
+
+                                {% for cat in categories %}
+                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}" onclick="setFilterValue3('category', '{{ cat.slug }}')">
+                                    {{ cat.name }}
+                                </button>
+
+                                {% for child in cat.children.all %}
+                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}" onclick="setFilterValue3('category', '{{ child.slug }}')">
+                                    &nbsp;&nbsp;{{ child.name }}
+                                </button>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if brands %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-tag"></i> Brand
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for brand in brands %}
+                                <label class="filter-check">
+                                    <input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"
+                                           {% if brand.name in current_brands %}checked{% endif %}
+                                           onchange="submitFilterForm3()">
+                                    <span>{{ brand.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if price_range.min_price is not None and price_range.max_price is not None %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-dollar-sign"></i> Price
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <div class="price-range-wrap">
+                                    <input type="range" id="priceRange3" name="price_max"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           oninput="updatePriceDisplay3(this.value); submitFilterFormDebounced3()">
+                                    <input type="hidden" name="price_min" id="priceMinInput3" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <div class="price-values">
+                                        <span id="priceMinLabel3">${{ price_range.min_price|default:0 }}</span>
+                                        <span id="priceValue3">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if filter_attributes %}
+                        {% for attr in filter_attributes %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {{ attr.display_name }}
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in attr.filter_values %}
+                                <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
+                                    <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
+                                           name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
+                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           onchange="submitFilterForm3()"
+                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                    >
+                                    {% if attr.filter_type == 'color' and attr_value.color_code %}
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% else %}
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% endif %}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <input type="hidden" name="page" id="pageInput3" value="1">
+                        <input type="hidden" name="sort" id="sortInput3" value="{{ current_sort }}">
+                        {% if search_q %}
+                        <input type="hidden" name="q" value="{{ search_q }}">
+                        {% endif %}
+                    </form>
+                </aside>
+            </div>
+
+            <!-- Variant 4: Minimal Line -->
+            <div class="col-12 mt-5">
+                <h3>Variant 4: Minimal Line</h3>
+                <aside class="filters filters--design1-minimal sticky-filter" id="filterSidebar4">
+                    <header class="filters-header">
+                        <h3>Filters</h3>
+                        <button type="button" class="btn-close-filters" id="closeFilters4" aria-label="Close filters">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+
+                    <form id="filterForm4" method="GET" action="{% url 'products' %}">
+                        {% if categories %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-folder-tree"></i> Category
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <button type="button" class="filter-link {% if not current_cat %}active{% endif %}"
+                                        data-category="" onclick="setFilterValue4('category', '')">
+                                    All Categories
+                                </button>
+
+                                {% for cat in categories %}
+                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}" onclick="setFilterValue4('category', '{{ cat.slug }}')">
+                                    {{ cat.name }}
+                                </button>
+
+                                {% for child in cat.children.all %}
+                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}" onclick="setFilterValue4('category', '{{ child.slug }}')">
+                                    &nbsp;&nbsp;{{ child.name }}
+                                </button>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if brands %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-tag"></i> Brand
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for brand in brands %}
+                                <label class="filter-check">
+                                    <input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"
+                                           {% if brand.name in current_brands %}checked{% endif %}
+                                           onchange="submitFilterForm4()">
+                                    <span>{{ brand.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if price_range.min_price is not None and price_range.max_price is not None %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-dollar-sign"></i> Price
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <div class="price-range-wrap">
+                                    <input type="range" id="priceRange4" name="price_max"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           oninput="updatePriceDisplay4(this.value); submitFilterFormDebounced4()">
+                                    <input type="hidden" name="price_min" id="priceMinInput4" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <div class="price-values">
+                                        <span id="priceMinLabel4">${{ price_range.min_price|default:0 }}</span>
+                                        <span id="priceValue4">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if filter_attributes %}
+                        {% for attr in filter_attributes %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {{ attr.display_name }}
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for attr_value in attr.filter_values %}
+                                <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
+                                    <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
+                                           name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
+                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           onchange="submitFilterForm4()"
+                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                    >
+                                    {% if attr.filter_type == 'color' and attr_value.color_code %}
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% else %}
+                                    <span>{{ attr_value.display_value|default:attr_value.value }}</span>
+                                    {% endif %}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+
+                        <input type="hidden" name="page" id="pageInput4" value="1">
+                        <input type="hidden" name="sort" id="sortInput4" value="{{ current_sort }}">
+                        {% if search_q %}
+                        <input type="hidden" name="q" value="{{ search_q }}">
+                        {% endif %}
+                    </form>
+                </aside>
+            </div>
+
+            <!-- Variant 5: Shadow Only -->
+            <div class="col-12 mt-5">
+                <h3>Variant 5: Shadow Only</h3>
+                <aside class="filters filters--design1-shadow sticky-filter" id="filterSidebar5">
+                    <header class="filters-header">
+                        <h3>Filters</h3>
+                        <button type="button" class="btn-close-filters" id="closeFilters5" aria-label="Close filters">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </header>
+
+                    <form id="filterForm5" method="GET" action="{% url 'products' %}">
+                        {% if categories %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-folder-tree"></i> Category
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <button type="button" class="filter-link {% if not current_cat %}active{% endif %}"
+                                        data-category="" onclick="setFilterValue5('category', '')">
+                                    All Categories
+                                </button>
+
+                                {% for cat in categories %}
+                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}" onclick="setFilterValue5('category', '{{ cat.slug }}')">
+                                    {{ cat.name }}
+                                </button>
+
+                                {% for child in cat.children.all %}
+                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}" onclick="setFilterValue5('category', '{{ child.slug }}')">
+                                    &nbsp;&nbsp;{{ child.name }}
+                                </button>
+                                {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if brands %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-tag"></i> Brand
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                {% for brand in brands %}
+                                <label class="filter-check">
+                                    <input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"
+                                           {% if brand.name in current_brands %}checked{% endif %}
+                                           onchange="submitFilterForm5()">
+                                    <span>{{ brand.name }}</span>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if price_range.min_price is not None and price_range.max_price is not None %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    <i class="fa-solid fa-dollar-sign"></i> Price
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </button>
+
+                            <div class="filter-content">
+                                <div class="price-range-wrap">
+                                    <input type="range" id="priceRange5" name="price_max"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           oninput="updatePriceDisplay5(this.value); submitFilterFormDebounced5()">
+                                    <input type="hidden" name="price_min" id="priceMinInput5" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <div class="price-values">
+                                        <span id="priceMinLabel5">${{ price_range.min_price|default:0 }}</span>
+                                        <span id="priceValue5">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if filter_attributes %}
+                        {% for attr in filter_attributes %}
+                        <div class="filter-group open">
+                            <button type="button" class="filter-toggle" data-toggle>
+                                <span class="filter-group-title">
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {{ attr.display_name }}
+                                </span

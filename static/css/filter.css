@@ -1,0 +1,714 @@
+/* =============================================
+   FILTER SIDEBAR - Home Store Slider Theme Match
+   ============================================= */
+
+.filters {
+    --fl-bg: #ffffff;
+    --fl-border: rgba(39, 160, 107, 0.22);
+    --fl-text: #1b2b22;
+    --fl-text-muted: #6b8d75;
+    --fl-primary: #27a06b;
+    --fl-primary-hover: #1e8a57;
+    --fl-primary-light: #e8f7ef;
+    --fl-primary-gradient: linear-gradient(90deg, #27a06b, #157347);
+    --fl-radius: 16px;
+    --fl-shadow: 0 6px 20px -8px rgba(13, 62, 41, 0.15);
+    --fl-shadow-hover: 0 10px 28px -8px rgba(21, 115, 71, 0.22);
+    --fl-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --fl-font: 14px;
+    --fl-gap: 16px;
+    --fl-padding: 20px;
+
+    width: 280px;
+    min-width: 280px;
+    background: var(--fl-bg);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-padding);
+    box-shadow: var(--fl-shadow);
+    height: fit-content;
+}
+
+/* Gradient background like product-slider-wrapper */
+.filters::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(900px 320px at 85% -20%, rgba(39, 160, 107, 0.08), transparent 60%),
+        radial-gradient(700px 280px at 8% 115%, rgba(21, 115, 71, 0.05), transparent 55%),
+        transparent;
+    border-radius: var(--fl-radius);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Sticky filter behavior */
+.sticky-filter {
+    position: sticky;
+    top: 120px;
+    align-self: flex-start;
+}
+
+/* RTL/LTR Support */
+.filters { direction: ltr; }
+
+/* =============================================
+   FILTER GROUP COMMON
+   ============================================= */
+.filters .filter-group {
+    margin-top: var(--fl-gap);
+}
+
+.filters .filter-group:first-child {
+    margin-top: 0;
+}
+
+.filters .filter-group-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--fl-border);
+    margin-bottom: 0;
+}
+
+.filters .filter-group-title i {
+    color: var(--fl-primary);
+    font-size: 14px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fl-primary-light);
+    border-radius: 8px;
+    transition: var(--fl-transition);
+}
+
+.filters .filter-group-title:hover i {
+    background: var(--fl-primary);
+    color: white;
+}
+
+.filters .filter-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--fl-text);
+    padding: 12px 16px;
+    width: 100%;
+    text-align: left;
+    background: var(--fl-bg);
+    border: 1px solid var(--fl-border);
+    border-radius: 10px;
+    transition: var(--fl-transition);
+}
+
+.filters .filter-toggle:hover {
+    background: var(--fl-primary-light);
+    border-color: var(--fl-primary);
+}
+
+.filters .filter-toggle:hover i {
+    color: var(--fl-primary);
+}
+
+.filters .filter-group.open .filter-toggle {
+    background: var(--fl-primary-light);
+    border-color: var(--fl-primary);
+}
+
+.filters .filter-group.open .filter-toggle i {
+    transform: rotate(180deg);
+    color: var(--fl-primary);
+}
+
+.filters .filter-toggle-icon {
+    transition: transform 0.25s ease, color 0.2s ease;
+    color: var(--fl-primary);
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--fl-primary-light);
+    border-radius: 6px;
+    transition: var(--fl-transition);
+    flex-shrink: 0;
+}
+
+.filters .filter-toggle:hover .filter-toggle-icon,
+.filters .filter-group.open .filter-toggle-icon {
+    background: var(--fl-primary);
+    color: white;
+    transform: rotate(180deg);
+}
+
+/* =============================================
+   FILTER CONTENT (Collapsible Body)
+   ============================================= */
+.filters .filter-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.2s ease;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 20px 20px 20px;
+}
+
+.filters .filter-group.open .filter-content {
+    max-height: 800px;
+    opacity: 1;
+}
+
+/* Filter items */
+.filters .filter-link {
+    display: block;
+    width: 100%;
+    text-align: right;
+    padding: 12px 0;
+    border: none;
+    background: transparent;
+    color: var(--fl-text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--fl-transition);
+    font-family: inherit;
+    position: relative;
+}
+
+.filters .filter-link:hover {
+    color: var(--fl-primary);
+    background: transparent;
+}
+
+.filters .filter-link.active {
+    color: var(--fl-primary);
+    font-weight: 600;
+}
+
+/* Brand checkboxes */
+.filters .filter-check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 12px 0;
+    border-radius: 10px;
+    transition: var(--fl-transition);
+}
+
+.filters .filter-check:hover {
+    background: var(--fl-primary-light);
+}
+
+.filters .filter-check input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--fl-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.filters .filter-check span {
+    font-size: 14px;
+    color: var(--fl-text);
+    font-weight: 500;
+}
+
+/* Price range */
+.filters .price-range-wrap {
+    padding: 16px 0;
+    border-top: 1px solid rgba(39, 160, 107, 0.18);
+}
+
+.filters .price-range-wrap input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(39, 160, 107, 0.2);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.filters .price-range-wrap input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--fl-primary-gradient);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(21, 115, 71, 0.4);
+    transition: var(--fl-transition);
+}
+
+.filters .price-range-wrap input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(21, 115, 71, 0.5);
+}
+
+.filters .price-range-wrap input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--fl-primary-gradient);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.filters .price-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 8px;
+    color: var(--fl-text-muted);
+    font-weight: 700;
+}
+
+/* Price range inputs */
+.filters .price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.filters .price-inputs input[type="number"] {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid rgba(39, 160, 107, 0.25);
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--fl-text);
+    background: var(--fl-bg);
+    outline: none;
+    transition: var(--fl-transition);
+}
+
+.filters .price-inputs input[type="number"]:focus {
+    border-color: var(--fl-primary);
+    box-shadow: 0 0 0 3px var(--fl-primary-light);
+}
+
+.filters .price-separator {
+    color: var(--fl-text-muted);
+    font-weight: 700;
+}
+
+/* Price range slider */
+.filters .price-range-wrap input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(39, 160, 107, 0.2);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+}
+
+.filters .price-range-wrap input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--fl-primary-gradient);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(21, 115, 71, 0.4);
+    transition: var(--fl-transition);
+}
+
+.filters .price-range-wrap input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 4px 12px rgba(21, 115, 71, 0.5);
+}
+
+.filters .price-range-wrap input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--fl-primary-gradient);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.filters .price-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 8px;
+    color: var(--fl-text-muted);
+    font-weight: 700;
+}
+
+/* Color filter special styling */
+.filters .filter-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.filters .filter-check-color {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 2px solid rgba(39, 160, 107, 0.22);
+    background: var(--fl-bg);
+    transition: var(--fl-transition);
+    position: relative;
+}
+
+.filters .filter-check-color::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--fl-primary-gradient);
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.filters .filter-check-color:hover {
+    border-color: var(--fl-primary);
+    background: transparent;
+}
+
+.filters .filter-check-color:hover::before {
+    opacity: 1;
+}
+
+.filters .filter-check-color input[type="checkbox"]:checked ~ .color-swatch {
+    border-color: var(--fl-primary);
+    box-shadow: 0 0 0 3px var(--fl-primary-light);
+}
+
+.filters .filter-check-color input[type="checkbox"]:checked ~ span {
+    color: white;
+}
+
+.filters .filter-check-color input[type="checkbox"]:checked ~ * {
+    color: inherit;
+}
+
+.filters .filter-check-color .color-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    border: 2px solid rgba(39, 160, 107, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: var(--fl-transition);
+}
+
+.filters .filter-check-color:hover .color-swatch {
+    transform: scale(1.08);
+}
+
+/* Radio buttons */
+.filters .filter-check input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--fl-primary);
+    cursor: pointer;
+}
+
+/* Price range inputs */
+.filters .price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.filters .price-inputs input[type="number"] {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid rgba(39, 160, 107, 0.25);
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--fl-text);
+    background: var(--fl-bg);
+    outline: none;
+    transition: var(--fl-transition);
+}
+
+.filters .price-inputs input[type="number"]:focus {
+    border-color: var(--fl-primary);
+    box-shadow: 0 0 0 3px var(--fl-primary-light);
+}
+
+.filters .price-separator {
+    color: var(--fl-text-muted);
+    font-weight: 700;
+}
+
+/* Radio buttons */
+.filters .filter-check input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--fl-primary);
+    cursor: pointer;
+}
+
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 992px) {
+    .filters {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .sticky-filter {
+        position: static;
+        top: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .filters {
+        --fl-padding: 16px;
+        --fl-gap: 12px;
+    }
+}
+
+/* =============================================
+   FILTERS HEADER
+   ============================================= */
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(39, 160, 107, 0.18);
+}
+
+.filters-header h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--fl-text);
+    margin: 0;
+}
+
+.filters-header .btn-close-filters {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--fl-text-muted);
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    transition: var(--fl-transition);
+}
+
+.filters-header .btn-close-filters:hover {
+    background: var(--fl-primary-light);
+    color: var(--fl-primary);
+}
+
+@media (max-width: 992px) {
+    .filters-header .btn-close-filters {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Mobile filter toggle */
+.mobile-filter-toggle {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: var(--fl-primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(21, 115, 71, 0.35);
+    transition: var(--fl-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-filter-toggle::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #1e8a57, #157347);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+}
+
+.mobile-filter-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(21, 115, 71, 0.45);
+}
+
+.mobile-filter-toggle:hover::before {
+    opacity: 1;
+}
+
+.mobile-filter-toggle:active {
+    transform: translateY(0);
+}
+
+.mobile-filter-toggle .filter-badge {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+@media (max-width: 992px) {
+    .mobile-filter-toggle {
+        display: inline-flex;
+    }
+}
+
+/* Filter overlay for mobile */
+.filter-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.filter-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 992px) {
+    .filters {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 320px;
+        max-width: 100%;
+        height: 100%;
+        border-radius: 0;
+        border-left: 1px solid rgba(39, 160, 107, 0.3);
+        box-shadow: -4px 0 24px rgba(13, 62, 41, 0.2);
+        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+    }
+
+    .filters.open {
+        transform: translateX(0);
+    }
+
+    .filter-overlay.show {
+        display: block;
+    }
+
+    .filters-header .btn-close-filters {
+        display: flex;
+    }
+}
+
+/* Clear all filters button */
+.clear-all-filters {
+    margin-left: auto;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--fl-primary);
+    background: var(--fl-primary-light);
+    border: 1px solid rgba(39, 160, 107, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: var(--fl-transition);
+}
+
+.clear-all-filters:hover {
+    background: var(--fl-primary);
+    color: white;
+    border-color: var(--fl-primary);
+}
+
+/* Active filters badge */
+.filter-badge {
+    background: var(--fl-primary-gradient);
+    color: white;
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(21, 115, 71, 0.3);
+}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes filterSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.filters {
+    animation: filterSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focus visible for accessibility */
+.filters .filter-link:focus-visible,
+.filters .filter-check:focus-visible,
+.filters .filter-toggle:focus-visible,
+.filters input[type="range"]:focus-visible,
+.filters input[type="number"]:focus-visible {
+    outline: 2px solid #27a06b;
+    outline-offset: 2px;
+}
+
+/* Filter group title hover */
+.filters .filter-group-title:hover {
+    background: rgba(39, 160, 107, 0.04);
+}
+
+/* Active filter check */
+.filters .filter-check input[type="checkbox"]:checked + span,
+.filters .filter-check input[type="radio"]:checked + span {
+    color: var(--fl-primary);
+    font-weight: 600;
+}

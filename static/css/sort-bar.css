@@ -1,0 +1,288 @@
+/* =============================================
+   SORT BAR - Premium Home Store Experience
+   ============================================= */
+
+.sort-bar {
+    --sb-bg: #ffffff;
+    --sb-border: rgba(39, 160, 107, 0.18);
+    --sb-text: #1b2b22;
+    --sb-text-muted: #6b8d75;
+    --sb-primary: #27a06b;
+    --sb-primary-hover: #1e8a57;
+    --sb-primary-light: #e8f7ef;
+    --sb-primary-gradient: linear-gradient(135deg, #27a06b 0%, #1e8a57 100%);
+    --sb-radius: 16px;
+    --sb-shadow: 0 4px 20px -6px rgba(13, 62, 41, 0.12), 0 2px 6px -2px rgba(13, 62, 41, 0.06);
+    --sb-shadow-hover: 0 12px 32px -8px rgba(21, 115, 71, 0.25);
+    --sb-transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    --sb-transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --sb-font: 13px;
+    --sb-gap: 10px;
+    --sb-padding: 16px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: var(--sb-gap);
+    flex-wrap: wrap;
+    background: var(--sb-bg);
+    border: 1px solid var(--sb-border);
+    border-radius: var(--sb-radius);
+    padding: var(--sb-padding);
+    box-shadow: var(--sb-shadow);
+    margin-bottom: 24px;
+    direction: ltr;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Premium background with depth */
+.sort-bar::before {
+    content: "";
+    position: absolute;
+    inset: -50% -20% -50% -20%;
+    background:
+        radial-gradient(ellipse 60% 80% at 90% -10%, rgba(39, 160, 107, 0.15), transparent 60%),
+        radial-gradient(ellipse 50% 60% at 10% 110%, rgba(21, 115, 71, 0.1), transparent 55%),
+        transparent;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    animation: backgroundShift 8s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundShift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(2%, -2%) scale(1.02); }
+}
+
+/* Subtle top highlight */
+.sort-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(39, 160, 107, 0.3), transparent);
+    pointer-events: none;
+}
+
+.sort-bar .sort-label {
+    font-size: var(--sb-font);
+    font-weight: 700;
+    color: var(--sb-text);
+    white-space: nowrap;
+    flex-shrink: 0;
+    z-index: 1;
+    letter-spacing: -0.01em;
+}
+
+.sort-bar .sort-options {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.9);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-radius: calc(var(--sb-radius) - 4px);
+    padding: 6px;
+    flex: 1;
+    min-width: 0;
+    z-index: 1;
+    border: 1px solid rgba(39, 160, 107, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.sort-bar .sort-btn {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--sb-text);
+    font-size: var(--sb-font);
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: calc(var(--sb-radius) - 6px);
+    cursor: pointer;
+    transition: var(--sb-transition);
+    white-space: nowrap;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.sort-bar .sort-btn::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    background: var(--sb-primary-gradient);
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: calc(var(--sb-radius) - 8px);
+    z-index: -1;
+    transform: scale(0.95);
+}
+
+.sort-bar .sort-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 60%;
+    height: 3px;
+    background: var(--sb-primary-gradient);
+    border-radius: 3px 3px 0 0;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+    opacity: 0;
+    z-index: 2;
+}
+
+.sort-bar .sort-btn:hover {
+    color: white;
+}
+
+.sort-bar .sort-btn:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.sort-bar .sort-btn:hover::after {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+}
+
+.sort-bar .sort-btn.active {
+    color: white;
+}
+
+.sort-bar .sort-btn.active::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.sort-bar .sort-btn.active::after {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+}
+
+.sort-bar .sort-btn i {
+    font-size: 14px;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+}
+
+.sort-bar .sort-btn:hover i,
+.sort-bar .sort-btn.active i {
+    transform: scale(1.15) rotate(-5deg);
+}
+
+.sort-bar .sort-btn:focus-visible {
+    outline: none;
+}
+
+.sort-bar .sort-btn:focus-visible::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 2px solid var(--sb-primary);
+    border-radius: calc(var(--sb-radius) - 4px);
+    animation: focusRing 1.5s ease-out infinite;
+}
+
+@keyframes focusRing {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.02); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+.sort-bar .product-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--sb-text-muted);
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: 1px solid rgba(39, 160, 107, 0.18);
+    white-space: nowrap;
+    flex-shrink: 0;
+    z-index: 1;
+    box-shadow: 0 2px 8px rgba(13, 62, 41, 0.08);
+    transition: var(--sb-transition-fast);
+}
+
+.sort-bar .product-count:hover {
+    border-color: rgba(39, 160, 107, 0.35);
+    color: var(--sb-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(39, 160, 107, 0.15);
+}
+
+/* Entrance animation with stagger */
+.sort-bar {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.98);
+    animation: sortBarEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.sort-bar .sort-label { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both; }
+.sort-bar .sort-options { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both; }
+.sort-bar .sort-btn:nth-child(1) { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both; }
+.sort-bar .sort-btn:nth-child(2) { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both; }
+.sort-bar .sort-btn:nth-child(3) { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both; }
+.sort-bar .sort-btn:nth-child(4) { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.35s both; }
+.sort-bar .sort-btn:nth-child(5) { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both; }
+.sort-bar .product-count { animation: fadeSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s both; }
+
+@keyframes sortBarEntrance {
+    0% { opacity: 0; transform: translateY(-20px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeSlideIn {
+    0% { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sort-bar { --sb-gap: 8px; --sb-padding: 14px 16px; }
+    .sort-bar .sort-label { display: none; }
+    .sort-bar .sort-btn { padding: 10px 16px; font-size: 12px; }
+    .sort-bar .product-count { padding: 8px 14px; font-size: 11px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .sort-bar,
+    .sort-bar * {
+        animation: none !important;
+        transition: none !important;
+    }
+    .sort-bar::before { animation: none; }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .sort-bar {
+        border-width: 2px;
+    }
+    .sort-bar .sort-btn.active {
+        border: 2px solid var(--sb-primary);
+    }
+}
+
+/* Print styles */
+@media print {
+    .sort-bar { display: none; }
+}

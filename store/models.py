@@ -21,9 +21,13 @@ class Category(models.Model):
     level = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     show_in_home = models.BooleanField(default=False)
+    # Filter display settings
+    filter_display_order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش در فیلتر")
+    show_in_filter = models.BooleanField(default=True, verbose_name="نمایش در فیلتر دسته‌بندی")
+    filter_icon = models.CharField(max_length=50, blank=True, help_text="آیکون FontAwesome مثل fa-mobile-alt")
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["filter_display_order", "name"]
 
     def save(self, *args, **kwargs):
         if self.parent:
@@ -47,7 +51,6 @@ class Category(models.Model):
 
     @property
     def sub_categories(self):
-
         return self.children.count()
 
     def __str__(self):
@@ -271,6 +274,9 @@ class ProductSpecification(models.Model):
     display_order = models.PositiveIntegerField(
         default=0
     )
+    # Filter settings
+    is_filterable = models.BooleanField(default=False, verbose_name="قابل فیلتر کردن")
+    filter_display_name = models.CharField(max_length=100, blank=True, verbose_name="نام نمایش در فیلتر")
 
     class Meta:
         ordering = [
@@ -283,6 +289,66 @@ class ProductSpecification(models.Model):
     @property
     def full_specification(self):
         return f"{self.title}: {self.value}"
+
+
+class ProductAttribute(models.Model):
+    """ویژگی‌های قابل فیلتر برای محصولات (رنگ، حافظه، حافظه رم، سایز صفحه نمایش و...)"""
+    name = models.CharField(max_length=100, unique=True, verbose_name="نام ویژگی")
+    slug = models.SlugField(unique=True, verbose_name="اسلاگ")
+    display_name = models.CharField(max_length=100, verbose_name="نام نمایشی")
+    icon = models.CharField(max_length=50, blank=True, help_text="آیکون FontAwesome")
+    display_order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+    is_active = models.BooleanField(default=True, verbose_name="فعال")
+    # Filter display type
+    FILTER_TYPES = (
+        ('checkbox', 'چک‌باکس (چندانتخابی)'),
+        ('radio', 'رادیو (تنها یک انتخاب)'),
+        ('range', 'محدوده (برای مقادیر عددی)'),
+        ('color', 'انتخاب رنگ'),
+    )
+    filter_type = models.CharField(max_length=20, choices=FILTER_TYPES, default='checkbox', verbose_name="نوع فیلتر")
+
+    class Meta:
+        ordering = ["display_order", "name"]
+        verbose_name = "ویژگی محصول"
+        verbose_name_plural = "ویژگی‌های محصول"
+
+    def __str__(self):
+        return self.display_name
+
+
+class ProductAttributeValue(models.Model):
+    """مقادیر ممکن برای هر ویژگی"""
+    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE, related_name="values")
+    value = models.CharField(max_length=100, verbose_name="مقدار")
+    display_value = models.CharField(max_length=100, blank=True, verbose_name="مقدار نمایشی")
+    color_code = models.CharField(max_length=7, blank=True, help_text="کد رنگ برای نوع color مثل #FF0000")
+    display_order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["display_order", "value"]
+        unique_together = ["attribute", "value"]
+        verbose_name = "مقدار ویژگی"
+        verbose_name_plural = "مقادیر ویژگی‌ها"
+
+    def __str__(self):
+        return f"{self.attribute.display_name}: {self.value}"
+
+
+class ProductAttributeAssignment(models.Model):
+    """انتساب مقادیر ویژگی به محصول"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="attribute_assignments")
+    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
+    value = models.ForeignKey(ProductAttributeValue, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ["product", "attribute", "value"]
+        verbose_name = "انتساب ویژگی به محصول"
+        verbose_name_plural = "انتساب‌های ویژگی‌ها"
+
+    def __str__(self):
+        return f"{self.product.name} - {self.attribute.display_name}: {self.value.value}"
 
 
 class VoteProduct(models.Model):

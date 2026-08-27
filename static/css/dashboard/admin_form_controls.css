@@ -1,0 +1,144 @@
+/*==================================================
+   GLOBAL ADMIN DASHBOARD FORM CONTROLS
+   TB_SAS Online Store Admin Dashboard
+   Shared styling applied to every admin page via
+   base_dashboard_admin.html (custom_css block).
+
+   Harmonizes raw Django form fields (inputs, textareas,
+   selects, and especially the ugly file input) with the
+   dashboard's green (#198754) accent so every page feels
+   the same. Because Django does not add Bootstrap's
+   "form-control" class, we style the bare controls.
+====================================================*/
+
+/* --- Generic controls inside form bodies ----------------- */
+
+input, textarea, select {
+    background-color: #fff;
+    color: #212529;
+    border: 1px solid #ced4da;
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 15px;
+    line-height: 1.5;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 .25rem rgba(25, 135, 84, .15);
+    outline: none;
+}
+
+/* custom arrow for selects (replaces the native one) */
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+}
+
+/* --- File input: green select button, tidy field --- */
+
+input[type="file"] {
+    padding: 8px 10px;
+}
+
+input[type="file"]::file-selector-button {
+    background: #eaf8ef;
+    color: #198754;
+    border: 1px solid #198754;
+    border-radius: 10px;
+    padding: 8px 16px;
+    margin-right: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #198754;
+    color: #fff;
+}
+
+/* --- Green checkboxes / switches --- */
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    accent-color: #198754;
+}
+
+/* little helper text that Django renders for fields */
+small, .form-text, .helptext {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/*==================================================
+   UNIFIED SAVE / CANCEL BUTTONS
+   Applied live from the base template's global CSS
+   so every admin form's primary action looks identical
+   to the About Us page. Loaded last, so these rules
+   win over each page's own button classes.
+====================================================*/
+
+/* --- Save / Add / Update buttons ------------------ */
+
+.category-save-btn,
+.banner-save-btn,
+.product-save-btn,
+.setting-site-save-btn {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: #198754;
+    border: 1px solid #198754;
+    transition: background-color .2s;
+}
+
+.category-save-btn:hover,
+.banner-save-btn:hover,
+.product-save-btn:hover,
+.setting-site-save-btn:hover {
+    color: #fff;
+    background: #157347;
+    border-color: #157347;
+}
+
+/* --- Cancel / Reset buttons ----------------------- */
+
+.cancel-btn,
+.banner-cancel-btn,
+.product-footer .btn-outline-danger,
+.banner-form-footer .btn-outline-danger,
+.category-form-footer .btn-outline-danger {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #dc3545;
+    background: #fff;
+    border: 1px solid #dc3545;
+    transition: background-color .2s, color .2s;
+}
+
+.cancel-btn:hover,
+.banner-cancel-btn:hover,
+.product-footer .btn-outline-danger:hover,
+.banner-form-footer .btn-outline-danger:hover,
+.category-form-footer .btn-outline-danger:hover {
+    color: #fff;
+    background: #dc3545;
+    border-color: #dc3545;
+}
