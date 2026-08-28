@@ -15,7 +15,8 @@ Filter Variants Test
 <section class="filter-test-page">
     <div class="container">
         <h2 class="mb-4">Filter Variants Test (Real Data)</h2>
-        <p class="mb-4">Below are five different styling options for the filter sidebar. Review each and decide which you prefer for the products page.</p>
+        <p class="mb-4">Below are five different styling options for the filter sidebar. Review each and decide which
+            you prefer for the products page.</p>
 
         <div class="row g-4">
             <!-- Variant 1: Elevated Cards (current) -->
@@ -47,14 +48,18 @@ Filter Variants Test
                                 </button>
 
                                 {% for cat in categories %}
-                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
-                                        data-category="{{ cat.slug }}" onclick="setFilterValue('category', '{{ cat.slug }}')">
+                                <button type="button"
+                                        class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}"
+                                        onclick="setFilterValue('category', '{{ cat.slug }}')">
                                     {{ cat.name }}
                                 </button>
 
                                 {% for child in cat.children.all %}
-                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
-                                        data-category="{{ child.slug }}" onclick="setFilterValue('category', '{{ child.slug }}')">
+                                <button type="button"
+                                        class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}"
+                                        onclick="setFilterValue('category', '{{ child.slug }}')">
                                     &nbsp;&nbsp;{{ child.name }}
                                 </button>
                                 {% endfor %}
@@ -76,8 +81,7 @@ Filter Variants Test
                                 {% for brand in brands %}
                                 <label class="filter-check">
                                     <input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"
-                                           {% if brand.name in current_brands %}checked{% endif %}
-                                           onchange="submitFilterForm()">
+                                           {% if brand.name in current_brands %}checked{% endif %}>
                                     <span>{{ brand.name }}</span>
                                 </label>
                                 {% endfor %}
@@ -101,7 +105,8 @@ Filter Variants Test
                                            max="{{ price_range.max_price|default:9999 }}"
                                            value="{{ price_max|default:price_range.max_price|default:9999 }}"
                                            oninput="updatePriceDisplay1(this.value); submitFilterFormDebounced1()">
-                                    <input type="hidden" name="price_min" id="priceMinInput1" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <input type="hidden" name="price_min" id="priceMinInput1"
+                                           value="{{ price_min|default:price_range.min_price|default:0 }}">
                                     <div class="price-values">
                                         <span id="priceMinLabel1">${{ price_range.min_price|default:0 }}</span>
                                         <span id="priceValue1">${{ price_max|default:price_range.max_price|default:9999 }}</span>
@@ -116,7 +121,8 @@ Filter Variants Test
                         <div class="filter-group open">
                             <button type="button" class="filter-toggle" data-toggle>
                                 <span class="filter-group-title">
-                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i
+                                        class="fa-solid fa-sliders-h"></i>{% endif %}
                                     {{ attr.display_name }}
                                 </span>
                                 <i class="fa-solid fa-chevron-down"></i>
@@ -127,12 +133,15 @@ Filter Variants Test
                                 <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
                                     <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
                                            name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
-                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           {% if attr.slug in attr_filters and attr_value.value in
+                                           attr_filters|dict_get:attr.slug %}checked{% endif %}
                                            onchange="submitFilterForm()"
-                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                           {% if attr.filter_type== 'radio' %}data-radio-group="attr_{{ attr.slug }}"{%
+                                    endif %}
                                     >
                                     {% if attr.filter_type == 'color' and attr_value.color_code %}
-                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};"
+                                          title="{{ attr_value.display_value|default:attr_value.value }}"></span>
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
                                     {% else %}
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
@@ -181,14 +190,18 @@ Filter Variants Test
                                 </button>
 
                                 {% for cat in categories %}
-                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
-                                        data-category="{{ cat.slug }}" onclick="setFilterValue2('category', '{{ cat.slug }}')">
+                                <button type="button"
+                                        class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}"
+                                        onclick="setFilterValue2('category', '{{ cat.slug }}')">
                                     {{ cat.name }}
                                 </button>
 
                                 {% for child in cat.children.all %}
-                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
-                                        data-category="{{ child.slug }}" onclick="setFilterValue2('category', '{{ child.slug }}')">
+                                <button type="button"
+                                        class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}"
+                                        onclick="setFilterValue2('category', '{{ child.slug }}')">
                                     &nbsp;&nbsp;{{ child.name }}
                                 </button>
                                 {% endfor %}
@@ -235,7 +248,8 @@ Filter Variants Test
                                            max="{{ price_range.max_price|default:9999 }}"
                                            value="{{ price_max|default:price_range.max_price|default:9999 }}"
                                            oninput="updatePriceDisplay2(this.value); submitFilterFormDebounced2()">
-                                    <input type="hidden" name="price_min" id="priceMinInput2" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <input type="hidden" name="price_min" id="priceMinInput2"
+                                           value="{{ price_min|default:price_range.min_price|default:0 }}">
                                     <div class="price-values">
                                         <span id="priceMinLabel2">${{ price_range.min_price|default:0 }}</span>
                                         <span id="priceValue2">${{ price_max|default:price_range.max_price|default:9999 }}</span>
@@ -250,7 +264,8 @@ Filter Variants Test
                         <div class="filter-group open">
                             <button type="button" class="filter-toggle" data-toggle>
                                 <span class="filter-group-title">
-                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i
+                                        class="fa-solid fa-sliders-h"></i>{% endif %}
                                     {{ attr.display_name }}
                                 </span>
                                 <i class="fa-solid fa-chevron-down"></i>
@@ -261,12 +276,15 @@ Filter Variants Test
                                 <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
                                     <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
                                            name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
-                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           {% if attr.slug in attr_filters and attr_value.value in
+                                           attr_filters|dict_get:attr.slug %}checked{% endif %}
                                            onchange="submitFilterForm2()"
-                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                           {% if attr.filter_type== 'radio' %}data-radio-group="attr_{{ attr.slug }}"{%
+                                    endif %}
                                     >
                                     {% if attr.filter_type == 'color' and attr_value.color_code %}
-                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};"
+                                          title="{{ attr_value.display_value|default:attr_value.value }}"></span>
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
                                     {% else %}
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
@@ -315,14 +333,18 @@ Filter Variants Test
                                 </button>
 
                                 {% for cat in categories %}
-                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
-                                        data-category="{{ cat.slug }}" onclick="setFilterValue3('category', '{{ cat.slug }}')">
+                                <button type="button"
+                                        class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}"
+                                        onclick="setFilterValue3('category', '{{ cat.slug }}')">
                                     {{ cat.name }}
                                 </button>
 
                                 {% for child in cat.children.all %}
-                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
-                                        data-category="{{ child.slug }}" onclick="setFilterValue3('category', '{{ child.slug }}')">
+                                <button type="button"
+                                        class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}"
+                                        onclick="setFilterValue3('category', '{{ child.slug }}')">
                                     &nbsp;&nbsp;{{ child.name }}
                                 </button>
                                 {% endfor %}
@@ -369,7 +391,8 @@ Filter Variants Test
                                            max="{{ price_range.max_price|default:9999 }}"
                                            value="{{ price_max|default:price_range.max_price|default:9999 }}"
                                            oninput="updatePriceDisplay3(this.value); submitFilterFormDebounced3()">
-                                    <input type="hidden" name="price_min" id="priceMinInput3" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <input type="hidden" name="price_min" id="priceMinInput3"
+                                           value="{{ price_min|default:price_range.min_price|default:0 }}">
                                     <div class="price-values">
                                         <span id="priceMinLabel3">${{ price_range.min_price|default:0 }}</span>
                                         <span id="priceValue3">${{ price_max|default:price_range.max_price|default:9999 }}</span>
@@ -384,7 +407,8 @@ Filter Variants Test
                         <div class="filter-group open">
                             <button type="button" class="filter-toggle" data-toggle>
                                 <span class="filter-group-title">
-                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i
+                                        class="fa-solid fa-sliders-h"></i>{% endif %}
                                     {{ attr.display_name }}
                                 </span>
                                 <i class="fa-solid fa-chevron-down"></i>
@@ -395,12 +419,15 @@ Filter Variants Test
                                 <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
                                     <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
                                            name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
-                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           {% if attr.slug in attr_filters and attr_value.value in
+                                           attr_filters|dict_get:attr.slug %}checked{% endif %}
                                            onchange="submitFilterForm3()"
-                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                           {% if attr.filter_type== 'radio' %}data-radio-group="attr_{{ attr.slug }}"{%
+                                    endif %}
                                     >
                                     {% if attr.filter_type == 'color' and attr_value.color_code %}
-                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};"
+                                          title="{{ attr_value.display_value|default:attr_value.value }}"></span>
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
                                     {% else %}
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
@@ -449,14 +476,18 @@ Filter Variants Test
                                 </button>
 
                                 {% for cat in categories %}
-                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
-                                        data-category="{{ cat.slug }}" onclick="setFilterValue4('category', '{{ cat.slug }}')">
+                                <button type="button"
+                                        class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}"
+                                        onclick="setFilterValue4('category', '{{ cat.slug }}')">
                                     {{ cat.name }}
                                 </button>
 
                                 {% for child in cat.children.all %}
-                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
-                                        data-category="{{ child.slug }}" onclick="setFilterValue4('category', '{{ child.slug }}')">
+                                <button type="button"
+                                        class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}"
+                                        onclick="setFilterValue4('category', '{{ child.slug }}')">
                                     &nbsp;&nbsp;{{ child.name }}
                                 </button>
                                 {% endfor %}
@@ -503,7 +534,8 @@ Filter Variants Test
                                            max="{{ price_range.max_price|default:9999 }}"
                                            value="{{ price_max|default:price_range.max_price|default:9999 }}"
                                            oninput="updatePriceDisplay4(this.value); submitFilterFormDebounced4()">
-                                    <input type="hidden" name="price_min" id="priceMinInput4" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <input type="hidden" name="price_min" id="priceMinInput4"
+                                           value="{{ price_min|default:price_range.min_price|default:0 }}">
                                     <div class="price-values">
                                         <span id="priceMinLabel4">${{ price_range.min_price|default:0 }}</span>
                                         <span id="priceValue4">${{ price_max|default:price_range.max_price|default:9999 }}</span>
@@ -518,7 +550,8 @@ Filter Variants Test
                         <div class="filter-group open">
                             <button type="button" class="filter-toggle" data-toggle>
                                 <span class="filter-group-title">
-                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i
+                                        class="fa-solid fa-sliders-h"></i>{% endif %}
                                     {{ attr.display_name }}
                                 </span>
                                 <i class="fa-solid fa-chevron-down"></i>
@@ -529,12 +562,15 @@ Filter Variants Test
                                 <label class="filter-check {% if attr.filter_type == 'color' %}filter-check-color{% endif %}">
                                     <input type="{% if attr.filter_type == 'radio' %}radio{% else %}checkbox{% endif %}"
                                            name="attr_{{ attr.slug }}" value="{{ attr_value.value }}"
-                                           {% if attr.slug in attr_filters and attr_value.value in attr_filters|dict_get:attr.slug %}checked{% endif %}
+                                           {% if attr.slug in attr_filters and attr_value.value in
+                                           attr_filters|dict_get:attr.slug %}checked{% endif %}
                                            onchange="submitFilterForm4()"
-                                           {% if attr.filter_type == 'radio' %}data-radio-group="attr_{{ attr.slug }}"{% endif %}
+                                           {% if attr.filter_type== 'radio' %}data-radio-group="attr_{{ attr.slug }}"{%
+                                    endif %}
                                     >
                                     {% if attr.filter_type == 'color' and attr_value.color_code %}
-                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};" title="{{ attr_value.display_value|default:attr_value.value }}"></span>
+                                    <span class="color-swatch" style="background-color: {{ attr_value.color_code }};"
+                                          title="{{ attr_value.display_value|default:attr_value.value }}"></span>
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
                                     {% else %}
                                     <span>{{ attr_value.display_value|default:attr_value.value }}</span>
@@ -583,14 +619,18 @@ Filter Variants Test
                                 </button>
 
                                 {% for cat in categories %}
-                                <button type="button" class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
-                                        data-category="{{ cat.slug }}" onclick="setFilterValue5('category', '{{ cat.slug }}')">
+                                <button type="button"
+                                        class="filter-link {% if current_cat == cat.slug %}active{% endif %}"
+                                        data-category="{{ cat.slug }}"
+                                        onclick="setFilterValue5('category', '{{ cat.slug }}')">
                                     {{ cat.name }}
                                 </button>
 
                                 {% for child in cat.children.all %}
-                                <button type="button" class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
-                                        data-category="{{ child.slug }}" onclick="setFilterValue5('category', '{{ child.slug }}')">
+                                <button type="button"
+                                        class="filter-link sub {% if current_cat == child.slug %}active{% endif %}"
+                                        data-category="{{ child.slug }}"
+                                        onclick="setFilterValue5('category', '{{ child.slug }}')">
                                     &nbsp;&nbsp;{{ child.name }}
                                 </button>
                                 {% endfor %}
@@ -637,7 +677,8 @@ Filter Variants Test
                                            max="{{ price_range.max_price|default:9999 }}"
                                            value="{{ price_max|default:price_range.max_price|default:9999 }}"
                                            oninput="updatePriceDisplay5(this.value); submitFilterFormDebounced5()">
-                                    <input type="hidden" name="price_min" id="priceMinInput5" value="{{ price_min|default:price_range.min_price|default:0 }}">
+                                    <input type="hidden" name="price_min" id="priceMinInput5"
+                                           value="{{ price_min|default:price_range.min_price|default:0 }}">
                                     <div class="price-values">
                                         <span id="priceMinLabel5">${{ price_range.min_price|default:0 }}</span>
                                         <span id="priceValue5">${{ price_max|default:price_range.max_price|default:9999 }}</span>
@@ -652,6 +693,7 @@ Filter Variants Test
                         <div class="filter-group open">
                             <button type="button" class="filter-toggle" data-toggle>
                                 <span class="filter-group-title">
-                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i class="fa-solid fa-sliders-h"></i>{% endif %}
+                                    {% if attr.icon %}<i class="{{ attr.icon }}"></i>{% else %}<i
+                                        class="fa-solid fa-sliders-h"></i>{% endif %}
                                     {{ attr.display_name }}
                                 </span
