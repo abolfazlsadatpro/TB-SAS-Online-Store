@@ -2,63 +2,63 @@
 
 {# SORT BAR - Project Theme Match #}
 <div class="sort-bar" role="group" aria-label="Sort products" dir="ltr">
-  <span class="sort-label">Sort by:</span>
+    <span class="sort-label">Sort by:</span>
 
-  <div class="sort-options">
-    <button type="button"
-            class="sort-btn {% if current_sort == 'popular' %}active{% endif %}"
-            data-sort="popular"
-            role="radio"
-            aria-checked="{% if current_sort == 'popular' %}true{% else %}false{% endif %}"
-            onclick="setSortAndSubmit('popular')"
-            title="Sort by popularity (most viewed)">
-      <i class="fa-solid fa-fire"></i> Most Popular
-    </button>
+    <div class="sort-options">
+        <button type="button"
+                class="sort-btn {% if current_sort == 'popular' %}active{% endif %}"
+                data-sort="popular"
+                role="radio"
+                aria-checked="{% if current_sort == 'popular' %}true{% else %}false{% endif %}"
+                onclick="setSortAndSubmit('popular')"
+                title="Sort by popularity (most viewed)">
+            <i class="fa-solid fa-fire"></i> Most Popular
+        </button>
 
-    <button type="button"
-            class="sort-btn {% if not current_sort or current_sort == 'newest' %}active{% endif %}"
-            data-sort="newest"
-            role="radio"
-            aria-checked="{% if not current_sort or current_sort == 'newest' %}true{% else %}false{% endif %}"
-            onclick="setSortAndSubmit('newest')"
-            title="Sort by newest arrivals">
-      <i class="fa-solid fa-sparkles"></i> Newest
-    </button>
+        <button type="button"
+                class="sort-btn {% if not current_sort or current_sort == 'newest' %}active{% endif %}"
+                data-sort="newest"
+                role="radio"
+                aria-checked="{% if not current_sort or current_sort == 'newest' %}true{% else %}false{% endif %}"
+                onclick="setSortAndSubmit('newest')"
+                title="Sort by newest arrivals">
+            <i class="fa-solid fa-sparkles"></i> Newest
+        </button>
 
-    <button type="button"
-            class="sort-btn {% if current_sort == 'cheapest' %}active{% endif %}"
-            data-sort="cheapest"
-            role="radio"
-            aria-checked="{% if current_sort == 'cheapest' %}true{% else %}false{% endif %}"
-            onclick="setSortAndSubmit('cheapest')"
-            title="Sort by price: low to high">
-      <i class="fa-solid fa-arrow-down-long"></i> Cheapest
-    </button>
+        <button type="button"
+                class="sort-btn {% if current_sort == 'cheapest' %}active{% endif %}"
+                data-sort="cheapest"
+                role="radio"
+                aria-checked="{% if current_sort == 'cheapest' %}true{% else %}false{% endif %}"
+                onclick="setSortAndSubmit('cheapest')"
+                title="Sort by price: low to high">
+            <i class="fa-solid fa-arrow-down-long"></i> Cheapest
+        </button>
 
-    <button type="button"
-            class="sort-btn {% if current_sort == 'expensive' %}active{% endif %}"
-            data-sort="expensive"
-            role="radio"
-            aria-checked="{% if current_sort == 'expensive' %}true{% else %}false{% endif %}"
-            onclick="setSortAndSubmit('expensive')"
-            title="Sort by price: high to low">
-      <i class="fa-solid fa-arrow-up-long"></i> Most Expensive
-    </button>
+        <button type="button"
+                class="sort-btn {% if current_sort == 'expensive' %}active{% endif %}"
+                data-sort="expensive"
+                role="radio"
+                aria-checked="{% if current_sort == 'expensive' %}true{% else %}false{% endif %}"
+                onclick="setSortAndSubmit('expensive')"
+                title="Sort by price: high to low">
+            <i class="fa-solid fa-arrow-up-long"></i> Most Expensive
+        </button>
 
-    <button type="button"
-            class="sort-btn {% if current_sort == 'best_selling' %}active{% endif %}"
-            data-sort="best_selling"
-            role="radio"
-            aria-checked="{% if current_sort == 'best_selling' %}true{% else %}false{% endif %}"
-            onclick="setSortAndSubmit('best_selling')"
-            title="Sort by best selling (most purchased)">
-      <i class="fa-solid fa-chart-line"></i> Best Selling
-    </button>
-  </div>
+        <button type="button"
+                class="sort-btn {% if current_sort == 'best_selling' %}active{% endif %}"
+                data-sort="best_selling"
+                role="radio"
+                aria-checked="{% if current_sort == 'best_selling' %}true{% else %}false{% endif %}"
+                onclick="setSortAndSubmit('best_selling')"
+                title="Sort by best selling (most purchased)">
+            <i class="fa-solid fa-chart-line"></i> Best Selling
+        </button>
+    </div>
 
-  <div class="product-count">
-    <span id="productsTotalCount">{{ total_count }}</span> Products
-  </div>
+    <div class="product-count">
+        <span id="productsTotalCount">{{ total_count }}</span> Products
+    </div>
 </div>
 
 {% if products %}
@@ -66,7 +66,7 @@
 <div class="products-grid">
 
     {% for product in products %}
-        {% include "main/includes/product_card.html" %}
+    {% include "main/includes/product_card.html" %}
     {% endfor %}
 
 </div>
@@ -92,48 +92,35 @@
 
     {% if page_obj.has_previous %}
     <button
-        type="button"
-        class="page-btn prev"
-        data-page="{{ page_obj.previous_page_number }}"
-        onclick="goToPage({{ page_obj.previous_page_number }})"
-    >&laquo; Prev</button>
+            type="button"
+            class="page-btn prev"
+            data-page="{{ page_obj.previous_page_number }}"
+            onclick="goToPage({{ page_obj.previous_page_number }})"
+    >&laquo; Prev
+    </button>
     {% endif %}
 
     {% for num in page_obj.paginator.page_range %}
 
-        {% if page_obj.number == num %}
-        <button type="button" class="page-btn active" data-page="{{ num }}">{{ num }}</button>
+    {% if page_obj.number == num %}
+    <button type="button" class="page-btn active" data-page="{{ num }}">{{ num }}</button>
 
-        {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-        <button type="button" class="page-btn" data-page="{{ num }}" onclick="goToPage({{ num }})">{{ num }}</button>
+    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+    <button type="button" class="page-btn" data-page="{{ num }}" onclick="goToPage({{ num }})">{{ num }}</button>
 
-        {% endif %}
+    {% endif %}
 
     {% endfor %}
 
     {% if page_obj.has_next %}
     <button
-        type="button"
-        class="page-btn next"
-        data-page="{{ page_obj.next_page_number }}"
-        onclick="goToPage({{ page_obj.next_page_number }})"
-    >Next &raquo;</button>
+            type="button"
+            class="page-btn next"
+            data-page="{{ page_obj.next_page_number }}"
+            onclick="goToPage({{ page_obj.next_page_number }})"
+    >Next &raquo;
+    </button>
     {% endif %}
 
 </nav>
 {% endif %}
-
-<script>
-    // Sort handling
-    function setSortAndSubmit(sortValue) {
-        document.getElementById('sortInput').value = sortValue;
-        document.getElementById('pageInput').value = '1';
-        document.getElementById('filterForm').submit();
-    }
-
-    // Pagination handling
-    function goToPage(pageNum) {
-        document.getElementById('pageInput').value = pageNum;
-        document.getElementById('filterForm').submit();
-    }
-</script>

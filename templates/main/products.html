@@ -206,7 +206,7 @@ Products
                                            min="{{ price_range.min_price|default:0 }}"
                                            max="{{ price_range.max_price|default:9999 }}" placeholder="Min">
                                     <span class="price-separator">–</span>
-                                    <input type="number" id="priceMaxInput"
+                                    <input type="number" id="priceMaxInput" name="price_max"
                                            value="{{ price_max|default:price_range.max_price|default:9999 }}"
                                            min="{{ price_range.min_price|default:0 }}"
                                            max="{{ price_range.max_price|default:9999 }}" placeholder="Max">
@@ -247,6 +247,7 @@ Products
                                         name="attr_color"
                                         value="{{ attr_value.value }}"
                                         {% if 'color' in attr_filters and attr_value.value in attr_filters|dict_get:'color' %}checked{% endif %}
+                                >
                                 <span class="color-swatch" style="background-color: {{ attr_value.color_code }};"
                                       title="{{ attr_value.display_value|default:attr_value.value }}"></span>
                                 <span>{{ attr_value.display_value|default:attr_value.value }}</span>
@@ -337,7 +338,7 @@ Products
                                         type="radio"
                                         name="attr_condition"
                                         value="{{ attr_value.value }}"
-                                        {% if 'storage' in attr_filters and attr_value.value in attr_filters|dict_get:'storage' %}checked{% endif %} >
+                                        {% if 'condition' in attr_filters and attr_value.value in attr_filters|dict_get:'condition' %}checked{% endif %} >
                                 <span>{{ attr_value.display_value|default:attr_value.value }}</span>
                             </label>
                             {% endfor %}

@@ -1,4 +1,3 @@
-javascript
 // ============================================================
 // PRODUCTS PAGE - AJAX FILTER / SORT / PAGINATION
 // ============================================================
@@ -2215,87 +2214,7 @@ document.addEventListener(
 
 
 // ------------------------------------------------------------
-// Global exports
-// Required because products_ajax.html currently uses
-// onclick="setSortAndSubmit(...)" and onclick="goToPage(...)"
+// Global exports for inline onclick handlers in products_ajax.html
 // ------------------------------------------------------------
 
-window.productsJS = {
-
-    toggleFilter,
-
-    clearAllFilters,
-
-    showMoreLessFilterGroup,
-
-    updateActiveFiltersCount,
-
-    setFilterValue,
-
-    submitFilterForm,
-
-    submitFilterFormDebounced,
-
-    updatePriceDisplay,
-
-    syncPriceRange,
-
-    updatePriceInputFromRange,
-
-    setSortAndSubmit,
-
-    goToPage,
-
-    loadProducts,
-
-    showQuickView,
-
-    hideQuickView
-};
-
-
-// Make inline onclick handlers globally available
-window.toggleFilter =
-    toggleFilter;
-
-window.clearAllFilters =
-    clearAllFilters;
-
-window.showMoreLessFilterGroup =
-    showMoreLessFilterGroup;
-
-window.updateActiveFiltersCount =
-    updateActiveFiltersCount;
-
-window.setFilterValue =
-    setFilterValue;
-
-window.submitFilterForm =
-    submitFilterForm;
-
-window.submitFilterFormDebounced =
-    submitFilterFormDebounced;
-
-window.updatePriceDisplay =
-    updatePriceDisplay;
-
-window.syncPriceRange =
-    syncPriceRange;
-
-window.updatePriceInputFromRange =
-    updatePriceInputFromRange;
-
-window.setSortAndSubmit =
-    setSortAndSubmit;
-
-window.goToPage =
-    goToPage;
-
-window.loadProducts =
-    loadProducts;
-
-window.showQuickView =
-    showQuickView;
-
-window.hideQuickView =
-    hideQuickView;
+window.toggleFilter = toggleFilter;
