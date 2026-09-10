@@ -1,0 +1,66 @@
+{% extends 'dashboard_user/base.html' %}
+{% load static %}
+{% load custom_filters_stor %}
+
+{% block dashboard_title %}My Orders{% endblock %}
+{% block dashboard_subtitle %}View and manage your order history{% endblock %}
+
+{% block dashboard_content %}
+<div class="dashboard-card">
+    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+        <h5 class="mb-0"><i class="fa-solid fa-box-archive"></i> Order History</h5>
+        <div class="d-flex gap-2">
+            <a href="{% url 'products' %}" class="btn btn-primary">
+                <i class="fa-solid fa-bag-shopping me-2"></i> Continue Shopping
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Order #</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td><strong>#{{ order.id }}</strong></td>
+                        <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+                        <td>{{ order.total_quantity }}</td>
+                        <td>
+                            <span class="badge {% if order.status == 0 %}bg-warning{% elif order.status == 1 %}bg-info{% elif order.status == 2 %}bg-primary{% elif order.status == 3 %}bg-success{% elif order.status == -1 %}bg-danger{% else %}bg-secondary{% endif %}">
+                                {{ order.status|show_status_order }}
+                            </span>
+                        </td>
+                        <td>${{ order.total_price }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'user_dashboard:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fa-solid fa-eye me-1"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fa-solid fa-box-open fa-3x text-muted mb-3"></i>
+            <h5>No Orders Yet</h5>
+            <p class="text-muted">You haven't placed any orders yet.</p>
+            <a href="{% url 'products' %}" class="btn btn-primary mt-2">
+                <i class="fa-solid fa-bag-shopping me-2"></i> Start Shopping
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

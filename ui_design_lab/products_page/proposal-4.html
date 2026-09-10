@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 4 — Original (No-Sidebar Marketplace)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ============================================================
+   PROPOSAL 4 — ORIGINAL / NO-SIDEBAR MARKETPLACE
+   Structure rethink: drop the left sidebar. Filters collapse
+   into a sticky horizontal filter bar. Dense, high-density
+   4-column cards with hover overlay actions. Centre column max ~1400px.
+   ============================================================ */
+body[data-proposal="4"] { background: #ffffff; }
+.p4 { --brand: #06c; --brand-2: #0066cc; --text: #111827; --mut: #6b7280; --line: #e5e7eb; --soft: #f3f4f6; }
+
+.p4-wide { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+.p4-crumb { font-size: 13px; color: var(--mut); padding: 16px 0 6px; display: flex; gap: 8px; }
+.p4-crumb a:hover { color: var(--brand-2); }
+.p4-crumb b { color: var(--text); }
+
+.p4-titlebar { display: flex; align-items: flex-end; justify-content: space-between; padding: 16px 0 18px; flex-wrap: wrap; gap: 12px; }
+.p4-title { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -.4px; }
+.p4-sub { color: var(--mut); font-size: 14px; margin-top: 2px; }
+
+/* Sticky filter bar */
+.p4-bar {
+    position: sticky; top: 72px; z-index: 40;
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px; margin-bottom: 20px;
+    box-shadow: 0 4px 16px -8px rgba(0,0,0,.06); flex-wrap: wrap;
+}
+.p4-bar .act-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.p4-chip {
+    background: var(--soft); border: 1px solid var(--line); color: var(--text);
+    font-size: 12.5px; font-weight: 600; padding: 5px 11px; border-radius: 99px; display: inline-flex; align-items: center; gap: 6px;
+}
+.p4-chip .rm { color: #9ca3af; cursor: pointer; }
+
+.p4-dd {
+    position: relative;
+}
+.p4-dd > button {
+    display: flex; align-items: center; gap: 8px; background: var(--soft); border: 1px solid var(--line);
+    padding: 8px 14px; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer;
+}
+.p4-dd > button:hover { border-color: #c7cbd1; }
+.p4-dd .menu {
+    position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: 0 12px 34px -12px rgba(0,0,0,.2); padding: 10px; min-width: 200px;
+    display: none; z-index: 41;
+}
+.p4-dd.open .menu { display: block; }
+.p4-dd .menu label { display: flex; align-items: center; gap: 9px; padding: 7px 10px; font-size: 13.5px; color: var(--text); border-radius: 8px; cursor: pointer; }
+.p4-dd .menu label:hover { background: var(--soft); }
+.p4-dd .menu input { accent-color: var(--brand); }
+.p4-sorts { margin-left: auto; display: flex; gap: 6px; }
+.p4-sorts button {
+    background: transparent; border: none; padding: 7px 12px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: var(--mut); cursor: pointer;
+}
+.p4-sorts button.active { background: var(--brand); color: #fff; }
+.p4-sorts button:hover:not(.active) { background: var(--soft); }
+
+/* Grid + cards */
+.p4-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.p4-card {
+    position: relative; border-radius: 14px; border: 1px solid var(--line); background: #fff;
+    overflow: hidden; display: flex; flex-direction: column; transition: box-shadow .18s, transform .18s;
+}
+.p4-card:hover { box-shadow: 0 12px 30px -14px rgba(0,0,0,.18); transform: translateY(-2px); }
+.p4-media { position: relative; aspect-ratio: 1 / 1; background: #fafafa; overflow: hidden; }
+.p4-media img { width: 100%; height: 100%; object-fit: cover; }
+.p4-flag { position: absolute; top: 10px; left: 10px; background: #dc2626; color: #fff; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+.p4-flag.new { background: var(--brand); }
+.p4-hotbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; justify-content: space-between; padding: 10px;
+    opacity: 0; transition: opacity .18s;
+}
+.p4-card:hover .p4-hotbar { opacity: 1; }
+.p4-hotbar button {
+    width: 34px; height: 34px; border-radius: 50%; background: #fff; border: 1px solid var(--line);
+    color: #9ca3af; cursor: pointer; font-size: 15px; display: grid; place-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.p4-hotbar button.active { color: #dc2626; }
+.p4-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.p4-brand { font-size: 12px; font-weight: 600; color: var(--mut); }
+.p4-name { font-size: 14px; font-weight: 700; margin: 0; color: var(--text); line-height: 1.35; }
+.p4-rate { display: flex; align-items: center; gap: 5px; color: #f59e0b; font-size: 12.5px; }
+.p4-rate .c { color: #9ca3af; }
+.p4-price { display: flex; align-items: baseline; gap: 7px; }
+.p4-price .old { color: #9ca3af; text-decoration: line-through; font-size: 12.5px; }
+.p4-price .now { font-size: 17px; font-weight: 800; color: var(--text); }
+.p4-row { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.p4-stock { font-size: 12px; color: #16a34a; font-weight: 600; }
+.p4-stock.no { color: #dc2626; }
+.p4-stock + .p4-colors { display: flex; gap: 4px; }
+.p4-colors span { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 1px #e5e7eb; }
+.p4-cart { margin-top: 10px; width: 100%; background: var(--brand); color: #fff; border: none; border-radius: 9px; padding: 9px; font-weight: 700; font-size: 13px; cursor: pointer; }
+.p4-cart:hover { background: var(--brand-2); }
+.p4-cart:disabled { background: #d1d5db; cursor: not-allowed; }
+
+/* Pagination */
+.p4-pages { display: flex; justify-content: center; gap: 6px; margin-top: 28px; }
+.p4-pages button { min-width: 38px; height: 38px; border-radius: 9px; border: 1px solid var(--line); background: #fff; font-weight: 700; color: var(--text); cursor: pointer; }
+.p4-pages button.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+.p4-pages button:hover:not(.on) { background: var(--soft); }
+
+/* Drawer (mobile only) */
+.p4-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 58; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.p4-overlay.show { opacity: 1; pointer-events: auto; }
+.p4-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 320px; max-width: 90%; background: #fff; z-index: 59;
+    transform: translateX(100%); transition: transform .3s; overflow-y: auto; padding: 20px;
+}
+.p4-drawer.open { transform: translateX(0); }
+.p4-drawer h3 { display: flex; justify-content: space-between; align-items: center; font-size: 17px; font-weight: 800; margin: 0 0 16px; }
+.p4-drawer h3 button { border: none; background: none; font-size: 22px; color: var(--mut); cursor: pointer; }
+.p4-drawer .sec { border-top: 1px solid var(--line); padding: 14px 0; }
+.p4-drawer .sec h4 { margin: 0 0 10px; font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--mut); letter-spacing: .6px; }
+.p4-drawer .sec label { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 14px; cursor: pointer; }
+.p4-drawer .sec input { accent-color: var(--brand); }
+.p4-toggle { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 58; background: var(--brand); color: #fff; border: none; border-radius: 99px; padding: 13px 24px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 26px rgba(0,102,204,.35); }
+
+/* Modal */
+.p4-modal { position: fixed; inset: 0; background: rgba(17,24,39,.5); display: none; align-items: center; justify-content: center; z-index: 70; padding: 22px; }
+.p4-modal.show { display: flex; }
+.p4-modalbox { background: #fff; border-radius: 16px; width: 100%; max-width: 620px; overflow: hidden; }
+.p4-modalhead { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--line); font-weight: 700; }
+.p4-modalhead button { border: none; background: none; font-size: 20px; color: var(--mut); cursor: pointer; }
+.p4-modalbody { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 20px; }
+.p4-modalbody img { width: 100%; border-radius: 12px; }
+.p4-modalbody h4 { font-size: 18px; font-weight: 800; margin: 0 0 5px; }
+.p4-modalbody .pr { font-size: 20px; font-weight: 800; margin: 10px 0; }
+.p4-modalbody p { color: var(--mut); font-size: 14px; }
+
+/* Skeleton */
+.sk4 { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.sk4 .ph { aspect-ratio: 1; background: var(--soft); }
+.sk4 .ln { height: 13px; border-radius: 6px; background: var(--soft); margin: 11px 12px 0; }
+.sk4 .ln.w { width: 60%; margin-bottom: 12px; }
+@keyframes p4pulse { 50% { opacity: .5; } }
+.p4-pulse { animation: p4pulse 1.1s ease-in-out infinite; }
+
+@media (max-width: 1100px) { .p4-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 992px) {
+    .p4-bar .p4-dd { display: none; }
+    .p4-toggle { display: block; }
+    .p4-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+}
+@media (max-width: 680px) {
+    .p4-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .p4-name { font-size: 13px; }
+    .p4-modalbody { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body data-proposal="4">
+<main class="p4-wide">
+    <nav class="p4-crumb">TB SAS Online Store <span>/</span> Digital <span>/</span> <b>Mobile Phones</b></nav>
+
+    <div class="p4-titlebar">
+        <div>
+            <h1 class="p4-title">Mobile Phones</h1>
+            <div class="p4-sub"><span data-total-count>12</span> products</div>
+        </div>
+    </div>
+
+    <!-- Sticky horizontal filter + sort bar -->
+    <div class="p4-bar">
+        <div class="p4-dd" data-dropdown>
+            <button><i class="fa-solid fa-tag"></i> Brand <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+            <div class="menu">
+                <label><input type="checkbox" value="Apple" data-chip-filter> Apple</label>
+                <label><input type="checkbox" value="Samsung" data-chip-filter> Samsung</label>
+                <label><input type="checkbox" value="Xiaomi" data-chip-filter> Xiaomi</label>
+                <label><input type="checkbox" value="HP" data-chip-filter> HP</label>
+                <label><input type="checkbox" value="Sony" data-chip-filter> Sony</label>
+            </div>
+        </div>
+        <div class="p4-dd" data-dropdown>
+            <button><i class="fa-solid fa-mobile-screen"></i> Category <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+            <div class="menu">
+                <label><input type="checkbox" value="Phone" data-chip-filter> Phone</label>
+                <label><input type="checkbox" value="Laptop" data-chip-filter> Laptop</label>
+                <label><input type="checkbox" value="Audio" data-chip-filter> Audio</label>
+            </div>
+        </div>
+        <div class="p4-dd" data-dropdown>
+            <button><i class="fa-solid fa-dollar-sign"></i> Price <i class="fa-solid fa-chevron-down" style="font-size:10px"></i></button>
+            <div class="menu" style="min-width:220px;padding:14px;">
+                <input type="range" min="149" max="1399" value="1399" style="width:100%;accent-color:#06c;">
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:6px;"><span>$149</span><span>$1,399</span></div>
+            </div>
+        </div>
+
+        <div class="act-chips" data-active-chips>
+            <span data-chips-empty style="display:none;"></span>
+        </div>
+
+        <div class="p4-sorts">
+            <button data-sort class="active">Popular</button>
+            <button data-sort>Newest</button>
+            <button data-sort>Price ↑</button>
+        </div>
+    </div>
+
+    <div class="p4-grid" data-products-grid></div>
+
+    <div class="p4-pages">
+        <button><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="on">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <div style="margin:26px 0 40px;text-align:center;">
+        <button data-demo-loading style="border:1px solid #e5e7eb;background:#fff;color:#111827;font-weight:700;padding:9px 18px;border-radius:9px;cursor:pointer;">Demo loading skeleton</button>
+    </div>
+</main>
+
+<!-- Mobile drawer -->
+<div class="p4-overlay" data-overlay></div>
+<aside class="p4-drawer" data-filter-sidebar>
+    <h3>Filters <button data-drawer-close><i class="fa-solid fa-xmark"></i></button></h3>
+    <div class="sec"><h4>Brand</h4>
+        <label><input type="checkbox" value="Apple" data-chip-filter> Apple</label>
+        <label><input type="checkbox" value="Samsung" data-chip-filter> Samsung</label>
+        <label><input type="checkbox" value="Xiaomi" data-chip-filter> Xiaomi</label>
+        <label><input type="checkbox" value="HP" data-chip-filter> HP</label>
+        <label><input type="checkbox" value="Lenovo" data-chip-filter> Lenovo</label>
+        <label><input type="checkbox" value="Sony" data-chip-filter> Sony</label>
+    </div>
+    <div class="sec"><h4>Category</h4>
+        <label><input type="checkbox" value="Phone" data-chip-filter> Phone</label>
+        <label><input type="checkbox" value="Laptop" data-chip-filter> Laptop</label>
+        <label><input type="checkbox" value="Audio" data-chip-filter> Audio</label>
+    </div>
+    <div class="sec"><h4>Availability</h4>
+        <label><input type="checkbox" value="In Stock" data-chip-filter> In Stock</label>
+    </div>
+</aside>
+<button class="p4-toggle" data-drawer-open><i class="fa-solid fa-sliders"></i> Filters & Sort</button>
+
+<div class="p4-modal" data-quickview-modal>
+    <div class="p4-modalbox">
+        <div class="p4-modalhead"><span>Quick View</span><button data-quickview-close><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="p4-modalbody">
+            <img data-quickview-img src="">
+            <div>
+                <h4 data-quickview-title>Product name</h4>
+                <div class="pr">$1,399</div>
+                <p>Detailed specs, images and reviews are available on the full product page.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="shared/data.js"></script>
+<script src="shared/header.js"></script>
+<script src="shared/app.js"></script>
+<script>
+(function () {
+    var grid = document.querySelector('[data-products-grid]');
+    if (!grid || !window.PRODUCTS_DATA) return;
+    function stars(r) {
+        var b = window.starBreakdown(r), h = '';
+        for (var i=0;i<b.full;i++) h += '<i class="fa-solid fa-star"></i>';
+        if (b.half) h += '<i class="fa-solid fa-star-half-stroke"></i>';
+        for (var j=0;j<b.empty;j++) h += '<i class="fa-regular fa-star"></i>';
+        return h;
+    }
+    grid.innerHTML = window.PRODUCTS_DATA.map(function (p) {
+        var colors = p.colors.map(function (c) { return '<span style="background:'+c.code+'"></span>'; }).join('');
+        return '' +
+        '<article class="p4-card">' +
+          '<div class="p4-media">' +
+            (p.discount ? '<span class="p4-flag">-'+p.discount+'%</span>' : (p.is_new ? '<span class="p4-flag new">NEW</span>' : '')) +
+            '<div class="p4-hotbar">' +
+              '<button data-wishlist><i class="fa-regular fa-heart"></i></button>' +
+              '<button data-quickview="' + p.name + '" data-product-id="' + p.id + '"><i class="fa-regular fa-eye"></i></button>' +
+            '</div>' +
+            '<img src="' + window.productImageURI(p) + '" alt="' + p.name + '" loading="lazy">' +
+          '</div>' +
+          '<div class="p4-body">' +
+            '<span class="p4-brand">' + p.brand + '</span>' +
+            '<h3 class="p4-name">' + p.name + '</h3>' +
+            '<div class="p4-rate">' + stars(p.rating) + ' <span class="c">(' + p.rating_count + ')</span></div>' +
+            '<div class="p4-price">' +
+              (p.old_price ? '<span class="old">$' + p.old_price + '</span>' : '') +
+              '<span class="now">$' + p.price + '</span>' +
+            '</div>' +
+            '<div class="p4-row">' +
+              '<span class="p4-stock ' + (p.in_stock ? '' : 'no') + '">' + (p.in_stock ? '✓ In stock' : '✗ Out of stock') + '</span>' +
+              '<span class="p4-colors">' + colors + '</span>' +
+            '</div>' +
+            '<button class="p4-cart" ' + (p.in_stock ? '' : 'disabled') + '><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>' +
+          '</div>' +
+        '</article>';
+    }).join('');
+
+    // Dropdown toggling
+    document.querySelectorAll('[data-dropdown]').forEach(function (dd) {
+        var btn = dd.querySelector('button');
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var wasOpen = dd.classList.contains('open');
+            document.querySelectorAll('[data-dropdown]').forEach(function (o) { o.classList.remove('open'); });
+            if (!wasOpen) dd.classList.add('open');
+        });
+    });
+    document.addEventListener('click', function () {
+        document.querySelectorAll('[data-dropdown]').forEach(function (o) { o.classList.remove('open'); });
+    });
+})();
+</script>
+</body>
+</html>

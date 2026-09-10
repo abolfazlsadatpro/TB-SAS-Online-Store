@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 5 — Editorial (Curated Boutique)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wdth,wght@9..144,90,400;9..144,90,500;9..144,90,600&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ============================================================
+   PROPOSAL 5 — EDITORIAL / CURATED BOUTIQUE
+   Asymmetric gallery grid, image-first cards with glass caption
+   bars, serif display typography, warm paper background, slim
+   minimal left rail. Purposefully different visual rhythm.
+   ============================================================ */
+body[data-proposal="5"] { background: #faf7f0; font-family: "Inter", system-ui, sans-serif; }
+.p5 { --wine: #7c2d12; --aubergine: #4a2545; --paper: #faf7f0; --ink: #1f1a17; --mut: #8a7a6f; --line: #e7dfd2; }
+
+.p5-wrap { max-width: 1320px; margin: 0 auto; padding: 0 22px; }
+
+.p5-crumb { font-size: 12.5px; color: var(--mut); padding: 14px 0 18px; display: flex; gap: 8px; align-items: center; }
+.p5-crumb b { color: var(--ink); }
+
+.p5-mast {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding-bottom: 24px; margin-bottom: 26px; border-bottom: 1px solid var(--line); flex-wrap: wrap; gap: 14px;
+}
+.p5-mast h1 { font-family: "Fraunces", serif; font-size: 44px; font-weight: 500; margin: 0; letter-spacing: -.6px; }
+.p5-mast .d { color: var(--mut); font-size: 14px; margin-top: 5px; max-width: 520px; }
+
+.p5-shell { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+
+/* Left rail */
+.p5-rail { position: sticky; top: 88px; align-self: start; }
+.p5-rail .h { font-family: "Fraunces", serif; font-size: 20px; margin: 0 0 16px; }
+.p5-rail .h .cls { display: none; }
+.p5-link { display: block; font-size: 14px; color: var(--mut); padding: 8px 0; text-decoration: none; border-bottom: 1px solid transparent; }
+.p5-link.active { color: var(--ink); font-weight: 700; border-bottom-color: var(--wine); }
+.p5-link:hover { color: var(--ink); }
+.p5-sec { margin-top: 22px; }
+.p5-sec h5 { font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mut); margin: 0 0 12px; }
+.p5-opt { display: flex; align-items: center; gap: 9px; padding: 5px 0; font-size: 13.5px; color: var(--ink); cursor: pointer; }
+.p5-opt input { accent-color: var(--wine); }
+
+.p5-toolbar { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+.p5-toolbar .res { color: var(--mut); font-size: 13px; }
+.p5-sort { margin-left: auto; display: flex; gap: 4px; }
+.p5-sort button { background: none; border: none; padding: 7px 13px; border-radius: 99px; font-size: 13px; font-weight: 600; color: var(--mut); cursor: pointer; }
+.p5-sort button.active { background: var(--ink); color: #fff; }
+.p5-sort button:hover:not(.active) { background: #efe8dc; }
+
+.p5-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.p5-acts .chip { background: #fff; border: 1px solid var(--line); color: var(--ink); font-size: 12.5px; font-weight: 600; padding: 6px 13px; border-radius: 99px; display: inline-flex; align-items: center; gap: 7px; }
+.p5-acts .chip .rm { color: #b8ab9c; cursor: pointer; }
+
+/* Asymmetric grid */
+.p5-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 260px;
+    gap: 16px;
+}
+.p5-tile {
+    position: relative; border-radius: 16px; overflow: hidden; cursor: pointer;
+    box-shadow: 0 1px 2px rgba(31,26,23,.05);
+}
+.p5-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.p5-tile:hover img { transform: scale(1.05); }
+.p5-tile.featured { grid-column: span 2; grid-row: span 2; }
+.p5-tile.wide { grid-column: span 2; }
+
+/* Glass caption */
+.p5-cap {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 18px;
+    background: linear-gradient(180deg, transparent, rgba(20,14,10,.82) 70%);
+    color: #fff;
+}
+.p5-cap .cat { font-size: 10.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; opacity: .8; }
+.p5-cap .name { font-family: "Fraunces", serif; font-size: 21px; margin: 2px 0 6px; line-height: 1.2; }
+.p5-tile.featured .p5-cap .name { font-size: 28px; }
+.p5-cap .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.p5-cap .price { font-weight: 700; font-size: 15px; }
+.p5-cap .price .old { opacity: .6; text-decoration: line-through; font-weight: 500; font-size: 12.5px; margin-right: 6px; }
+.p5-cap .rate { color: #f6c453; font-size: 12px; }
+.p5-wish {
+    position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.9); border: none; color: #9a8676; cursor: pointer;
+    display: grid; place-items: center; font-size: 15px;
+}
+.p5-wish.active { color: #dc2626; }
+.p5-qv {
+    position: absolute; top: 12px; left: 12px; background: rgba(20,14,10,.6); color: #fff;
+    border: none; border-radius: 99px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+    opacity: 0; transition: opacity .2s;
+}
+.p5-tile:hover .p5-qv { opacity: 1; }
+
+/* Pagination */
+.p5-pages { display: flex; justify-content: center; gap: 20px; margin-top: 32px; align-items: center; }
+.p5-pages button { background: none; border: none; font-family: "Fraunces", serif; font-size: 16px; color: var(--mut); cursor: pointer; }
+.p5-pages button.on { color: var(--wine); font-weight: 600; }
+
+/* Overlay/toggle/modal */
+.p5-overlay { position: fixed; inset: 0; background: rgba(20,14,10,.4); z-index: 59; opacity: 0; pointer-events: none; transition: opacity .3s; }
+.p5-overlay.show { opacity: 1; pointer-events: auto; }
+.p5-toggle { display: none; position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; border: none; border-radius: 99px; padding: 13px 24px; font-weight: 600; cursor: pointer; box-shadow: 0 12px 30px rgba(0,0,0,.25); }
+.p5-modal { position: fixed; inset: 0; background: rgba(20,14,10,.55); display: none; align-items: center; justify-content: center; z-index: 70; padding: 22px; }
+.p5-modal.show { display: flex; }
+.p5-modalbox { background: var(--paper); border-radius: 20px; width: 100%; max-width: 620px; overflow: hidden; }
+.p5-modalhead { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; border-bottom: 1px solid var(--line); font-family: "Fraunces", serif; font-size: 20px; }
+.p5-modalhead button { border: none; background: none; font-size: 20px; color: var(--mut); cursor: pointer; }
+.p5-modalbody { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 22px; }
+.p5-modalbody img { width: 100%; border-radius: 14px; }
+.p5-modalbody h4 { font-family: "Fraunces", serif; font-size: 22px; margin: 0 0 5px; }
+.p5-modalbody .pr { font-weight: 700; font-size: 20px; margin: 10px 0; }
+.p5-modalbody p { color: var(--mut); font-size: 14px; }
+
+/* Skeleton */
+.sk5 { border-radius: 16px; background: #efe8dc; }
+.sk5.featured { grid-column: span 2; grid-row: span 2; }
+@keyframes p5pulse { 50% { opacity: .45; } }
+.p5-pulse { animation: p5pulse 1.2s ease-in-out infinite; }
+
+@media (max-width: 1100px) { .p5-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 992px) {
+    .p5-shell { grid-template-columns: 1fr; }
+    .p5-rail { position: static; }
+    .p5-rail { display: none; }
+    .p5-toggle { display: block; }
+    .p5-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
+}
+@media (max-width: 560px) {
+    .p5-mast h1 { font-size: 32px; }
+    .p5-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; gap: 10px; }
+    .p5-tile.featured, .p5-tile.wide { grid-column: span 2; }
+    .p5-modalbody { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body data-proposal="5">
+<main class="p5-wrap">
+    <nav class="p5-crumb">TB SAS Online Store <span>/</span> Digital <span>/</span> <b>Mobile Phones</b></nav>
+
+    <div class="p5-mast">
+        <div>
+            <h1>The Phone Collection</h1>
+            <div class="d"><span data-total-count>12</span> hand-selected devices — from flagship to everyday value.</div>
+        </div>
+    </div>
+
+    <div class="p5-shell">
+        <aside class="p5-rail" data-filter-sidebar>
+            <div class="h">Explore <button class="cls" data-drawer-close><i class="fa-solid fa-xmark"></i></button></div>
+            <a class="p5-link active" href="#">All Products</a>
+            <a class="p5-link" href="#">Phones</a>
+            <a class="p5-link" href="#">Laptops</a>
+            <a class="p5-link" href="#">Audio</a>
+
+            <div class="p5-sec">
+                <h5>Brand</h5>
+                <label class="p5-opt"><input type="checkbox" value="Apple" data-chip-filter> Apple</label>
+                <label class="p5-opt"><input type="checkbox" value="Samsung" data-chip-filter> Samsung</label>
+                <label class="p5-opt"><input type="checkbox" value="Xiaomi" data-chip-filter> Xiaomi</label>
+                <label class="p5-opt"><input type="checkbox" value="Sony" data-chip-filter> Sony</label>
+            </div>
+            <div class="p5-sec">
+                <h5>Price</h5>
+                <input type="range" min="149" max="1399" value="1399" style="width:100%;accent-color:#7c2d12;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:#8a7a6f;margin-top:6px;"><span>$149</span><span>$1,399</span></div>
+            </div>
+        </aside>
+
+        <div class="p5-overlay" data-overlay></div>
+
+        <section>
+            <div class="p5-toolbar">
+                <span class="res">12 products</span>
+                <div class="p5-sort">
+                    <button data-sort class="active">Popular</button>
+                    <button data-sort>Newest</button>
+                    <button data-sort>Price</button>
+                </div>
+            </div>
+
+            <div class="p5-acts" data-active-chips>
+                <span data-chips-empty style="font-size:13px;color:#b8ab9c;display:none;">No active filters</span>
+            </div>
+
+            <div class="p5-grid" data-products-grid></div>
+
+            <nav class="p5-pages">
+                <button>&larr; Prev</button>
+                <button class="on">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>Next &rarr;</button>
+            </nav>
+
+            <div style="margin:30px 0 44px;text-align:center;">
+                <button data-demo-loading style="background:#1f1a17;color:#fff;border:none;font-weight:600;padding:10px 20px;border-radius:99px;cursor:pointer;">Demo loading skeleton</button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<button class="p5-toggle" data-drawer-open><i class="fa-solid fa-sliders"></i> Explore & Filter</button>
+
+<div class="p5-modal" data-quickview-modal>
+    <div class="p5-modalbox">
+        <div class="p5-modalhead"><span>Quick View</span><button data-quickview-close><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="p5-modalbody">
+            <img data-quickview-img src="">
+            <div>
+                <h4 data-quickview-title>Product name</h4>
+                <div class="pr">$1,399</div>
+                <p>Discover full specifications, gallery and reviews on the product page.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="shared/data.js"></script>
+<script src="shared/header.js"></script>
+<script src="shared/app.js"></script>
+<script>
+(function () {
+    var grid = document.querySelector('[data-products-grid]');
+    if (!grid || !window.PRODUCTS_DATA) return;
+    function stars(r) {
+        var b = window.starBreakdown(r), h = '';
+        for (var i=0;i<b.full;i++) h += '<i class="fa-solid fa-star"></i>';
+        if (b.half) h += '<i class="fa-solid fa-star-half-stroke"></i>';
+        for (var j=0;j<b.empty;j++) h += '<i class="fa-regular fa-star"></i>';
+        return h;
+    }
+    grid.innerHTML = window.PRODUCTS_DATA.map(function (p, idx) {
+        // Asymmetric layout: first item featured, a couple wide
+        var cls = 'p5-tile';
+        if (idx === 0) cls += ' featured';
+        else if (idx === 3 || idx === 7) cls += ' wide';
+        return '' +
+        '<article class="' + cls + '" data-quickview="' + p.name + '" data-product-id="' + p.id + '">' +
+          '<img src="' + window.productImageURI(p) + '" alt="' + p.name + '" loading="lazy">' +
+          '<button class="p5-wish" data-wishlist><i class="fa-regular fa-heart"></i></button>' +
+          '<button class="p5-qv" data-quickview="' + p.name + '" data-product-id="' + p.id + '"><i class="fa-regular fa-eye"></i> Quick View</button>' +
+          '<div class="p5-cap">' +
+            '<div class="cat">' + p.category + '</div>' +
+            '<div class="name">' + p.name + '</div>' +
+            '<div class="row">' +
+              '<span class="price">' + (p.old_price ? '<span class="old">$' + p.old_price + '</span>' : '') + '$' + p.price + '</span>' +
+              '<span class="rate">' + stars(p.rating) + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</article>';
+    }).join('');
+})();
+</script>
+</body>
+</html>

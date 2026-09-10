@@ -25,7 +25,14 @@
 
                 <!-- LEFT -->
 
-                <div class="checkout-form">
+                <form
+    id="checkout-form"
+    method="POST"
+    action="{% url 'checkout' %}"
+    class="checkout-form"
+>
+                    {% csrf_token %}
+                    <input type="hidden" name="idempotency_key" value="{{ idempotency_key }}">
 
                     <!-- Customer Info -->
 
@@ -37,17 +44,17 @@
 
                             <div class="form-group">
                                 <label>Full Name</label>
-                                <input type="text">
+                                <input type="text" name="full_name">
                             </div>
 
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="email">
+                                <input type="email" name="email">
                             </div>
 
                             <div class="form-group">
                                 <label>Phone Number</label>
-                                <input type="text">
+                                <input type="text" name="phone">
                             </div>
 
                         </div>
@@ -85,22 +92,22 @@
 
                             <div class="form-group">
                                 <label>Country</label>
-                                <input type="text">
+                                <input type="text" name="country">
                             </div>
 
                             <div class="form-group">
                                 <label>City</label>
-                                <input type="text">
+                                <input type="text" name="city">
                             </div>
 
                             <div class="form-group full">
                                 <label>Address</label>
-                                <textarea rows="4"></textarea>
+                                <textarea name="address" rows="4"></textarea>
                             </div>
 
                             <div class="form-group">
                                 <label>Postal Code</label>
-                                <input type="text">
+                                <input type="text" name="postal_code">
                             </div>
 
                         </div>
@@ -115,18 +122,18 @@
                         <h3>Payment Method</h3>
 
                         <label class="payment-option">
-                            <input type="radio" name="payment" checked>
+                            <input type="radio" name="payment" value="cash_on_delivery" checked>
                             Cash on Delivery
                         </label>
 
                         <label class="payment-option">
-                            <input type="radio" name="payment">
+                            <input type="radio" name="payment" value="online_payment">
                             Online Payment
                         </label>
 
                     </div>
 
-                </div>
+                </form>
 
                 <!-- RIGHT -->
 
@@ -161,7 +168,11 @@
                         <span>$5,351</span>
                     </div>
 
-                    <button class="place-order-btn">
+                    <button
+                        type="submit"
+                        form="checkout-form"
+                        class="place-order-btn"
+                    >
                         Place Order
                     </button>
 

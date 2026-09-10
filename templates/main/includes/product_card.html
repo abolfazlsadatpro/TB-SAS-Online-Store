@@ -1,43 +1,31 @@
 {% load static %}
-
-<article class="product-card" data-product-id="{{ product.id }}">
+<article class="p1-card" data-product-id="{{ product.id }}">
 
     <!-- PRODUCT IMAGE -->
-    <div class="product-image-wrapper">
-
+    <div class="p1-card__img">
         {% if product.has_discount %}
-        <span class="product-discount-badge">
-                -{{ product.discount_percent }}%
-            </span>
+        <span class="p1-discount">-{{ product.discount_percent }}%</span>
         {% endif %}
-
+        {% if product.is_new %}
+        <span class="p1-discount" style="background:#16a34a;">New</span>
+        {% endif %}
         {% if product.main_image %}
         <img
                 src="{{ product.main_image.url }}"
                 alt="{{ product.name }}"
-                class="product-image"
+                class="p1-card-img"
                 loading="lazy"
         >
         {% else %}
-        <div class="product-image product-image--empty">
+        <div class="p1-card-img p1-card-img--empty">
             <i class="fa-regular fa-image"></i>
         </div>
         {% endif %}
-
-        <!-- QUICK VIEW -->
-        <button
-                type="button"
-                class="quick-view-btn"
-                data-product-id="{{ product.id }}"
-                aria-label="Quick view {{ product.name }}"
-        >
-            <i class="fa-regular fa-eye"></i>
-        </button>
-
         <!-- WISHLIST -->
         <button
                 type="button"
-                class="product-wishlist-btn {% if product.id in wishlist_ids %}is-active{% endif %}"
+                class="p1-wish product-wishlist-btn {% if product.id in wishlist_ids %}is-active{% endif %}"
+                data-wishlist
                 data-product-id="{{ product.id }}"
                 aria-label="Add {{ product.name }} to wishlist"
         >
@@ -47,133 +35,79 @@
             <i class="fa-regular fa-heart"></i>
             {% endif %}
         </button>
-
+        <!-- QUICK VIEW -->
+        <button
+                type="button"
+                class="p1-quickview quick-view-btn"
+                data-quickview="{{ product.name }}"
+                data-product-id="{{ product.id }}"
+                aria-label="Quick view {{ product.name }}"
+        >
+            <i class="fa-regular fa-eye"></i> Quick View
+        </button>
     </div>
 
-
     <!-- PRODUCT CONTENT -->
-    <div class="product-card-body">
+    <div class="p1-card__body">
 
         <!-- CATEGORY -->
         {% if product.category %}
-        <span class="product-category">
-                {{ product.category.name }}
-            </span>
+        <span class="p1-cat">{{ product.category.name }}</span>
         {% endif %}
 
-
         <!-- PRODUCT NAME -->
-        <h3 class="product-title">
-            <a href="{% url 'product_detail' product.id %}">
-                {{ product.name }}
-            </a>
-        </h3>
-
+        <h3 class="p1-name">{{ product.name }}</h3>
 
         <!-- RATING -->
-
-
-        <!-- PRICE -->
-        <div class="product-price">
-
-            {% if product.has_discount %}
-
-            <span class="product-old-price">
-                    {{ product.price }}
-                </span>
-
-            <span class="product-final-price">
-                    {{ product.discount_price }}
-                </span>
-
-            {% else %}
-
-            <span class="product-final-price">
-                    {{ product.price }}
-                </span>
-
+        <div class="p1-rating">
+            {% for i in product.star_full %}
+            <i class="fa-solid fa-star"></i>
+            {% endfor %}
+            {% if product.star_half %}
+            <i class="fa-solid fa-star-half-stroke"></i>
             {% endif %}
-
+            {% for i in product.star_empty %}
+            <i class="fa-regular fa-star"></i>
+            {% endfor %}
+            {% if product.rating_count %}
+            <span class="cnt">({{ product.rating_count }})</span>
+            {% endif %}
         </div>
 
+        <!-- PRICE -->
+        <div class="p1-price">
+            {% if product.has_discount %}
+            <span class="p1-old">{{ product.price }}</span>
+            <span class="p1-final">{{ product.discount_price }}</span>
+            {% else %}
+            <span class="p1-final">{{ product.price }}</span>
+            {% endif %}
+        </div>
 
         <!-- COLORS -->
         {% if product.colors.all %}
-
-        <div class="product-colors">
-
+        <div class="p1-colors">
             {% for color in product.colors.all|slice:":5" %}
-
             <span
-                    class="product-color-dot"
+                    class="p1-color"
                     style="background-color: {{ color.color_code }};"
+                    data-color="{{ color.color_code }}"
                     title="{{ color.name }}"
             ></span>
-
             {% endfor %}
-
             {% if product.colors.count > 5 %}
-            <span class="product-more-colors">
-                        +{{ product.colors.count|add:"-5" }}
-                    </span>
+            <span class="p1-color" style="background-color: #ccc;" title="More colors">+{{ product.colors.count|add:"-5" }}</span>
             {% endif %}
-
         </div>
-
         {% endif %}
 
-
         <!-- STOCK -->
-        <div class="product-stock">
-
+        <div class="p1-stock {% if not product.is_in_stock %}out{% endif %}">
             {% if product.is_in_stock %}
-            <span class="stock-in">
-                    <i class="fa-solid fa-circle-check"></i>
-                    In Stock
-                </span>
+            <i class="fa-solid fa-circle-check"></i> In Stock
             {% else %}
-            <span class="stock-out">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                    Out of Stock
-                </span>
+            <i class="fa-solid fa-circle-xmark"></i> Out of Stock
             {% endif %}
-
-        </div>
-
-
-        <!-- ACTIONS -->
-        <div class="product-actions">
-
-            <a
-                    href="{% url 'product_detail' product.id %}"
-                    class="product-view-btn"
-            >
-                <i class="fa-regular fa-eye"></i>
-                View Product
-            </a>
-
-            {% if product.is_in_stock %}
-
-            <button
-                    type="button"
-                    class="product-cart-btn"
-                    onclick="addToCart({{ product.id }})"
-            >
-                <i class="fa-solid fa-cart-shopping"></i>
-            </button>
-
-            {% else %}
-
-            <button
-                    type="button"
-                    class="product-cart-btn"
-                    disabled
-            >
-                <i class="fa-solid fa-cart-shopping"></i>
-            </button>
-
-            {% endif %}
-
         </div>
 
     </div>

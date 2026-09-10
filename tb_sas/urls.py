@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('store.urls')),
     path('admin_dashboard/', include('admin_dashboard.urls')),
     path('users/', include('users.urls')),
+    path('dashboard/', include('user_dashboard.urls')),
 ]
 
 urlpatterns += static(

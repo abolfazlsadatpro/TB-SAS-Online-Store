@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from store.models import (
     Category, Product, Customer, Order, OrderItem, Brand, AboutUsSection,
-    ProductSpecification, ProductAttribute, ProductAttributeValue, ProductAttributeAssignment
+    ProductSpecification, ProductAttribute, ProductAttributeValue, ProductAttributeAssignment,
+    Coupon
 )
 
 
@@ -46,7 +47,9 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_per_page = 20
-    list_display = ('order', 'product', 'quantity')
+    list_display = ('order', 'product', 'quantity', 'price', 'color')
+    list_filter = ('order__status',)
+    search_fields = ('product__name', 'order__id')
 
 
 @admin.register(Brand)
@@ -91,6 +94,37 @@ class ProductAttributeValueAdmin(admin.ModelAdmin):
     list_editable = ('display_order', 'is_active')
     list_filter = ('attribute', 'is_active')
     search_fields = ('value', 'display_value')
+
+
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_per_page = 20
+    list_display = (
+        "code", "is_active", "discount_percent", "discount_amount",
+        "valid_from", "valid_until", "min_subtotal", "max_discount",
+        "usage_limit", "usage_count", "created_at"
+    )
+    list_filter = ("is_active",)
+    search_fields = ("code",)
+    list_editable = ("is_active", "usage_limit", "usage_count")
+    readonly_fields = ("created_at", "updated_at", "usage_count")
+    fieldsets = (
+        ("Basic Information", {
+            "fields": ("code", "is_active")
+        }),
+        ("Discount Settings", {
+            "fields": ("discount_percent", "discount_amount", "min_subtotal", "max_discount")
+        }),
+        ("Validity Window", {
+            "fields": ("valid_from", "valid_until")
+        }),
+        ("Usage Limits", {
+            "fields": ("usage_limit", "usage_count")
+        }),
+        ("Metadata", {
+            "fields": ("created_at", "updated_at")
+        }),
+    )
 
 
 @admin.register(ProductAttributeAssignment)

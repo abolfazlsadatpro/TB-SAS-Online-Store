@@ -1,0 +1,218 @@
+/* ============================================================
+   SHARED BASE — Design Lab
+   Common reset, typography baseline, and the TB-SAS site header
+   (header is shared so every proposal shows the same navbar
+   relationship; the Products page body is what differs).
+   ============================================================ */
+
+:root {
+    /* Project brand tokens (reference, matching the live site) */
+    --brand: #27a06b;
+    --brand-dark: #1e8a57;
+    --brand-darker: #0f5d3a;
+    --brand-light: #e8f7ef;
+    --ink: #1b2b22;
+    --ink-muted: #6b8d75;
+    --line: rgba(39, 160, 107, 0.22);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    color: var(--ink);
+    background: #f4f7f5;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; }
+
+/* ============================================================
+   SITE HEADER (shared across all proposals)
+   ============================================================ */
+.lab-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.lab-header__top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 20px;
+}
+
+.lab-logo {
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    color: var(--brand-darker);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+.lab-logo .dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+}
+
+.lab-search {
+    flex: 1;
+    max-width: 460px;
+    display: flex;
+    align-items: center;
+    background: #f1f5f3;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 14px;
+    gap: 10px;
+}
+.lab-search i { color: var(--ink-muted); font-size: 14px; }
+.lab-search input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    color: var(--ink);
+}
+
+.lab-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    white-space: nowrap;
+}
+.lab-auth {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-muted);
+}
+.lab-auth .divider { color: var(--line); }
+.lab-cart {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    position: relative;
+}
+.lab-cart__badge {
+    background: var(--brand);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 1px 7px;
+}
+
+.lab-catbar {
+    border-top: 1px solid var(--line);
+    background: #fff;
+}
+.lab-catbar__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+.lab-mega-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--brand);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: default;
+    position: relative;
+}
+.lab-catnav {
+    display: flex;
+    gap: 4px;
+    margin-left: 12px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+.lab-catnav a {
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    border-radius: 8px;
+}
+.lab-catnav a:hover { background: var(--brand-light); color: var(--brand-darker); }
+.lab-catnav a.active { background: var(--brand-light); color: var(--brand-darker); }
+
+/* Lab switcher bar (top-right, always visible so you can jump between proposals) */
+.lab-switcher {
+    background: #0f5d3a;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.lab-switcher a {
+    color: #d9ffe9;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+.lab-switcher a:hover { background: rgba(255, 255, 255, 0.15); }
+.lab-switcher a.current { background: #fff; color: var(--brand-darker); }
+
+.lab-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ============================================================
+   SHARED HEADER — responsive
+   ============================================================ */
+@media (max-width: 640px) {
+    .lab-header__top { flex-wrap: wrap; gap: 10px; padding: 10px 14px; }
+    .lab-logo { font-size: 17px; }
+    .lab-search { order: 3; flex: 1 1 100%; max-width: none; }
+    .lab-header__actions { gap: 10px; }
+    .lab-auth { display: none; }
+    .lab-cart { font-size: 13px; }
+    .lab-catbar__inner { padding: 0 14px; }
+    .lab-mega-btn { font-size: 13px; padding: 11px 12px; }
+    .lab-catnav { margin-left: 6px; gap: 2px; }
+    .lab-catnav a { padding: 6px 9px; font-size: 12px; }
+}
+@media (max-width: 420px) {
+    .lab-cart .cart-text, .lab-cart span:not(.lab-cart__badge) { display: none; }
+    .lab-header__actions { gap: 6px; }
+}

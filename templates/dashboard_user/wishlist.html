@@ -1,0 +1,137 @@
+{% extends 'dashboard_user/base.html' %}
+{% load static %}
+
+{% block dashboard_title %}My Wishlist{% endblock %}
+{% block dashboard_subtitle %}Manage your saved products{% endblock %}
+
+{% block dashboard_content %}
+<div class="dashboard-card">
+    <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+        <h5 class="mb-0"><i class="fa-solid fa-heart"></i> My Wishlist</h5>
+        <div class="d-flex gap-2">
+            <a href="{% url 'products' %}" class="btn btn-primary">
+                <i class="fa-solid fa-bag-shopping me-2"></i> Continue Shopping
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if wishlists %}
+        <!-- WISHLIST STATS -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-4">
+                <div class="stat-mini">
+                    <div class="stat-mini-value">{{ wishlists.count }}</div>
+                    <div class="stat-mini-label">Total Products</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="stat-mini">
+                    <div class="stat-mini-value">{{ discount_count }}</div>
+                    <div class="stat-mini-label">On Discount</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4">
+                <div class="stat-mini">
+                    <div class="stat-mini-value">${{ total_value }}</div>
+                    <div class="stat-mini-label">Total Value</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WISHLIST PRODUCTS -->
+        <div class="wishlist-grid" id="wishlistGrid">
+            {% for item in wishlists %}
+            <div class="wishlist-item" data-id="{{ item.product.id }}">
+                <div class="wishlist-item-image">
+                    <a href="{% url 'product_detail' item.product.id %}">
+                        {% if item.product.main_image %}
+                        <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}" loading="lazy">
+                        {% else %}
+                        <div class="image-placeholder"><i class="fa-solid fa-image"></i></div>
+                        {% endif %}
+                    </a>
+                    {% if item.product.has_discount %}
+                    <span class="discount-badge">-{{ item.product.discount_percent|floatformat:0 }}%</span>
+                    {% endif %}
+                    <button class="remove-wishlist-btn" data-id="{{ item.product.id }}" title="Remove from wishlist" aria-label="Remove {{ item.product.name }} from wishlist">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                <div class="wishlist-item-content">
+                    <h6 class="wishlist-item-title">
+                        <a href="{% url 'product_detail' item.product.id %}">{{ item.product.name }}</a>
+                    </h6>
+                    <p class="wishlist-item-category">
+                        <i class="fa-solid fa-tag"></i> {{ item.product.category.name }}
+                    </p>
+                    {% if item.product.is_out_of_stock %}
+                    <span class="stock-badge out"><i class="fa-solid fa-circle-exclamation"></i> Out of Stock</span>
+                    {% else %}
+                    <span class="stock-badge in"><i class="fa-solid fa-circle-check"></i> In Stock</span>
+                    {% endif %}
+                    <div class="wishlist-item-price">
+                        {% if item.product.has_discount %}
+                        <span class="old-price">${{ item.product.price }}</span>
+                        <span class="current-price">${{ item.product.discount_price }}</span>
+                        {% else %}
+                        <span class="current-price">${{ item.product.price }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="wishlist-item-actions">
+                        <a href="{% url 'product_detail' item.product.id %}" class="btn btn-sm btn-outline-primary">
+                            <i class="fa-solid fa-eye me-1"></i> View
+                        </a>
+                        {% if not item.product.is_out_of_stock %}
+                        <button class="btn btn-sm btn-outline-success add-to-cart-from-wishlist" 
+                                data-product-id="{{ item.product.id }}"
+                                data-color-id="{% if item.product.default_color %}{{ item.product.default_color.id }}{% endif %}"
+                                title="Add to cart">
+                            <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- RECOMMENDED PRODUCTS -->
+        {% if popular_products %}
+        <div class="wishlist-recommended mt-5">
+            <h5 class="mb-3"><i class="fa-solid fa-fire"></i> Popular Products</h5>
+            <div class="row g-3">
+                {% for product in popular_products %}
+                <div class="col-6 col-md-3">
+                    <a href="{% url 'product_detail' product.id %}" class="recommended-card">
+                        {% if product.main_image %}
+                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" loading="lazy">
+                        {% else %}
+                        <div class="image-placeholder"><i class="fa-solid fa-image"></i></div>
+                        {% endif %}
+                        <div class="rec-body">
+                            <h6>{{ product.name|truncatechars:30 }}</h6>
+                            <span class="rec-price">${{ product.final_price }}</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- EMPTY STATE -->
+        <div class="text-center py-5">
+            <div class="empty-icon mb-3">
+                <i class="fa-regular fa-heart fa-4x text-muted"></i>
+            </div>
+            <h4>Your Wishlist Is Empty</h4>
+            <p class="text-muted">Discover amazing products and save your favorites to view them later.</p>
+            <a href="{% url 'products' %}" class="btn btn-primary mt-3">
+                <i class="fa-solid fa-bag-shopping me-2"></i> Continue Shopping
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

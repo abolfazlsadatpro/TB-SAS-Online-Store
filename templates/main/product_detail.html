@@ -281,6 +281,7 @@
 
                             <div class="color-item {% if forloop.first %}active{% endif %}"
                                  data-name="{{ color.name }}"
+                                 data-id="{{ color.id }}"
                                  {% if color.image %}
                                  data-image="{{ color.image.url }}"
                                  {% endif %}
@@ -391,7 +392,7 @@
 
                     </div>
 
-                    <button type="button" class="mini-cart-btn" data-cart="buybox">
+                    <button type="button" class="mini-cart-btn" data-cart="buybox" data-product-id="{{ product.id }}">
 
                         <i class="fa-solid fa-cart-shopping"></i>
 
@@ -550,7 +551,8 @@
 
     <section class="details-section">
 
-        <div class="details-container">
+        <div class="container">
+            <div class="details-container">
 
             <!-- LEFT CONTENT -->
 
@@ -637,9 +639,9 @@
 
                         {% if product.specifications.count > 5 %}
 
-                        <div class="show-more" onclick="toggleSpecs()">
-                            <span>Show More</span>
-                            <i class="fa-solid fa-chevron-down"></i>
+                        <div class="show-more" onclick="toggleSpecs(this)" data-expanded="false">
+                            <span class="show-more-text">Show More</span>
+                            <i class="fa-solid fa-chevron-down show-more-icon"></i>
                         </div>
 
                         {% endif %}
@@ -981,7 +983,7 @@
 
                     </div>
 
-                    <button type="button" class="mini-cart-btn" data-cart="minicard">
+                    <button type="button" class="mini-cart-btn" data-cart="minicard" data-product-id="{{ product.id }}">
 
                         <i class="fa-solid fa-cart-shopping"></i>
 
@@ -994,6 +996,7 @@
             </div>
 
         </div>
+    </div>
 
     </section>
 

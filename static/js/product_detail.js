@@ -1,16 +1,16 @@
-function getCookie(name){
+function getCookie(name) {
 
     let cookieValue = null;
 
-    if(document.cookie && document.cookie !== ""){
+    if (document.cookie && document.cookie !== "") {
 
         const cookies = document.cookie.split(";");
 
-        for(let cookie of cookies){
+        for (let cookie of cookies) {
 
             cookie = cookie.trim();
 
-            if(cookie.startsWith(name + "=")){
+            if (cookie.startsWith(name + "=")) {
 
                 cookieValue = decodeURIComponent(
                     cookie.substring(name.length + 1)
@@ -22,6 +22,112 @@ function getCookie(name){
     }
 
     return cookieValue;
+}
+
+function getActiveColorId() {
+    const activeColor = document.querySelector(".color-item.active");
+    if (activeColor && activeColor.dataset.id) {
+        return activeColor.dataset.id;
+    }
+    return null;
+}
+
+function syncProductDetailWithCart() {
+    const productButtons = document.querySelectorAll(".mini-cart-btn[data-cart]");
+    const productId = productButtons[0]?.dataset?.productId;
+    if (!productId) return;
+
+    fetch("/cart/state/")
+        .then((response) => response.json())
+        .then((data) => {
+            if (!data.success) return;
+
+            const activeColorId = getActiveColorId();
+            const items = data.items || [];
+            const matchingItem = items.find(item => {
+                if (item.product_id != productId) return false;
+                if (activeColorId) {
+                    return item.color_id == activeColorId;
+                }
+                return item.color_id == 0 || item.color_id === null || item.color_id === undefined;
+            });
+
+            // Authoritative cart quantity for this product/color
+            const authQty = matchingItem ? matchingItem.quantity : 1;
+
+            // Update both Product Detail quantity steppers
+            pdpQuantity = authQty;
+            document.querySelectorAll(".qty-value").forEach(function (el) {
+                el.textContent = pdpQuantity;
+            });
+
+            // Also update the mini-cart badge / summary consistency
+            const cartBadge = document.getElementById("cartBadge");
+            if (cartBadge && data.badge !== undefined) {
+                cartBadge.textContent = data.badge;
+            }
+        })
+        .catch(console.error);
+}
+
+// Sync Product Detail qty with cart on page load
+document.addEventListener("DOMContentLoaded", function () {
+    syncProductDetailWithCart();
+});
+
+function addToCartServer(btn, quantity) {
+    const productId = btn.dataset.productId;
+    const colorId = getActiveColorId();
+    const hasColors = document.querySelectorAll(".color-item").length > 0;
+
+    // If product has colors but no color selected, show error
+    const colorItems = document.querySelectorAll(".color-item");
+    if (colorItems.length > 0 && !document.querySelector(".color-item.active")) {
+        alert("Please select a color for this product.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("product_id", productId);
+    formData.append("quantity", quantity);
+    formData.append("set_quantity", "true");
+    if (colorId) {
+        formData.append("color_id", colorId);
+    }
+
+    fetch("/cart/add/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: formData,
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                // Use the AUTHORITATIVE quantity from the server response
+                // rather than the requested quantity, in case stock validation
+                // or business rules adjusted it.
+                const authQty = data.quantity !== undefined ? data.quantity : quantity;
+                pdpQuantity = authQty;
+
+                addToCartFeedback(btn);
+                // Sync quantity display on Product Detail page (both steppers)
+                document.querySelectorAll(".qty-value").forEach(function (el) {
+                    el.textContent = pdpQuantity;
+                });
+                // Update cart badge if exists
+                const cartBadge = document.getElementById("cartBadge");
+                if (cartBadge && data.badge !== undefined) {
+                    cartBadge.textContent = data.badge;
+                }
+            } else {
+                alert(data.message || "Failed to add to cart.");
+            }
+        })
+        .catch(() => {
+            alert("An error occurred. Please try again.");
+        });
 }
 
 function scrollToReviews() {
@@ -59,16 +165,28 @@ function scrollToSection(id, el) {
 
 }
 
-function toggleSpecs() {
+function toggleSpecs(btn) {
 
     const more = document.getElementById("moreSpecs");
 
     if (!more) return;
 
-    if (more.style.display === "block") {
+    const isExpanded = more.style.display === "block";
+
+    if (isExpanded) {
         more.style.display = "none";
+        if (btn) {
+            btn.setAttribute("data-expanded", "false");
+            const textEl = btn.querySelector(".show-more-text");
+            if (textEl) textEl.textContent = "Show More";
+        }
     } else {
         more.style.display = "block";
+        if (btn) {
+            btn.setAttribute("data-expanded", "true");
+            const textEl = btn.querySelector(".show-more-text");
+            if (textEl) textEl.textContent = "Show Less";
+        }
     }
 
 }
@@ -522,23 +640,6 @@ document.addEventListener("DOMContentLoaded", function () {
     initQuantitySteppers();
     initQtyRowToggle();
     initCommentsSlider();
-    document.addEventListener("click", function (e) {
-        const btn = e.target.closest(".mini-cart-btn");
-        if (!btn) return;
-        // If qty row is closed, let initQtyRowToggle handle it
-        const buyBox = btn.closest(".buy-box, .mini-product-card");
-        const qtyRow = buyBox ? buyBox.querySelector(".qty-row") : null;
-        const isOpen = qtyRow && qtyRow.style.display === 'flex';
-        if (qtyRow && !isOpen) {
-            return; // initQtyRowToggle handles this case
-        }
-        // Only add to cart if qty row is already open (second click)
-        if (isOpen) {
-            e.preventDefault();
-            addToCartFeedback(btn);
-        }
-    });
-
 });
 
 /*==================================================
@@ -582,13 +683,13 @@ function initQtyRowToggle() {
         var minusBtn = stepper ? stepper.querySelector(".qty-minus") : null;
         var plusBtn = stepper ? stepper.querySelector(".qty-plus") : null;
         var valueEl = stepper ? stepper.querySelector(".qty-value") : null;
-        var min = valueEl ? Number(valueEl.dataset.min || 1) : 1;
+        var min = 1;
 
         if (!qtyRow || !stepper || !minusBtn || !plusBtn || !valueEl) return;
 
         // Function to update minus button state (trash vs minus)
         function updateMinusButton() {
-            var cur = Number(valueEl.textContent) || min;
+            var cur = Number(pdpQuantity) || min;
             if (cur <= min) {
                 minusBtn.classList.add("trash");
                 minusBtn.disabled = false; // trash button should be clickable to close
@@ -609,7 +710,8 @@ function initQtyRowToggle() {
             qtyRow.style.overflow = 'hidden';
             qtyRow.style.pointerEvents = 'auto';
             btn.style.display = 'none'; // Hide Add to Cart button
-            valueEl.textContent = min;
+            // Use global pdpQuantity, do NOT reset to min
+            valueEl.textContent = pdpQuantity;
             updateMinusButton();
         }
 
@@ -617,30 +719,32 @@ function initQtyRowToggle() {
         function closeQtyRow() {
             qtyRow.style.display = 'none';
             btn.style.display = 'inline-flex'; // Show Add to Cart button again
-            valueEl.textContent = min;
+            // Keep the current pdpQuantity visible
+            valueEl.textContent = pdpQuantity;
             updateMinusButton();
         }
 
-        // Click on Add to Cart button - handles opening row
+        // Click on Add to Cart button
+        // - First click: send quantity to cart + close the qty row
+        // - If qty row already open, still send to cart
         btn.addEventListener("click", function (e) {
-            var isOpen = qtyRow.style.display === 'flex';
-            if (!isOpen) {
-                e.preventDefault();
-                openQtyRow();
-            }
+            e.preventDefault();
+            // Send the current authoritative quantity to the cart
+            addToCartServer(btn, pdpQuantity);
+            // Close the qty row after sending
+            closeQtyRow();
         });
 
         // Minus button click - handle both trash and decrement
         minusBtn.addEventListener("click", function (e) {
             e.stopPropagation();
-            var cur = Number(valueEl.textContent) || min;
-
-            if (cur <= min) {
+            if (pdpQuantity <= min) {
                 // Currently at 1, trash icon clicked -> close the row
                 closeQtyRow();
             } else {
-                // Decrement normally
-                valueEl.textContent = cur - 1;
+                // Decrement normally using global state
+                pdpQuantity = Math.max(min, pdpQuantity - 1);
+                valueEl.textContent = pdpQuantity;
                 updateMinusButton();
             }
         });
@@ -648,8 +752,8 @@ function initQtyRowToggle() {
         // Plus button click
         plusBtn.addEventListener("click", function (e) {
             e.stopPropagation();
-            var cur = Number(valueEl.textContent) || min;
-            valueEl.textContent = Math.min(99, cur + 1);
+            pdpQuantity = Math.min(99, pdpQuantity + 1);
+            valueEl.textContent = pdpQuantity;
             updateMinusButton();
         });
 
@@ -691,35 +795,18 @@ function selectColor(el) {
         imageSrc
     );
 
+    // Sync quantity with cart when color changes
+    syncProductDetailWithCart();
+
     // Sync thumbs
     document
         .querySelectorAll(".thumbs img")
         .forEach(img => {
-
-            img.classList.remove(
-                "active-thumb"
-            );
-
-            const thumbName =
-                (
-                    img.dataset.colorName
-                    || ""
-                )
-                .trim()
-                .toLowerCase();
-
-            if (
-                thumbName === colorName
-            ) {
-
-                img.classList.add(
-                    "active-thumb"
-                );
-
-            }
-
+            const thumbName = (
+                img.dataset.colorName || img.alt || ""
+            ).trim().toLowerCase();
+            img.classList.toggle("active-thumb", thumbName === colorName);
         });
-
 }
 
 function selectColorThumb(el) {
@@ -807,6 +894,9 @@ const galleryTotal = document.getElementById("galleryTotal");
 let galleryImages = [];
 
 let currentGalleryIndex = 0;
+
+/// --- Product Detail quantity state (authoritative, single source of truth) ---
+let pdpQuantity = 1; // starts at 1, updated by steppers and color selection
 
 
 /*=========================================
@@ -1128,98 +1218,18 @@ function shareProduct() {
 const wishlistBtn =
     document.querySelector(".wishlist-btn");
 
-
 if(wishlistBtn){
 
     wishlistBtn.addEventListener(
         "click",
         function(){
-
-            const productId =
-                this.dataset.id;
-
-
-            const icon =
-                this.querySelector("i");
-
-
-            fetch(
-                `/wishlist/add/${productId}/`,
-                {
-                    method:"POST",
-
-                    headers:{
-                        "X-CSRFToken":
-                            getCookie("csrftoken"),
-                    }
-                }
-            )
-
-            .then(response => response.json())
-
-            .then(data => {
-
-
-                if(data.success){
-
-
-                    const count =
-                        document.getElementById(
-                            "wishlistCount"
-                        );
-
-
-                    if(count){
-
-                        count.innerText =
-                            data.total;
-
-                    }
-
-
-
-                    if(data.action === "added"){
-
-
-                        icon.classList.remove(
-                            "fa-regular"
-                        );
-
-
-                        icon.classList.add(
-                            "fa-solid"
-                        );
-
-
-                        showWishlistToast();
-
-
-                    }else{
-
-
-                        icon.classList.remove(
-                            "fa-solid"
-                        );
-
-
-                        icon.classList.add(
-                            "fa-regular"
-                        );
-
-
-                    }
-
-
-                }
-
-
-            });
-
-
+            // Use the shared pdpQuantity state and addToCartServer
+            // instead of the wishlist /wishlist/add/ endpoint
+            addToCartServer(wishlistBtn, pdpQuantity);
         }
     );
-
 }
+
 
 /*==================================================
         COMMENTS SLIDER
@@ -1296,7 +1306,7 @@ function showCartToast(message) {
 }
 
 function addToCartFeedback(btn) {
-    var qty = getQtyForButton(btn);
+    var qty = pdpQuantity;
     var color = getActiveColor();
     var name = color.name || "No Color";
 

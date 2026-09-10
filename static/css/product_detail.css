@@ -3,9 +3,6 @@
 =========================== */
 .product-page {
     direction: ltr;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
     box-sizing: border-box;
 }
 
@@ -19,7 +16,7 @@
 /* ---------------------------
    LEFT: GALLERY
 --------------------------- */
-.gallery-box, .gallery {
+.gallery-box {
     width: 420px;
     background: white;
     padding: 20px;
@@ -27,10 +24,9 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
     flex: 0 0 400px;
-    min-height: 480px;
+    height: 480px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .main-image {
@@ -38,13 +34,19 @@
     height: 360px;
     object-fit: contain;
     display: block;
+    border-radius: 8px;
+    background: #fafafa;
 }
 
 .thumbs {
-    min-height: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
+    overflow: hidden;
+    margin-top: auto;
+    padding-top: 10px;
 }
 
 .thumbs img, .more-thumb {
@@ -59,6 +61,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
+    flex-shrink: 0;
 }
 
 .more-thumb {
@@ -80,6 +83,8 @@
 .product-title {
     font-size: 24px;
     margin: 15px 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .review-btn {
@@ -181,6 +186,10 @@
     border-radius: 12px;
     font-size: 16px;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .add-cart:hover, .mini-cart-btn:hover {
@@ -251,6 +260,33 @@
     margin-right: 6px;
 }
 
+/* PRODUCT SLIDER IN PRODUCT DETAIL - fix image stretching */
+.product-page .product-slider-wrapper {
+    padding: 28px 24px;
+}
+
+.product-page .product-slider .product-card > a {
+    display: block;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.product-page .product-slider .product-card > a img {
+    max-width: 85%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 16px rgba(13, 62, 41, .12));
+    transition: .3s;
+}
+
+.product-page .product-slider .product-card:hover > a img {
+    transform: scale(1.06);
+}
+
 /* ---------------------------
    DETAIL TABS
 --------------------------- */
@@ -258,15 +294,20 @@
     margin-top: 40px;
 }
 
+.details-section .container {
+    padding-bottom: 40px;
+}
+
 .detail-layout, .details-container {
     display: flex;
     gap: 30px;
-    align-items: flex-start;
-    margin: 15px;
+    align-items: stretch;
+    min-height: calc(100vh - 200px);
 }
 
 .detail-left, .details-left {
     flex: 1;
+    min-width: 0;
 }
 
 .detail-right, .details-right {
@@ -274,6 +315,7 @@
     position: sticky;
     top: 120px;
     flex: 0 0 280px;
+    min-width: 0;
 }
 
 .mini-product-card {
@@ -283,11 +325,20 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
     text-align: left;
     width: 100%;
+    box-sizing: border-box;
+    position: sticky;
+    top: 150px;
+    align-self: flex-start;
 }
 
 .mini-product-card img {
     width: 100%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
     margin-bottom: 10px;
+    border-radius: 8px;
+    background: #fafafa;
 }
 
 .mini-price {
@@ -299,11 +350,12 @@
 
 .tabs {
     position: sticky;
-    top: 120px; /* navbar + category */
-    z-index: 500;
+    top: 150px; /* navbar (~96px) + category bar (~40px) + small gap */
+    z-index: 1001; /* above category-bar (999) */
     background: #fff;
     padding: 12px 15px;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    transition: top .25s ease;
 }
 
 
@@ -364,12 +416,16 @@
     color: #666;
     font-size: 14px;
     margin-bottom: 4px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .spec-item b {
     display: block;
     font-size: 15px;
     font-weight: 600;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* SHOW MORE */
@@ -382,6 +438,26 @@
     color: #198754;
     cursor: pointer;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    border: none;
+    background: transparent;
+    transition: color 0.2s ease;
+}
+
+.show-more:hover {
+    color: #157347;
+}
+
+.show-more .show-more-icon {
+    transition: transform 0.2s ease;
+    font-size: 0.85em;
+}
+
+.show-more[data-expanded="true"] .show-more-icon {
+    transform: rotate(180deg);
 }
 
 /* ---------------------------
@@ -394,7 +470,7 @@
 }
 
 @media (max-width: 1100px), (max-width: 992px) {
-    .product-layout, .gallery-box, .product-info-box, .buy-box, .detail-layout, .details-container {
+    .product-layout, .gallery-box, .product-info-box, .buy-box, .detail-layout, .details-container, .details-right, .mini-product-card {
         flex-direction: column;
         width: 100%;
         position: static;
@@ -433,11 +509,14 @@
 .lines {
     display: flex;
     gap: 6px;
+    width: 100%;
+    max-width: 100%;
 }
 
 .lines span {
     height: 2px;
-    width: 1300px;
+    flex: 1;
+    min-width: 0;
     background: #2c3e50;
     display: block;
     margin-top: 8px;
@@ -453,6 +532,8 @@
     margin-top: 12px;
     line-height: 1.9;
     color: #555;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .pros-cons {
@@ -468,10 +549,15 @@
     padding: 25px;
     border-radius: 12px;
     background: #f6f7f8;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .card h4 {
     margin-bottom: 10px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .pros {
@@ -526,17 +612,11 @@
 }
 
 body.cat-hidden .tabs {
-    top: 70px; /* فقط navbar */
-}
-
-.tabs {
-    position: sticky;
-    top: 120px; /* حالت عادی: navbar + category */
-    transition: top .25s ease;
+    top: 100px; /* navbar only (~96px) + small gap */
 }
 
 .category-hidden .tabs {
-    top: 70px; /* فقط navbar */
+    top: 100px; /* navbar only (~96px) + small gap */
 }
 
 /* COMMENTS SECTION */
@@ -649,6 +729,8 @@ body.cat-hidden .tabs {
     line-height: 1.9;
     color: #555;
     margin-bottom: 15px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 /* actions */

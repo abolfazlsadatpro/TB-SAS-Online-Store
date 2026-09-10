@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Product Detail — Design Lab</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(180deg, #f4faf6 0%, #e8f0ea 100%);
+  min-height: 100vh;
+  color: #1a2a22;
+  direction: ltr;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 24px 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #0e5c3d;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  font-size: 17px;
+  color: #4a5b53;
+  max-width: 600px;
+  margin: 0 auto 16px;
+  line-height: 1.7;
+}
+
+.hero .badge {
+  display: inline-block;
+  background: #198754;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.proposals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.proposal-card {
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(13, 62, 41, .08);
+  transition: all .3s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  border: 1px solid rgba(25, 135, 84, .08);
+}
+
+.proposal-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px -10px rgba(21, 115, 71, .25);
+}
+
+.proposal-card .preview {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.proposal-card .num {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #198754;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+
+.proposal-card .tag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, .95);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: #0e5c3d;
+}
+
+.proposal-card .body {
+  padding: 24px;
+}
+
+.proposal-card .body h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a2a22;
+  margin-bottom: 8px;
+}
+
+.proposal-card .body p {
+  font-size: 14px;
+  color: #5a6b63;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.proposal-card .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #198754;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Preview backgrounds per proposal */
+.preview-1 { background: linear-gradient(135deg, #f0f9f3 0%, #dcefe4 100%); }
+.preview-2 { background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); }
+.preview-3 { background: linear-gradient(135deg, #1a2a22 0%, #2d3f37 100%); }
+.preview-4 { background: linear-gradient(135deg, #fff7e6 0%, #ffe4b3 100%); }
+.preview-5 { background: linear-gradient(135deg, #f0f4ff 0%, #d6e0ff 100%); }
+
+.preview-1 .mock,
+.preview-2 .mock,
+.preview-4 .mock,
+.preview-5 .mock {
+  width: 80%;
+  height: 70%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  display: flex;
+}
+
+.preview-3 .mock {
+  width: 80%;
+  height: 70%;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 8px;
+  display: flex;
+}
+
+/* Mini-mock inside each preview */
+.mock-img {
+  width: 35%;
+  background: rgba(0, 0, 0, .04);
+  border-radius: 8px 0 0 8px;
+}
+.preview-3 .mock-img { background: rgba(255, 255, 255, .08); }
+
+.mock-info {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mock-bar {
+  height: 6px;
+  background: rgba(0, 0, 0, .07);
+  border-radius: 3px;
+}
+.preview-3 .mock-bar { background: rgba(255, 255, 255, .15); }
+.mock-bar.lg { width: 80%; height: 10px; }
+.mock-bar.md { width: 60%; }
+.mock-bar.sm { width: 40%; }
+.mock-bar.btn { background: #198754; width: 50%; height: 14px; border-radius: 6px; margin-top: auto; }
+.preview-3 .mock-bar.btn { background: #27a06b; }
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #5a6b63;
+  font-size: 13px;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 50px 16px 24px; }
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 14px; }
+  .container { padding: 0 16px 50px; }
+  .proposals { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Design Lab</div>
+  <h1>Product Detail — Design Proposals</h1>
+  <p>Five isolated visual proposals for the Product Detail page. Each one preserves the existing TB-SAS green identity and functionality, but explores a different visual direction. Click any proposal below to view it.</p>
+</div>
+
+<div class="container">
+  <div class="proposals">
+
+    <a href="proposal-1.html" class="proposal-card">
+      <div class="preview preview-1">
+        <div class="num">1</div>
+        <div class="tag">Recommended</div>
+        <div class="mock">
+          <div class="mock-img"></div>
+          <div class="mock-info">
+            <div class="mock-bar lg"></div>
+            <div class="mock-bar sm"></div>
+            <div class="mock-bar md"></div>
+            <div class="mock-bar"></div>
+            <div class="mock-bar btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Proposal 1 — Project-Consistent</h3>
+        <p>The current TB-SAS Product Detail page, professionally polished. Refined spacing, typography, and visual hierarchy while keeping the existing structure familiar.</p>
+        <span class="cta">View Proposal →</span>
+      </div>
+    </a>
+
+    <a href="proposal-2.html" class="proposal-card">
+      <div class="preview preview-2">
+        <div class="num">2</div>
+        <div class="mock">
+          <div class="mock-img"></div>
+          <div class="mock-info">
+            <div class="mock-bar lg"></div>
+            <div class="mock-bar md"></div>
+            <div class="mock-bar sm"></div>
+            <div class="mock-bar btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Proposal 2 — Modern E-Commerce</h3>
+        <p>Clean two-column marketplace composition. Strong image presentation, compact information, highly visible price, and subtle borders for a refined shopping experience.</p>
+        <span class="cta">View Proposal →</span>
+      </div>
+    </a>
+
+    <a href="proposal-3.html" class="proposal-card">
+      <div class="preview preview-3">
+        <div class="num">3</div>
+        <div class="mock">
+          <div class="mock-img"></div>
+          <div class="mock-info">
+            <div class="mock-bar lg"></div>
+            <div class="mock-bar sm"></div>
+            <div class="mock-bar md"></div>
+            <div class="mock-bar"></div>
+            <div class="mock-bar btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Proposal 3 — Premium</h3>
+        <p>Sophisticated and restrained. Refined typography, elegant spacing, sophisticated color selectors, and polished specifications. Premium without being flashy.</p>
+        <span class="cta">View Proposal →</span>
+      </div>
+    </a>
+
+    <a href="proposal-4.html" class="proposal-card">
+      <div class="preview preview-4">
+        <div class="num">4</div>
+        <div class="mock">
+          <div class="mock-img"></div>
+          <div class="mock-info">
+            <div class="mock-bar lg"></div>
+            <div class="mock-bar"></div>
+            <div class="mock-bar md"></div>
+            <div class="mock-bar sm"></div>
+            <div class="mock-bar btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Proposal 4 — UX-First</h3>
+        <p>Usability-driven. Every action is obvious. Stock state, color selection, quantity, and Add to Cart are all clear at a glance. Strong interaction feedback.</p>
+        <span class="cta">View Proposal →</span>
+      </div>
+    </a>
+
+    <a href="proposal-5.html" class="proposal-card">
+      <div class="preview preview-5">
+        <div class="num">5</div>
+        <div class="mock">
+          <div class="mock-img"></div>
+          <div class="mock-info">
+            <div class="mock-bar lg"></div>
+            <div class="mock-bar md"></div>
+            <div class="mock-bar sm"></div>
+            <div class="mock-bar"></div>
+            <div class="mock-bar btn"></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <h3>Proposal 5 — Claude Original</h3>
+        <p>Independent creative direction. Rethinks gallery arrangement, information hierarchy, and mobile structure. Production-ready but visually distinct.</p>
+        <span class="cta">View Proposal →</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  Product Detail Design Lab — All proposals are isolated visual prototypes. None of these modify the production Product Detail page.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 5 — Claude Original | Product Detail Lab</title>
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+/* ============= PROPOSAL 5 — CLAUDE ORIGINAL ============= */
+/* Concept: Editorial-meets-e-commerce. Large product imagery with
+   horizontal thumb-rail. Glassy floating spec sheet. Reviews shown
+   as a scrolling carousel. Mobile uses a swipeable thumb-rail and
+   a single-column information stack. */
+:root {
+  --p5-bg: #f5f3ee;
+  --p5-paper: #ffffff;
+  --p5-ink: #1c1a17;
+  --p5-muted: #6a665e;
+  --p5-line: #d8d3ca;
+  --p5-brand: #1a6e3f;
+  --p5-brand-dark: #114d2c;
+  --p5-accent: #c79a4a;
+  --p5-radius: 14px;
+}
+
+body { background: var(--p5-bg); color: var(--p5-ink); }
+
+.custom-navbar { background: var(--p5-paper); border-bottom: 1px solid var(--p5-line); border-radius: 0; margin: 0; }
+.custom-navbar .nav-logo img,
+.custom-navbar .nav-logo > div { color: var(--p5-ink) !important; }
+.custom-navbar .nav-search input { background: var(--p5-bg); color: var(--p5-ink); border: 1px solid var(--p5-line); }
+.custom-navbar .nav-search .search-icon { color: var(--p5-muted); }
+.custom-navbar .cart-link { color: var(--p5-ink); background: var(--p5-bg); border: 1px solid var(--p5-line); }
+.custom-navbar .cart-badge { background: var(--p5-ink); color: #fff; border-color: var(--p5-ink); }
+.category-bar { display: none; }
+
+body { padding-top: 75px; }
+
+.pdl-p5-main { padding: 20px 0 80px; }
+.pdl-p5-container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+
+/* Hero strip */
+.pdl-p5-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--p5-muted);
+  margin-bottom: 16px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.pdl-p5-hero a { color: var(--p5-muted); }
+.pdl-p5-hero a:hover { color: var(--p5-ink); }
+.pdl-p5-hero .last { color: var(--p5-ink); font-weight: 600; }
+.pdl-p5-hero .sep { margin: 0 8px; color: var(--p5-line); }
+
+/* Layout: large gallery on left (1fr), info + actions on right (1fr) */
+.pdl-p5-layout {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Gallery: large image with horizontal thumb strip below */
+.pdl-p5-gallery {
+  background: var(--p5-paper);
+  border-radius: var(--p5-radius);
+  padding: 20px;
+  border: 1px solid var(--p5-line);
+  position: relative;
+}
+.pdl-p5-mainimage-wrap {
+  aspect-ratio: 1/1;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #fff, #f8f6f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.pdl-p5-mainimage { max-width: 88%; max-height: 88%; object-fit: contain; }
+.pdl-p5-disc {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: var(--p5-ink);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.pdl-p5-thumbs-wrap {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pdl-p5-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+}
+.pdl-p5-thumbs::-webkit-scrollbar { display: none; }
+.pdl-p5-thumbs img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: #fafafa;
+  flex-shrink: 0;
+  transition: all .15s ease;
+}
+.pdl-p5-thumbs img:hover { transform: translateY(-2px); }
+.pdl-p5-thumbs img.is-active { border-color: var(--p5-ink); }
+
+.pdl-p5-thumb-arrow {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--p5-line);
+  border-radius: 50%;
+  background: var(--p5-paper);
+  color: var(--p5-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all .15s ease;
+}
+.pdl-p5-thumb-arrow:hover { background: var(--p5-ink); color: #fff; }
+
+/* Info panel: large price, name, color label */
+.pdl-p5-info { display: flex; flex-direction: column; gap: 22px; }
+
+.pdl-p5-brand-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--p5-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.pdl-p5-brand-line .mark {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--p5-ink);
+  border-radius: 50%;
+}
+.pdl-p5-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--p5-ink);
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -.5px;
+}
+
+.pdl-p5-rating-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--p5-muted);
+}
+.pdl-p5-stars { color: var(--p5-accent); display: flex; gap: 1px; }
+.pdl-p5-stars .empty { color: #ddd; }
+.pdl-p5-rating-score { color: var(--p5-ink); font-weight: 600; }
+.pdl-p5-rating-link { color: var(--p5-muted); text-decoration: underline; cursor: pointer; }
+.pdl-p5-rating-link:hover { color: var(--p5-ink); }
+.pdl-p5-divider { width: 1px; height: 12px; background: var(--p5-line); }
+
+/* Price callout with strong typography */
+.pdl-p5-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 18px 0;
+  border-top: 1px solid var(--p5-line);
+  border-bottom: 1px solid var(--p5-line);
+}
+.pdl-p5-price-now {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--p5-ink);
+  letter-spacing: -1px;
+}
+.pdl-p5-price-old {
+  font-size: 18px;
+  color: #a8a39a;
+  text-decoration: line-through;
+}
+.pdl-p5-price-tag {
+  background: var(--p5-accent);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.pdl-p5-section { }
+.pdl-p5-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--p5-ink);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.pdl-p5-section-title .name {
+  color: var(--p5-muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+/* Color pickers: large, with name */
+.pdl-p5-colors {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pdl-p5-color {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  border: 2px solid transparent;
+  transition: all .2s ease;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .1);
+}
+.pdl-p5-color:hover { transform: scale(1.08); }
+.pdl-p5-color.is-selected {
+  border-color: var(--p5-ink);
+  box-shadow: 0 0 0 2px var(--p5-paper), 0 0 0 4px var(--p5-ink);
+}
+.pdl-p5-color.is-selected::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+  font-size: 14px;
+}
+
+/* Quantity + cart row */
+.pdl-p5-cart-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.pdl-p5-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--p5-ink);
+  border-radius: 8px;
+  background: var(--p5-paper);
+  overflow: hidden;
+}
+.pdl-p5-qty button {
+  width: 40px;
+  height: 46px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--p5-ink);
+  background: var(--p5-paper);
+  transition: background .15s ease;
+}
+.pdl-p5-qty button:hover { background: var(--p5-bg); }
+.pdl-p5-qty-value {
+  min-width: 42px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 0 8px;
+  border-left: 1.5px solid var(--p5-ink);
+  border-right: 1.5px solid var(--p5-ink);
+}
+.pdl-p5-addcart {
+  flex: 1;
+  height: 46px;
+  background: var(--p5-ink);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all .2s ease;
+}
+.pdl-p5-addcart:hover { background: #000; }
+.pdl-p5-addcart.is-added { background: var(--p5-brand); }
+.pdl-p5-wishlist {
+  width: 46px;
+  height: 46px;
+  border: 1.5px solid var(--p5-ink);
+  border-radius: 8px;
+  background: var(--p5-paper);
+  color: var(--p5-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s ease;
+}
+.pdl-p5-wishlist:hover { background: var(--p5-ink); color: #fff; }
+.pdl-p5-wishlist.is-active { background: #e53935; border-color: #e53935; color: #fff; }
+
+/* Perks grid */
+.pdl-p5-perks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.pdl-p5-perk {
+  background: var(--p5-paper);
+  border: 1px solid var(--p5-line);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--p5-ink);
+}
+.pdl-p5-perk i { color: var(--p5-brand); font-size: 16px; }
+
+/* Floating spec sheet: editorial layout */
+.pdl-p5-specsheet {
+  background: linear-gradient(180deg, var(--p5-paper), #faf8f3);
+  border: 1px solid var(--p5-line);
+  border-radius: var(--p5-radius);
+  padding: 28px;
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+.pdl-p5-specsheet h3 {
+  grid-column: 1/-1;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--p5-ink);
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pdl-p5-specsheet h3::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--p5-line);
+}
+.pdl-p5-spec-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.pdl-p5-spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+.pdl-p5-spec-item .k {
+  font-size: 11px;
+  color: var(--p5-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.pdl-p5-spec-item .v { color: var(--p5-ink); font-weight: 500; }
+
+.pdl-p5-showmore {
+  grid-column: 1/-1;
+  text-align: center;
+  color: var(--p5-ink);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: center;
+  padding: 8px 16px;
+  border-top: 1px solid var(--p5-line);
+}
+.pdl-p5-showmore svg { transition: transform .2s ease; }
+.pdl-p5-showmore.is-open svg { transform: rotate(180deg); }
+.pdl-p5-extra { display: none; }
+.pdl-p5-extra.is-open { display: contents; }
+
+/* Reviews section: editorial */
+.pdl-p5-reviews {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.pdl-p5-reviews-header {
+  grid-column: 1/-1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pdl-p5-reviews-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -.5px;
+}
+.pdl-p5-reviews-header .summary {
+  font-size: 13px;
+  color: var(--p5-muted);
+}
+.pdl-p5-review {
+  background: var(--p5-paper);
+  border: 1px solid var(--p5-line);
+  border-radius: 12px;
+  padding: 20px;
+}
+.pdl-p5-review-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.pdl-p5-review .user { font-weight: 600; font-size: 14px; }
+.pdl-p5-review .date { font-size: 11px; color: var(--p5-muted); letter-spacing: 1px; }
+.pdl-p5-review .quote { font-size: 14px; color: var(--p5-ink); line-height: 1.7; }
+
+/* Mini product card: floating in corner */
+.pdl-p5-mini {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 280px;
+  background: var(--p5-paper);
+  border: 1px solid var(--p5-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .15);
+  padding: 14px;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all .3s ease;
+}
+.pdl-p5-mini:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0, 0, 0, .2); }
+.pdl-p5-mini img { width: 60px; height: 60px; object-fit: contain; background: #fafafa; border-radius: 8px; }
+.pdl-p5-mini .mini-info { flex: 1; }
+.pdl-p5-mini h4 { font-size: 12px; font-weight: 600; margin: 0 0 2px; }
+.pdl-p5-mini .mp { font-size: 16px; font-weight: 700; color: var(--p5-brand); }
+.pdl-p5-mini .add-mini {
+  width: 36px;
+  height: 36px;
+  background: var(--p5-ink);
+  color: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Related */
+.pdl-p5-related {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+.pdl-p5-related-card {
+  background: var(--p5-paper);
+  border: 1px solid var(--p5-line);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  transition: all .2s ease;
+}
+.pdl-p5-related-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0, 0, 0, .08); }
+.pdl-p5-related-card img { width: 100%; aspect-ratio: 1/1; object-fit: contain; background: #fafafa; border-radius: 6px; margin-bottom: 10px; }
+.pdl-p5-related-card .pn { font-size: 12px; color: var(--p5-ink); margin-bottom: 4px; }
+.pdl-p5-related-card .pp { font-size: 14px; font-weight: 700; color: var(--p5-ink); }
+
+@media (max-width: 1100px) {
+  .pdl-p5-layout { grid-template-columns: 1fr; gap: 24px; }
+  .pdl-p5-specsheet { grid-template-columns: 1fr 1fr; }
+  .pdl-p5-reviews { grid-template-columns: 1fr; }
+  .pdl-p5-related { grid-template-columns: repeat(3, 1fr); }
+  .pdl-p5-mini { display: none; }
+}
+@media (max-width: 500px) {
+  .pdl-p5-specsheet { grid-template-columns: 1fr; }
+  .pdl-p5-related { grid-template-columns: repeat(2, 1fr); }
+  .pdl-p5-cart-row { flex-wrap: wrap; }
+  .pdl-p5-addcart { width: 100%; }
+  .pdl-p5-perks { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="lab-badge" style="background:#1c1a17">PROPOSAL 5</div>
+<a href="index.html" class="lab-back" style="background:#1c1a17;color:#fff">← Back to Lab</a>
+
+<nav class="custom-navbar">
+  <div class="nav-top">
+    <a class="nav-logo" href="#"><div style="width:80px;height:32px;background:var(--p5-bg);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--p5-ink);font-size:11px;font-weight:700;letter-spacing:1px">TBSAS</div></a>
+    <form class="nav-search" onsubmit="return false"><span class="search-icon">⌕</span><input placeholder="Search products..."></form>
+    <div class="nav-actions"><a href="#" class="cart-link">🛒<span>Cart</span><span class="cart-badge">0</span></a></div>
+  </div>
+</nav>
+
+<main class="pdl-p5-main">
+  <div class="pdl-p5-container">
+
+    <div class="pdl-p5-hero">
+      <div>
+        <a href="#">Home</a><span class="sep">/</span>
+        <a href="#">Smartphones</a><span class="sep">/</span>
+        <span class="last" id="pdl-p5-bcname">Apple iPhone 17 Pro Max</span>
+      </div>
+      <div>Ships in 24 hours · TBSAS Official</div>
+    </div>
+
+    <div class="pdl-p5-layout">
+      <!-- Gallery -->
+      <div class="pdl-p5-gallery">
+        <div class="pdl-p5-mainimage-wrap">
+          <span class="pdl-p5-disc" id="pdl-p5-disc">SAVE 17%</span>
+          <img class="pdl-p5-mainimage" data-pdl-mainimage id="pdl-p5-mainimg"
+               src="https://images.unsplash.com/photo-1592286927504-1b2b2b2b2b2b?w=800&h=800&fit=crop" alt="Apple iPhone 17 Pro Max">
+        </div>
+        <div class="pdl-p5-thumbs-wrap">
+          <button class="pdl-p5-thumb-arrow" id="pdl-p5-thumb-prev" aria-label="Previous image">‹</button>
+          <div class="pdl-p5-thumbs" id="pdl-p5-thumbs"></div>
+          <button class="pdl-p5-thumb-arrow" id="pdl-p5-thumb-next" aria-label="Next image">›</button>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="pdl-p5-info">
+        <div class="pdl-p5-brand-line"><span class="mark"></span> Apple · New Release 2026</div>
+        <h1 class="pdl-p5-title" id="pdl-p5-title">Apple iPhone 17 Pro Max</h1>
+
+        <div class="pdl-p5-rating-line">
+          <div class="pdl-p5-stars" id="pdl-p5-stars"></div>
+          <span class="pdl-p5-rating-score" id="pdl-p5-rating">4.7</span>
+          <div class="pdl-p5-divider"></div>
+          <a class="pdl-p5-rating-link" id="pdl-p5-rlink">128 reviews · 47 comments</a>
+        </div>
+
+        <div class="pdl-p5-price-row">
+          <div class="pdl-p5-price-now" id="pdl-p5-price">$1,499</div>
+          <div class="pdl-p5-price-old" id="pdl-p5-old">$1,799</div>
+          <div class="pdl-p5-price-tag" id="pdl-p5-tag">SAVE $300</div>
+        </div>
+
+        <div class="pdl-p5-section">
+          <div class="pdl-p5-section-title">Colour <span class="name" data-pdl-colorname id="pdl-p5-cname">— Dark Blue</span></div>
+          <div class="pdl-p5-colors" data-pdl-colorpicker id="pdl-p5-colors"></div>
+        </div>
+
+        <div class="pdl-p5-section">
+          <div class="pdl-p5-section-title">Quantity</div>
+          <div class="pdl-p5-cart-row">
+            <div class="pdl-p5-qty" data-pdl-qty>
+              <button class="pdl-p5-qty-minus is-min">−</button>
+              <div class="pdl-p5-qty-value">1</div>
+              <button class="pdl-p5-qty-plus">+</button>
+            </div>
+            <button class="pdl-p5-addcart" data-pdl-addtocart>
+              <i class="fa-solid fa-bag-shopping"></i> Add to Bag
+            </button>
+            <button class="pdl-p5-wishlist" data-pdl-wishlist aria-label="Wishlist">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="pdl-p5-perks">
+          <div class="pdl-p5-perk"><i class="fa-solid fa-truck-fast"></i> Free delivery over $50</div>
+          <div class="pdl-p5-perk"><i class="fa-solid fa-shield-halved"></i> 2-year warranty</div>
+          <div class="pdl-p5-perk"><i class="fa-solid fa-rotate-left"></i> 7-day returns</div>
+          <div class="pdl-p5-perk"><i class="fa-solid fa-store"></i> In-store pickup</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spec sheet -->
+    <div class="pdl-p5-specsheet" id="pdl-p5-specsheet">
+      <h3>Specifications</h3>
+      <div class="pdl-p5-spec-group" id="pdl-p5-specs-1"></div>
+      <div class="pdl-p5-spec-group" id="pdl-p5-specs-2"></div>
+      <div class="pdl-p5-spec-group" id="pdl-p5-specs-3"></div>
+      <div class="pdl-p5-extra" id="pdl-p5-extra">
+        <div class="pdl-p5-spec-group" id="pdl-p5-specs-4"></div>
+        <div class="pdl-p5-spec-group" id="pdl-p5-specs-5"></div>
+        <div class="pdl-p5-spec-group" id="pdl-p5-specs-6"></div>
+      </div>
+      <div class="pdl-p5-showmore" data-pdl-showmore data-target="pdl-p5-extra">
+        <span data-pdl-showmore-label>Show More</span>
+        <svg data-pdl-showmore-icon width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="pdl-p5-reviews">
+      <div class="pdl-p5-reviews-header">
+        <h3>What Buyers Say</h3>
+        <span class="summary" id="pdl-p5-rsummary">Average 4.7 / 5 from 128 reviews</span>
+      </div>
+      <div id="pdl-p5-reviews-list" style="display:contents"></div>
+    </div>
+
+    <!-- Related -->
+    <div style="margin-top:40px">
+      <h3 style="font-size:18px;margin-bottom:16px;font-weight:700;letter-spacing:-.3px">More from this collection</h3>
+      <div class="pdl-p5-related" id="pdl-p5-related"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Floating mini product card -->
+<div class="pdl-p5-mini">
+  <img id="pdl-p5-miniimg" src="https://images.unsplash.com/photo-1592286927504-1b2b2b2b2b2b?w=200&h=200&fit=crop" alt="Apple iPhone 17 Pro Max">
+  <div class="mini-info">
+    <h4 id="pdl-p5-mininame">Apple iPhone 17 Pro Max</h4>
+    <div class="mp">$1,499</div>
+  </div>
+  <button class="add-mini" data-pdl-addtocart aria-label="Add to bag">
+    <i class="fa-solid fa-plus" style="font-size:14px"></i>
+  </button>
+</div>
+
+<footer class="main-footer">
+  <p>© 2026 TBSAS — Product Detail Design Lab</p>
+</footer>
+
+<script src="shared/data.js"></script>
+<script src="shared/app.js"></script>
+<script>
+(function () {
+  var D = window.PDL_DATA;
+  var P = D.product8;
+
+  document.getElementById("pdl-p5-bcname").textContent = P.name;
+  document.getElementById("pdl-p5-title").textContent = P.name;
+  document.getElementById("pdl-p5-mininame").textContent = P.name;
+
+  document.getElementById("pdl-p5-price").textContent = "$" + P.finalPrice.toLocaleString();
+  if (P.oldPrice) {
+    document.getElementById("pdl-p5-old").textContent = "$" + P.oldPrice.toLocaleString();
+    document.getElementById("pdl-p5-tag").textContent = "SAVE $" + (P.oldPrice - P.finalPrice);
+    document.getElementById("pdl-p5-disc").textContent = "SAVE " + P.discount + "%";
+  } else {
+    document.getElementById("pdl-p5-old").style.display = "none";
+    document.getElementById("pdl-p5-tag").style.display = "none";
+    document.getElementById("pdl-p5-disc").style.display = "none";
+  }
+
+  var starsEl = document.getElementById("pdl-p5-stars");
+  var full = Math.floor(P.rating);
+  var half = (P.rating - full) >= .5;
+  var h = "";
+  for (var i = 0; i < full; i++) h += '<i class="fa-solid fa-star"></i>';
+  if (half) h += '<i class="fa-solid fa-star-half-stroke"></i>';
+  for (var j = 0; j < (5 - full - (half ? 1 : 0)); j++) h += '<i class="fa-regular fa-star empty"></i>';
+  starsEl.innerHTML = h;
+  document.getElementById("pdl-p5-rating").textContent = P.rating.toFixed(1);
+  document.getElementById("pdl-p5-rlink").textContent = P.reviewCount + " reviews · " + P.commentCount + " comments";
+
+  // Thumbs
+  var thumbsEl = document.getElementById("pdl-p5-thumbs");
+  var allImgs = P.images.length ? P.images : P.colors.filter(function (c) { return c.image; }).map(function (c) { return c.image; });
+  if (!allImgs.length) {
+    thumbsEl.innerHTML = '<div style="padding:8px;color:#999;font-size:12px">No additional images</div>';
+  } else {
+    allImgs.forEach(function (src, i) {
+      var img = document.createElement("img");
+      img.src = src;
+      img.setAttribute("data-pdl-thumb", "");
+      img.setAttribute("data-image", src);
+      if (i === 0) img.classList.add("is-active");
+      thumbsEl.appendChild(img);
+    });
+  }
+
+  // Thumb arrows
+  document.getElementById("pdl-p5-thumb-prev").addEventListener("click", function () {
+    thumbsEl.scrollBy({ left: -160, behavior: "smooth" });
+  });
+  document.getElementById("pdl-p5-thumb-next").addEventListener("click", function () {
+    thumbsEl.scrollBy({ left: 160, behavior: "smooth" });
+  });
+
+  // Colors
+  var colorsEl = document.getElementById("pdl-p5-colors");
+  P.colors.forEach(function (c, i) {
+    var div = document.createElement("div");
+    div.className = "pdl-p5-color" + (i === 0 ? " is-selected" : "");
+    div.style.background = c.code;
+    div.setAttribute("data-name", c.name);
+    div.setAttribute("data-image", c.image);
+    div.setAttribute("title", c.name + (c.stock === 0 ? " (Out of stock)" : ""));
+    div.setAttribute("role", "radio");
+    div.setAttribute("aria-checked", i === 0 ? "true" : "false");
+    if (c.stock === 0) div.style.opacity = ".3";
+    colorsEl.appendChild(div);
+  });
+
+  // Specs - distribute across 3 columns
+  var groups = [document.getElementById("pdl-p5-specs-1"), document.getElementById("pdl-p5-specs-2"), document.getElementById("pdl-p5-specs-3")];
+  var extras = [document.getElementById("pdl-p5-specs-4"), document.getElementById("pdl-p5-specs-5"), document.getElementById("pdl-p5-specs-6")];
+  var perCol = Math.ceil(P.specs.length / 3);
+  P.specs.forEach(function (s, i) {
+    var item = document.createElement("div");
+    item.className = "pdl-p5-spec-item";
+    item.innerHTML = '<span class="k">' + s.title + '</span><span class="v">' + s.value + '</span>';
+    var col = Math.floor(i / perCol);
+    if (col < 3) groups[col].appendChild(item);
+  });
+  if (!P.specs.length) {
+    document.querySelector("[data-pdl-showmore]").style.display = "none";
+  }
+
+  // Reviews
+  var rEl = document.getElementById("pdl-p5-reviews-list");
+  D.reviews.forEach(function (r) {
+    var card = document.createElement("div");
+    card.className = "pdl-p5-review";
+    var stars = "";
+    for (var k = 0; k < r.rating; k++) stars += '<i class="fa-solid fa-star"></i>';
+    for (var m = 0; m < 5 - r.rating; m++) stars += '<i class="fa-regular fa-star empty"></i>';
+    card.innerHTML =
+      '<div class="pdl-p5-review-top"><div class="user">' + r.user + '</div><div class="date">' + r.date + '</div></div>' +
+      '<div class="pdl-p5-stars" style="margin-bottom:8px">' + stars + '</div>' +
+      '<div class="quote">"' + r.text + '"</div>';
+    rEl.appendChild(card);
+  });
+
+  // Related
+  var relEl = document.getElementById("pdl-p5-related");
+  D.related.forEach(function (r) {
+    var card = document.createElement("a");
+    card.href = "#";
+    card.className = "pdl-p5-related-card";
+    card.innerHTML =
+      '<img src="' + r.image + '" alt="' + r.name + '">' +
+      '<div class="pn">' + r.name + '</div>' +
+      '<div class="pp">$' + r.price.toLocaleString() + '</div>';
+    relEl.appendChild(card);
+  });
+
+  // Sync mini image
+  var mini = document.getElementById("pdl-p5-miniimg");
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-pdl-thumb]");
+    if (t && mini) mini.src = t.getAttribute("data-image") || t.src;
+  });
+})();
+</script>
+</body>
+</html>

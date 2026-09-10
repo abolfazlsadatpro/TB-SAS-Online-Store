@@ -198,7 +198,7 @@ async function loadProducts({
 } = {}) {
 
     const form = document.getElementById('filterForm');
-    const container = document.getElementById('productsContainer');
+    const container = document.querySelector('[data-products-grid]') || document.getElementById('productsContainer');
 
     if (!form || !container) {
         return;
@@ -288,11 +288,44 @@ async function loadProducts({
 
 
         // ----------------------------------------
+        // Re-bind Quick View buttons
+        // ----------------------------------------
+
+        initQuickViewButtons();
+
+
+        // ----------------------------------------
+        // Re-bind card wishlist buttons
+        // ----------------------------------------
+
+        initCardWishlistButtons();
+
+        // Re-bind pagination buttons
+        initPagination();
+
+
+        // Update pagination active state
+        const pageInput = document.getElementById('pageInput');
+        if (pageInput) {
+            const currentPage = parseInt(pageInput.value, 10) || 1;
+            document.querySelectorAll('.p1-pagination-btn[data-page]').forEach(btn => {
+                const pageNum = parseInt(btn.getAttribute('data-page'), 10);
+                if (pageNum === currentPage) {
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-current', 'page');
+                } else {
+                    btn.classList.remove('active');
+                    btn.removeAttribute('aria-current');
+                }
+            });
+        }
+
+        // ----------------------------------------
         // Update product count
         // ----------------------------------------
 
         const totalCountElement =
-            document.getElementById('productsTotalCount');
+            document.querySelector('[data-total-count]') || document.getElementById('productsTotalCount');
 
         if (
             totalCountElement &&
@@ -307,7 +340,7 @@ async function loadProducts({
         // ----------------------------------------
 
         syncFormFromURL();
-
+        buildActiveFilterChips();
         updateActiveFiltersCount();
 
 
@@ -667,113 +700,60 @@ function updatePriceDisplay(value) {
 
 function syncPriceRange() {
 
-    const priceMinInput =
-        document.getElementById('priceMinInput');
+    const priceMinInput = document.getElementById('priceMinInput');
+    const priceMaxInput = document.getElementById('priceMaxInput');
+    const priceRangeMin = document.getElementById('priceRangeMin');
+    const priceRangeMax = document.getElementById('priceRangeMax');
+    const priceMinLabel = document.getElementById('priceMinLabel');
+    const priceValue = document.getElementById('priceValue');
 
-    const priceMaxInput =
-        document.getElementById('priceMaxInput');
-
-    const priceRange =
-        document.getElementById('priceRange');
-
-    const priceMinLabel =
-        document.getElementById('priceMinLabel');
-
-    const priceValue =
-        document.getElementById('priceValue');
-
-
-    if (
-        !priceMinInput ||
-        !priceMaxInput ||
-        !priceRange
-    ) {
+    if (!priceMinInput || !priceMaxInput || !priceRangeMin || !priceRangeMax) {
         return;
     }
 
-
-    let minVal =
-        parseInt(priceMinInput.value, 10);
-
-    let maxVal =
-        parseInt(priceMaxInput.value, 10);
-
+    let minVal = parseInt(priceMinInput.value, 10);
+    let maxVal = parseInt(priceMaxInput.value, 10);
 
     if (Number.isNaN(minVal)) {
-        minVal =
-            parseInt(priceMinInput.min, 10) || 0;
+        minVal = parseInt(priceMinInput.min, 10) || 0;
     }
-
-
     if (Number.isNaN(maxVal)) {
-        maxVal =
-            parseInt(priceMaxInput.max, 10) || 9999;
+        maxVal = parseInt(priceMaxInput.max, 10) || 9999;
     }
 
-
-    // --------------------------------------------
     // Ensure min <= max
-    // --------------------------------------------
-
     if (minVal > maxVal) {
         minVal = maxVal;
         priceMinInput.value = minVal;
     }
 
+    // Keep slider boundaries based on the real global price range
+    const globalMin = parseInt(priceMinInput.min, 10) || 0;
+    const globalMax = parseInt(priceMaxInput.max, 10) || 9999;
 
-    // --------------------------------------------
-    // Keep slider boundaries based on
-    // the real global price range
-    // --------------------------------------------
+    priceRangeMin.min = globalMin;
+    priceRangeMin.max = globalMax;
+    priceRangeMax.min = globalMin;
+    priceRangeMax.max = globalMax;
 
-    const globalMin =
-        parseInt(priceMinInput.min, 10) || 0;
+    // Slider values (clamped)
+    let minSlider = Math.max(globalMin, Math.min(minVal, globalMax));
+    let maxSlider = Math.max(globalMin, Math.min(maxVal, globalMax));
 
-    const globalMax =
-        parseInt(priceMaxInput.max, 10) || 9999;
+    priceRangeMin.value = minSlider;
+    priceRangeMax.value = maxSlider;
 
-
-    priceRange.min = globalMin;
-    priceRange.max = globalMax;
-
-
-    // --------------------------------------------
-    // Slider value
-    // --------------------------------------------
-
-    let sliderValue =
-        parseInt(priceMaxInput.value, 10);
-
-    if (Number.isNaN(sliderValue)) {
-        sliderValue = globalMax;
-    }
-
-
-    sliderValue =
-        Math.max(globalMin, Math.min(sliderValue, globalMax));
-
-
-    priceRange.value = sliderValue;
-
-
-    // --------------------------------------------
     // Labels
-    // --------------------------------------------
-
     if (priceMinLabel) {
-        priceMinLabel.textContent =
-            '$' + minVal.toLocaleString();
+        priceMinLabel.textContent = '$' + minSlider.toLocaleString();
     }
-
-
     if (priceValue) {
-        priceValue.textContent =
-            '$' + sliderValue.toLocaleString();
+        priceValue.textContent = '$' + maxSlider.toLocaleString();
     }
 }
 
 
-// ------------------------------------------------------------
+
 // Update max price input from slider
 // ------------------------------------------------------------
 
@@ -812,7 +792,7 @@ function updatePriceInputFromRange(value) {
 function showLoadingState() {
 
     const productsContainer =
-        document.getElementById('productsContainer');
+        document.querySelector('[data-products-grid]') || document.getElementById('productsContainer');
 
     if (!productsContainer) {
         return;
@@ -904,9 +884,49 @@ function setSortAndSubmit(sortValue) {
     }
 
 
+    // Update active state visually
+    document.querySelectorAll('.p1-sort-btn.sort-btn').forEach(btn => {
+        const btnSort = btn.getAttribute('data-sort');
+        btn.classList.toggle('active', btnSort === sortValue);
+        btn.setAttribute('aria-pressed', btnSort === sortValue ? 'true' : 'false');
+    });
+
+
     loadProducts({
         updateHistory: true,
         scrollToProducts: true
+    });
+}
+
+
+// ------------------------------------------------------------
+// Initialize sort buttons
+// ------------------------------------------------------------
+
+function initSortButtons() {
+    document.querySelectorAll('.p1-sort-btn.sort-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const sortValue = this.getAttribute('data-sort');
+            if (sortValue) {
+                setSortAndSubmit(sortValue);
+            }
+        });
+    });
+}
+
+
+// ------------------------------------------------------------
+// Initialize pagination buttons
+// ------------------------------------------------------------
+
+function initPagination() {
+    document.querySelectorAll('.p1-pagination-btn[data-page]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const page = this.getAttribute('data-page');
+            if (page) {
+                goToPage(page);
+            }
+        });
     });
 }
 
@@ -1145,7 +1165,11 @@ function initMobileFilter() {
 
         overlay.addEventListener(
             'click',
-            () => {
+            (e) => {
+
+                if (e.target !== overlay) {
+                    return;
+                }
 
                 sidebar.classList.remove('open');
 
@@ -1172,149 +1196,132 @@ function initMobileFilter() {
 function initFilterUI() {
 
     // --------------------------------------------
-    // Filter group toggles
+    // Filter group toggles (accordion) - event delegation
     // --------------------------------------------
 
-    document
-        .querySelectorAll(
-            '.filter-toggle[data-toggle]'
-        )
-        .forEach(toggle => {
+    const filterForm = document.getElementById('filterForm');
+    if (!filterForm) return;
 
-            toggle.addEventListener(
-                'click',
-                () => {
+    // Remove existing listener to prevent duplicates
+    if (filterForm._filterToggleHandler) {
+        filterForm.removeEventListener('click', filterForm._filterToggleHandler);
+    }
 
-                    const group =
-                        toggle.closest('.filter-group');
+    filterForm._filterToggleHandler = (e) => {
+        const toggle = e.target.closest('.filter-toggle[data-toggle]');
+        if (!toggle) return;
 
-                    if (!group) {
-                        return;
-                    }
+        const group = toggle.closest('.p1-group');
+        if (!group) return;
 
-                    group.classList.toggle('open');
+        // Only toggle the clicked group
+        group.classList.toggle('open');
+    };
+
+    filterForm.addEventListener('click', filterForm._filterToggleHandler);
+
+    const radioPointerState = new Map();
+
+    const getRadioFromEvent = (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) {
+            return null;
+        }
+
+        const radio = target.closest('input[type="radio"][data-radio-group]');
+        if (radio) {
+            return radio;
+        }
+
+        const filterCheck = target.closest('.filter-check');
+        return filterCheck
+            ? filterCheck.querySelector('input[type="radio"][data-radio-group]')
+            : null;
+    };
+
+    const syncRadioGroup = (radio) => {
+        const groupName = radio.dataset.radioGroup;
+
+        filterForm
+            .querySelectorAll(`input[data-radio-group="${groupName}"]`)
+            .forEach(input => {
+                const parent = input.closest('.filter-check');
+
+                if (parent) {
+                    parent.classList.toggle('active', input.checked);
                 }
-            );
-        });
+            });
+    };
 
+    const handleRadioPointer = (event) => {
+        const radio = getRadioFromEvent(event);
+        if (!radio) {
+            return;
+        }
 
-    // --------------------------------------------
-    // Radio active states
-    // --------------------------------------------
+        if (event.type === 'pointerdown') {
+            radioPointerState.set(radio, radio.checked);
+            return;
+        }
 
-    document
-        .querySelectorAll(
-            'input[type="radio"][data-radio-group]'
-        )
-        .forEach(radio => {
+        const wasChecked = radioPointerState.get(radio);
+        radioPointerState.delete(radio);
 
-            radio.addEventListener(
-                'change',
-                function () {
+        if (!wasChecked) {
+            return;
+        }
 
-                    const groupName =
-                        this.dataset.radioGroup;
+        event.preventDefault();
+        radio.checked = false;
+        radio.dispatchEvent(new Event('change', { bubbles: true }));
+    };
 
+    const handleFilterChange = (event) => {
+        const input = event.target;
 
-                    document
-                        .querySelectorAll(
-                            `input[data-radio-group="${groupName}"]`
-                        )
-                        .forEach(input => {
+        if (!(input instanceof HTMLInputElement) || !input.name) {
+            return;
+        }
 
-                            const parent =
-                                input.closest('.filter-check');
+        if (input.type === 'checkbox') {
+            const parent = input.closest('.filter-check');
 
-                            if (parent) {
+            if (parent) {
+                parent.classList.toggle('active', input.checked);
+            }
 
-                                parent.classList.toggle(
-                                    'active',
-                                    input.checked
-                                );
-                            }
-                        });
-                }
-            );
-        });
+            updateActiveFiltersCount();
+            submitFilterForm();
+            return;
+        }
 
+        if (
+            input.type !== 'radio' ||
+            !input.dataset.radioGroup
+        ) {
+            return;
+        }
 
-    // --------------------------------------------
-    // Checkbox active states + AJAX
-    // --------------------------------------------
+        syncRadioGroup(input);
+        updateActiveFiltersCount();
+        submitFilterForm();
+    };
 
-    document
-        .querySelectorAll(
-            '.filter-check input[type="checkbox"]'
-        )
-        .forEach(checkbox => {
+    if (filterForm._radioPointerHandler) {
+        filterForm.removeEventListener('pointerdown', filterForm._radioPointerHandler);
+        filterForm.removeEventListener('click', filterForm._radioPointerHandler);
+    }
 
-            checkbox.addEventListener(
-                'change',
-                function () {
+    filterForm._radioPointerHandler = handleRadioPointer;
+    filterForm.addEventListener('pointerdown', handleRadioPointer);
+    filterForm.addEventListener('click', handleRadioPointer);
 
-                    const parent =
-                        this.closest('.filter-check');
+    if (filterForm._filterChangeHandler) {
+        filterForm.removeEventListener('change', filterForm._filterChangeHandler);
+    }
 
-                    if (parent) {
-
-                        parent.classList.toggle(
-                            'active',
-                            this.checked
-                        );
-                    }
-
-
-                    updateActiveFiltersCount();
-
-                    submitFilterForm();
-                }
-            );
-        });
-
-
-    // --------------------------------------------
-    // Radio AJAX submission
-    // --------------------------------------------
-
-    document
-        .querySelectorAll(
-            '.filter-check input[type="radio"]'
-        )
-        .forEach(radio => {
-
-            radio.addEventListener(
-                'change',
-                function () {
-
-                    const groupName =
-                        this.dataset.radioGroup;
-
-
-                    document
-                        .querySelectorAll(
-                            `input[data-radio-group="${groupName}"]`
-                        )
-                        .forEach(input => {
-
-                            const parent =
-                                input.closest('.filter-check');
-
-                            if (parent) {
-
-                                parent.classList.toggle(
-                                    'active',
-                                    input.checked
-                                );
-                            }
-                        });
-
-
-                    updateActiveFiltersCount();
-
-                    submitFilterForm();
-                }
-            );
-        });
+    filterForm._filterChangeHandler = handleFilterChange;
+    filterForm.addEventListener('change', handleFilterChange);
 }
 
 
@@ -1322,10 +1329,17 @@ function initFilterUI() {
 // Price UI initialization
 // ------------------------------------------------------------
 
+// ------------------------------------------------------------
+// Price filter - Dual handle range slider
+// ------------------------------------------------------------
+
 function initPriceFilter() {
 
-    const priceRange =
-        document.getElementById('priceRange');
+    const priceRangeMin =
+        document.getElementById('priceRangeMin');
+
+    const priceRangeMax =
+        document.getElementById('priceRangeMax');
 
     const priceMinInput =
         document.getElementById('priceMinInput');
@@ -1333,9 +1347,46 @@ function initPriceFilter() {
     const priceMaxInput =
         document.getElementById('priceMaxInput');
 
+    const trackFill =
+        document.querySelector('.p1-range-track-fill');
 
-    if (!priceRange) {
+    if (!priceRangeMin || !priceRangeMax) {
         return;
+    }
+
+
+    // --------------------------------------------
+    // Update track fill between handles
+    // --------------------------------------------
+
+    function updateTrackFill() {
+        if (!trackFill) return;
+
+        const minVal = parseInt(priceRangeMin.value, 10);
+        const maxVal = parseInt(priceRangeMax.value, 10);
+        const globalMin = parseInt(priceRangeMin.min, 10) || 0;
+        const globalMax = parseInt(priceRangeMax.max, 10) || 9999;
+
+        if (Number.isNaN(minVal) || Number.isNaN(maxVal)) return;
+
+        const minPercent = ((minVal - globalMin) / (globalMax - globalMin)) * 100;
+        const maxPercent = ((maxVal - globalMin) / (globalMax - globalMin)) * 100;
+
+        trackFill.style.left = minPercent + '%';
+        trackFill.style.width = (maxPercent - minPercent) + '%';
+    }
+
+    function ensureMinMaxOrder() {
+        let minVal = parseInt(priceRangeMin.value, 10);
+        let maxVal = parseInt(priceRangeMax.value, 10);
+
+        if (minVal > maxVal) {
+            // Swap values
+            priceRangeMin.value = maxVal;
+            priceRangeMax.value = minVal;
+            if (priceMinInput) priceMinInput.value = maxVal;
+            if (priceMaxInput) priceMaxInput.value = minVal;
+        }
     }
 
 
@@ -1344,46 +1395,79 @@ function initPriceFilter() {
     // --------------------------------------------
 
     syncPriceRange();
+    updateTrackFill();
 
     updatePriceDisplay(
         priceMaxInput
             ? priceMaxInput.value
-            : priceRange.value
+            : priceRangeMax.value
     );
 
 
     // --------------------------------------------
-    // Slider
+    // Min slider
     // --------------------------------------------
 
-    priceRange.addEventListener(
+    priceRangeMin.addEventListener(
         'input',
         function () {
 
-            updatePriceInputFromRange(
-                this.value
-            );
-
-            updatePriceDisplay(
-                this.value
-            );
-
+            // Only update the number input and track fill
+            // Do NOT call syncPriceRange() here as it would reset the slider
+            if (priceMinInput) priceMinInput.value = this.value;
+            updatePriceDisplay(this.value);
+            updateTrackFill();
             updateActiveFiltersCount();
         }
     );
 
 
     // --------------------------------------------
-    // Slider change = AJAX
+    // Min slider change = AJAX
     // --------------------------------------------
 
-    priceRange.addEventListener(
+    priceRangeMin.addEventListener(
         'change',
         function () {
 
-            updatePriceInputFromRange(
-                this.value
-            );
+            ensureMinMaxOrder();
+            syncPriceRange();
+            updateTrackFill();
+
+            submitFilterFormDebounced();
+        }
+    );
+
+
+    // --------------------------------------------
+    // Max slider
+    // --------------------------------------------
+
+    priceRangeMax.addEventListener(
+        'input',
+        function () {
+
+            // Only update the number input and track fill
+            // Do NOT call syncPriceRange() here as it would reset the slider
+            if (priceMaxInput) priceMaxInput.value = this.value;
+            updatePriceDisplay(this.value);
+            updateTrackFill();
+            updateActiveFiltersCount();
+        }
+    );
+
+
+    // --------------------------------------------
+    // Max slider change = AJAX
+    // --------------------------------------------
+
+    priceRangeMax.addEventListener(
+        'change',
+        function () {
+
+            ensureMinMaxOrder();
+            syncPriceRange();
+            updateTrackFill();
 
             submitFilterFormDebounced();
         }
@@ -1401,6 +1485,7 @@ function initPriceFilter() {
             function () {
 
                 syncPriceRange();
+                updateTrackFill();
 
                 submitFilterFormDebounced();
             }
@@ -1419,6 +1504,7 @@ function initPriceFilter() {
             function () {
 
                 syncPriceRange();
+                updateTrackFill();
 
                 submitFilterFormDebounced();
             }
@@ -1490,7 +1576,7 @@ function initClearAllButton() {
             <button
                 type="button"
                 class="btn-close-filters"
-                id="closeFilters"
+                id="closeFiltersClearAll"
                 aria-label="Close filters"
             >
                 <i class="fa-solid fa-xmark"></i>
@@ -1499,7 +1585,7 @@ function initClearAllButton() {
 
 
         const closeButton =
-            header.querySelector('#closeFilters');
+            header.querySelector('#closeFiltersClearAll');
 
 
         if (closeButton) {
@@ -1653,6 +1739,9 @@ function showQuickView(productId) {
                     data.product
                 );
 
+                // Initialize mini-cart-btn and wishlist for Quick View
+                initializeQuickViewButtons();
+
             } else {
 
                 showErrorInModal(
@@ -1672,6 +1761,110 @@ function showQuickView(productId) {
                 'Error loading product details'
             );
         });
+}
+
+
+// ------------------------------------------------------------
+// Initialize Quick View buttons (mini-cart-btn + wishlist)
+// ------------------------------------------------------------
+
+function initializeQuickViewButtons() {
+    const modalContent = document.getElementById('quickViewContent');
+    if (!modalContent) return;
+
+    // Initialize mini-cart-btn (matches product_detail.js logic)
+    const miniCartBtns = modalContent.querySelectorAll('.mini-cart-btn[data-cart]');
+    miniCartBtns.forEach(function(btn) {
+        var buyBox = btn.closest('.buy-box, .mini-product-card');
+        if (!buyBox) return;
+
+        var qtyRow = buyBox.querySelector('.qty-row');
+        var stepper = qtyRow ? qtyRow.querySelector('.qty-stepper') : null;
+        var minusBtn = stepper ? stepper.querySelector('.qty-minus') : null;
+        var plusBtn = stepper ? stepper.querySelector('.qty-plus') : null;
+        var valueEl = stepper ? stepper.querySelector('.qty-value') : null;
+        var min = valueEl ? Number(valueEl.dataset.min || 1) : 1;
+
+        if (!qtyRow || !stepper || !minusBtn || !plusBtn || !valueEl) return;
+
+        function updateMinusButton() {
+            var cur = Number(valueEl.textContent) || min;
+            if (cur <= min) {
+                minusBtn.classList.add('trash');
+                minusBtn.disabled = false;
+                minusBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
+                minusBtn.setAttribute('aria-label', 'Remove from cart');
+            } else {
+                minusBtn.classList.remove('trash');
+                minusBtn.innerHTML = '&#8722;';
+                minusBtn.setAttribute('aria-label', 'Decrease quantity');
+            }
+        }
+
+        function openQtyRow() {
+            qtyRow.style.display = 'flex';
+            qtyRow.style.opacity = '1';
+            qtyRow.style.maxHeight = '60px';
+            qtyRow.style.overflow = 'hidden';
+            qtyRow.style.pointerEvents = 'auto';
+            btn.style.display = 'none';
+            valueEl.textContent = min;
+            updateMinusButton();
+        }
+
+        function closeQtyRow() {
+            qtyRow.style.display = 'none';
+            btn.style.display = 'inline-flex';
+            valueEl.textContent = min;
+            updateMinusButton();
+        }
+
+        btn.addEventListener('click', function(e) {
+            var isOpen = qtyRow.style.display === 'flex';
+            if (!isOpen) {
+                e.preventDefault();
+                openQtyRow();
+            }
+        });
+
+        minusBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var cur = Number(valueEl.textContent) || min;
+            if (cur <= min) {
+                closeQtyRow();
+            } else {
+                valueEl.textContent = cur - 1;
+                updateMinusButton();
+            }
+        });
+
+        plusBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            var cur = Number(valueEl.textContent) || min;
+            valueEl.textContent = Math.min(99, cur + 1);
+            updateMinusButton();
+        });
+
+        updateMinusButton();
+    });
+
+    // Initialize wishlist button in Quick View
+    const wishlistBtns = modalContent.querySelectorAll('.product-wishlist-btn');
+    wishlistBtns.forEach(function(btn) {
+        // Remove existing listeners by cloning
+        var newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+
+        newBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const productId = this.getAttribute('data-product-id');
+            if (!productId) return;
+
+            toggleCardWishlist(productId, this);
+        });
+    });
 }
 
 
@@ -1860,7 +2053,7 @@ function renderQuickViewContent(product) {
 
                 <div class="mb-3">
 
-                    <div class="rating-stars">
+                    <div class="rating-stars" style="color: #f5a623;">
 
                         ${
                             Array.from(
@@ -2019,34 +2212,34 @@ function renderQuickViewContent(product) {
                 }
 
 
-                <div class="d-grid gap-2">
-
+                <div class="mini-product-card">
+                    <div class="qty-row">
+                        <div class="qty-stepper">
+                            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity">&#8722;</button>
+                            <span class="qty-value" data-min="1">1</span>
+                            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity">&#43;</button>
+                        </div>
+                    </div>
                     <button
                         type="button"
-                        class="btn btn-primary"
-                        onclick="addToCart(${product.id})"
+                        class="mini-cart-btn"
+                        data-cart="quickview"
+                        data-product-id="${product.id}"
                     >
-                        <i
-                            class="fa-solid fa-cart-plus me-2"
-                        ></i>
-
-                        Add to Cart
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart-label">Add to Cart</span>
                     </button>
-
-
-                    <button
-                        type="button"
-                        class="btn btn-outline-secondary"
-                        onclick="addToWishlist(${product.id})"
-                    >
-                        <i
-                            class="fa-regular fa-heart me-2"
-                        ></i>
-
-                        Add to Wishlist
-                    </button>
-
                 </div>
+
+
+                <button
+                    type="button"
+                    class="p1-wish product-wishlist-btn ${product.in_wishlist ? 'is-active' : ''}"
+                    data-product-id="${product.id}"
+                    aria-label="Add ${product.name} to wishlist"
+                >
+                    <i class="${product.in_wishlist ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                </button>
 
             </div>
 
@@ -2153,6 +2346,250 @@ function initQuickViewButtons() {
 
 
 // ------------------------------------------------------------
+// Project login page (used when the wishlist endpoint redirects)
+// ------------------------------------------------------------
+
+const LOGIN_PAGE_URL = '/users/show_login';
+
+
+// ------------------------------------------------------------
+// CSRF helper (same cookie convention as existing project JS)
+// ------------------------------------------------------------
+
+function getCsrfToken() {
+
+    const name = 'csrftoken=';
+
+    const cookie = document
+        .cookie
+        .split(';')
+        .map(c => c.trim())
+        .find(c => c.startsWith(name));
+
+    return cookie
+        ? decodeURIComponent(cookie.substring(name.length))
+        : '';
+}
+
+
+// ------------------------------------------------------------
+// Product card wishlist buttons
+// ------------------------------------------------------------
+
+function initCardWishlistButtons() {
+
+    document
+        .querySelectorAll('.product-wishlist-btn')
+        .forEach(button => {
+
+            button.addEventListener(
+                'click',
+                function (event) {
+
+                    event.preventDefault();
+
+                    const productId =
+                        this.getAttribute(
+                            'data-product-id'
+                        );
+
+                    if (!productId) {
+                        return;
+                    }
+
+                    toggleCardWishlist(
+                        productId,
+                        this
+                    );
+                }
+            );
+        });
+}
+
+
+// ------------------------------------------------------------
+// Toggle wishlist state for a single product card
+// ------------------------------------------------------------
+
+function toggleCardWishlist(productId, button) {
+
+    const icon =
+        button.querySelector('i');
+
+    const csrfToken =
+        getCsrfToken();
+
+
+    if (!csrfToken) {
+        console.error(
+            'Wishlist error: CSRF token not found'
+        );
+
+        return;
+    }
+
+
+    fetch(
+        `/wishlist/add/${productId}/`,
+        {
+            method: 'POST',
+
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+
+            credentials: 'same-origin'
+        }
+    )
+        .then(response => {
+
+            const contentType =
+                response.headers.get(
+                    'Content-Type'
+                ) || '';
+
+
+            // Unauthenticated users are redirected by the
+            // backend to the login page. fetch() follows the
+            // redirect automatically, so the real flag is
+            // response.redirected or a non-JSON content type.
+
+            if (
+                response.redirected ||
+                !contentType.includes(
+                    'application/json'
+                )
+            ) {
+
+                window.location.href =
+                    LOGIN_PAGE_URL;
+
+                return null;
+            }
+
+
+            if (!response.ok) {
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+            }
+
+
+            return response.json();
+        })
+
+        .then(data => {
+
+            // Handled above (redirect to login)
+            if (data === null) {
+                return;
+            }
+
+
+            if (!data.success) {
+                throw new Error(
+                    'Wishlist update failed'
+                );
+            }
+
+
+            if (data.action === 'added') {
+
+                button.classList.add('is-active');
+
+                if (icon) {
+                    icon.classList.remove(
+                        'fa-regular'
+                    );
+                    icon.classList.add(
+                        'fa-solid'
+                    );
+                }
+
+            } else if (
+                data.action === 'removed'
+            ) {
+
+                button.classList.remove(
+                    'is-active'
+                );
+
+                if (icon) {
+                    icon.classList.remove(
+                        'fa-solid'
+                    );
+                    icon.classList.add(
+                        'fa-regular'
+                    );
+                }
+            }
+
+
+            // Sync the existing wishlist counter in the
+            // site header if it is present on this page.
+
+            const wishlistCountElement =
+                document.getElementById(
+                    'wishlistCount'
+                );
+
+            if (
+                wishlistCountElement &&
+                typeof data.total !== 'undefined'
+            ) {
+
+                wishlistCountElement.textContent =
+                    data.total;
+            }
+        })
+
+        .catch(error => {
+
+            console.error(
+                'Wishlist update error:',
+                error
+            );
+
+            alert(
+                'Could not update the wishlist. ' +
+                'Please try again.'
+            );
+        });
+}
+
+
+// ------------------------------------------------------------
+// Product card click navigation
+// ------------------------------------------------------------
+
+function initProductCardNavigation() {
+    const grid = document.querySelector('.p1-grid');
+    if (!grid) return;
+
+    grid.addEventListener('click', (e) => {
+        const card = e.target.closest('.p1-card');
+        if (!card) return;
+
+        // Don't navigate if clicking on interactive elements
+        if (e.target.closest('.p1-wish') ||
+            e.target.closest('.p1-quickview') ||
+            e.target.closest('.mini-cart-btn') ||
+            e.target.closest('.p1-color') ||
+            e.target.closest('.p1-wish')) {
+            return;
+        }
+
+        const productId = card.dataset.productId;
+        if (productId) {
+            window.location.href = `/product_detail/${productId}/`;
+        }
+    });
+}
+
+
+// ------------------------------------------------------------
 // Main initialization
 // ------------------------------------------------------------
 
@@ -2196,6 +2633,18 @@ document.addEventListener(
 
 
         // ----------------------------------------
+        // Sort buttons
+        // ----------------------------------------
+
+        initSortButtons();
+
+        // ----------------------------------------
+        // Pagination
+        // ----------------------------------------
+
+        initPagination();
+
+        // ----------------------------------------
         // Quick View
         // ----------------------------------------
 
@@ -2203,15 +2652,161 @@ document.addEventListener(
 
 
         // ----------------------------------------
+        // Card wishlist
+        // ----------------------------------------
+
+        initCardWishlistButtons();
+
+        // ----------------------------------------
+        // Product card navigation
+        // ----------------------------------------
+
+        initProductCardNavigation();
+
+
+        // ----------------------------------------
         // Initial UI sync
         // ----------------------------------------
 
         syncFormFromURL();
-
+        buildActiveFilterChips();
         updateActiveFiltersCount();
     }
 );
 
+
+function clearFilterChip(name, value) {
+    const input = Array.from(
+        document.querySelectorAll(`input[name="${name}"]`)
+    ).find(candidate => candidate.value === value);
+
+    if (input) {
+        input.checked = false;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        return;
+    }
+
+    submitFilterForm();
+}
+
+function clearPriceFilter() {
+    const priceMinInput = document.getElementById('priceMinInput');
+    const priceMaxInput = document.getElementById('priceMaxInput');
+    const priceRangeMin = document.getElementById('priceRangeMin');
+    const priceRangeMax = document.getElementById('priceRangeMax');
+
+    if (priceMinInput) {
+        priceMinInput.value = priceMinInput.min || '0';
+    }
+    if (priceMaxInput) {
+        priceMaxInput.value = priceMaxInput.max || '9999';
+    }
+    if (priceRangeMin) {
+        priceRangeMin.value = priceRangeMin.min || '0';
+    }
+    if (priceRangeMax) {
+        priceRangeMax.value = priceRangeMax.max || '9999';
+    }
+
+    submitFilterForm();
+}
+
+function buildActiveFilterChips() {
+    const chipsContainer = document.querySelector('[data-active-chips]');
+    if (!chipsContainer) return;
+
+    chipsContainer.innerHTML = '';
+
+    const form = document.getElementById('filterForm');
+    if (!form) return;
+
+    function makeChip(label, onRemove) {
+        const chip = document.createElement('span');
+        chip.className = 'chip';
+        const text = document.createTextNode(label + ' ');
+        chip.appendChild(text);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'chip-x';
+        btn.textContent = '\u00d7';
+        btn.setAttribute('aria-label', 'Remove filter');
+        btn.addEventListener('click', onRemove);
+        chip.appendChild(btn);
+        return chip;
+    }
+
+    // Brand chips
+    const brandInputs = form.querySelectorAll('input[name="brand"]:checked');
+    brandInputs.forEach(input => {
+        chipsContainer.appendChild(
+            makeChip(input.value, () => clearFilterChip('brand', input.value))
+        );
+    });
+
+    // All attribute chips (color, condition, screen-size, ram, storage, etc.)
+    const attrInputs = form.querySelectorAll('input[name^="attr_"]:checked');
+    attrInputs.forEach(input => {
+        const name = input.name;
+        const value = input.value;
+        let prefix = '';
+        const filterGroup = input.closest('.p1-group');
+        if (filterGroup) {
+            const titleEl = filterGroup.querySelector('.p1-group-title');
+            if (titleEl) {
+                prefix = titleEl.textContent.replace(/\s+/g, ' ').trim() + ': ';
+            }
+        }
+        const displayName = prefix + value;
+        chipsContainer.appendChild(
+            makeChip(displayName, () => clearFilterChip(name, value))
+        );
+    });
+
+    // Price chip
+    const priceMinInput = document.getElementById('priceMinInput');
+    const priceMaxInput = document.getElementById('priceMaxInput');
+    if (priceMinInput && priceMaxInput) {
+        const minVal = priceMinInput.value;
+        const maxVal = priceMaxInput.value;
+        const minDefault = priceMinInput.min || '0';
+        const maxDefault = priceMaxInput.max || '9999';
+
+        if (minVal !== minDefault || maxVal !== maxDefault) {
+            const label = 'Price: $' + minVal + ' - $' + maxVal;
+            chipsContainer.appendChild(
+                makeChip(label, () => clearPriceFilter())
+            );
+        }
+    }
+
+    // Category chip
+    const categoryInput = document.getElementById('categoryInput');
+    if (categoryInput && categoryInput.value) {
+        const catVal = categoryInput.value;
+        chipsContainer.appendChild(
+            makeChip(catVal, () => {
+                categoryInput.value = '';
+                submitFilterForm();
+            })
+        );
+    }
+
+    // Search chip
+    const searchQ = new URLSearchParams(window.location.search).get('q');
+    if (searchQ) {
+        const qVal = searchQ;
+        chipsContainer.appendChild(
+            makeChip('Search: ' + qVal, () => {
+                const formEl = document.getElementById('filterForm');
+                if (formEl) {
+                    const qInput = formEl.querySelector('input[name="q"]');
+                    if (qInput) qInput.value = '';
+                }
+                submitFilterForm();
+            })
+        );
+    }
+}
 
 // ------------------------------------------------------------
 // Global exports for inline onclick handlers in products_ajax.html

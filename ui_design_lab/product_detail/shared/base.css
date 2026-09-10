@@ -1,0 +1,229 @@
+/* ===========================================================
+   Product Detail Design Lab - Shared Base CSS
+   Common styles shared across all proposals
+   =========================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Vazirmatn", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #1a2a22;
+  background: #f7f9f8;
+  direction: ltr;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Reusable site shell - navbar/category/footer (copied from production for visual reference) */
+.site-header {
+  position: relative;
+  margin: 16px;
+  z-index: 999;
+}
+
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #0e5c3d, #198754);
+  border-radius: 22px;
+  padding: 14px 18px;
+  margin: 16px;
+  box-shadow: 0 18px 40px -18px rgba(13, 62, 41, .5);
+}
+
+.nav-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nav-logo img {
+  height: 36px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .3));
+  border-radius: 8px;
+}
+
+.nav-search {
+  flex: 1;
+  max-width: 620px;
+  position: relative;
+}
+
+.nav-search input {
+  width: 100%;
+  padding: 10px 18px 10px 40px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  background: rgba(255, 255, 255, .14);
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+}
+
+.nav-search input::placeholder { color: rgba(255, 255, 255, .75); }
+.nav-search .search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, .8);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.cart-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, .14);
+  border-radius: 30px;
+  padding: 8px 16px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.cart-badge {
+  background: #fff;
+  color: #0e5c3d;
+  border-radius: 50%;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  border: 2px solid #0e5c3d;
+  margin-left: -8px;
+}
+
+.category-bar {
+  background: rgba(255, 255, 255, .85);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  margin: 12px 16px 0;
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, .85);
+  position: relative;
+  margin-top: 80px;
+}
+
+.category-bar .container {
+  display: flex;
+  gap: 24px;
+}
+
+.category-bar a {
+  color: #0e5c3d;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+body {
+  padding-top: 130px;
+}
+
+.main-footer {
+  background: #212529;
+  color: #fff;
+  padding: 40px 20px;
+  margin-top: 60px;
+  text-align: center;
+}
+
+.main-footer h3 {
+  color: #fff;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.main-footer p {
+  color: rgba(255, 255, 255, .65);
+  font-size: 13px;
+}
+
+/* Lab-only: a fixed top-left badge so reviewers know they are in the lab */
+.lab-badge {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 9999;
+  background: #0e5c3d;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .2);
+}
+
+.lab-back {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+  background: #fff;
+  color: #1a2a22;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+  text-decoration: none;
+}
+
+/* Reusable shared utilities (specifics are per proposal) */
+.img-placeholder {
+  background: #f0f3f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a9b91;
+  font-size: 12px;
+}
+
+.fade-in {
+  animation: fadeIn .3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

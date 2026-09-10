@@ -1,0 +1,116 @@
+/* =====================================================
+   Cart Design Lab - Shared Base CSS
+   Common design tokens and minimal shared styles.
+   Each version (V1, V2, V3) extends this with its own CSS.
+   ===================================================== */
+
+:root {
+  --green: #198754;
+  --green-dark: #157347;
+  --green-soft: #f0faf4;
+  --ink: #1a1a1a;
+  --ink-2: #2c3a35;
+  --muted: #6b7a72;
+  --muted-2: #9aa39d;
+  --line: #e6e9e7;
+  --line-2: #eef0ee;
+  --bg: #f7f8f7;
+  --bg-soft: #fafbfa;
+  --danger: #dc3545;
+  --warn: #d97706;
+  --info: #2563eb;
+  --gold: #ca8a04;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 25, .04), 0 1px 3px rgba(15, 23, 25, .06);
+  --shadow-md: 0 2px 4px rgba(15, 23, 25, .04), 0 4px 12px rgba(15, 23, 25, .06);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 25, .08), 0 24px 48px rgba(15, 23, 25, .06);
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Vazirmatn", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  direction: ltr;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+
+.pcl-lab-bar {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: .3px;
+}
+.pcl-lab-bar .lab-tag {
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  font-size: 11px;
+}
+.pcl-lab-bar .lab-title { font-weight: 600; opacity: .9; }
+.pcl-lab-bar .lab-back {
+  color: #fff;
+  background: rgba(255, 255, 255, .12);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.pcl-lab-bar .lab-back:hover { background: rgba(255, 255, 255, .2); }
+
+/* Toast (shared) */
+.pcl-toast {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 9999;
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+  max-width: 360px;
+}
+.pcl-toast.is-show { opacity: 1; transform: translateY(0); }
+.pcl-toast.is-success { background: var(--green); }
+.pcl-toast.is-error { background: var(--danger); }
+.pcl-toast.is-info { background: var(--ink); }
+.pcl-toast .pcl-toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .15);
+  font-size: 12px;
+}

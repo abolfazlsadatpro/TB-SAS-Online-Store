@@ -1,0 +1,97 @@
+{% extends 'main/base/base_main.html' %}
+{% load static %}
+{% load custom_filters_stor %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/dashboard_user.css' %}?v={{ static_versions.css_dashboard_user }}">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-user-wrapper">
+    <div class="dashboard-user-container">
+        
+        <!-- SIDEBAR -->
+        <aside class="dashboard-user-sidebar" id="dashboardSidebar">
+            <div class="sidebar-header">
+                <a href="{% url 'home' %}" class="sidebar-logo">
+                    <img src="{% static 'images/logo_tb_sas.png' %}" alt="TB SAS">
+                    <span>My Account</span>
+                </a>
+            </div>
+            
+            <nav class="sidebar-nav" aria-label="User dashboard navigation">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
+                           href="{% url 'user_dashboard:dashboard' %}">
+                            <i class="fa-solid fa-gauge-high"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'order_list' %}active{% endif %}" 
+                           href="{% url 'user_dashboard:order_list' %}">
+                            <i class="fa-solid fa-box-archive"></i>
+                            <span>My Orders</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'wishlist' %}active{% endif %}" 
+                           href="{% url 'user_dashboard:wishlist' %}">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Wishlist</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'show_login' %}?next=/" class="btn btn-outline-secondary w-100">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Sign Out
+                </a>
+            </div>
+        </aside>
+
+        <!-- MOBILE SIDEBAR TOGGLE -->
+        <button class="sidebar-toggle d-lg-none" id="sidebarToggle" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="sidebar-overlay d-lg-none" id="sidebarOverlay"></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="dashboard-user-main">
+            <div class="dashboard-user-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title">{% block dashboard_title %}Dashboard{% endblock %}</h1>
+                    <p class="dashboard-subtitle">{% block dashboard_subtitle %}{% endblock %}</p>
+                </div>
+                <div class="header-right">
+                    <a href="{% url 'products' %}" class="btn btn-primary">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+            {% if messages %}
+            <div class="dashboard-messages" aria-live="polite">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block dashboard_content %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script src="{% static 'js/dashboard_user.js' %}?v={{ static_versions.js_dashboard_user }}"></script>
+{% endblock %}

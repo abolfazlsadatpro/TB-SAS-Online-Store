@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.db import models
 from django.conf import settings
 from users.models import PersonUser
@@ -371,6 +373,29 @@ class Order(models.Model):
     status = models.IntegerField(default=-1)
     note = models.CharField(blank=True, null=True)
     method_auto = models.BooleanField(default=True)
+    # TASK 26 — historical coupon data and idempotency protection.
+    coupon_code = models.CharField(
+        max_length=50,
+        blank=True,
+        default="",
+        verbose_name="Applied coupon code",
+        help_text="Coupon code used at order creation (historical record).",
+    )
+    discount_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0"),
+        verbose_name="Discount amount",
+        help_text="Discount amount applied at order creation (historical record).",
+    )
+    idempotency_key = models.CharField(
+        max_length=64,
+        unique=True,
+        null=True,
+        blank=True,
+        verbose_name="Idempotency key",
+        help_text="Server-side unique key to prevent duplicate order creation from repeated POST submissions.",
+    )
 
     @property
     def total_items(self):
@@ -391,6 +416,20 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+    # TASK 26 — historical price and selected color persistence (required for checkout/order integrity).
+    price = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Unit price at purchase",
+        help_text="Snapshot of product final price at time of order creation.",
+    )
+    color = models.ForeignKey(
+        ProductColor,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Selected color",
+        help_text="ProductColor selected at time of order creation.",
+    )
 
     def __str__(self):
         return f'{self.product.name} * {self.quantity}'
@@ -655,3 +694,129 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.product.name}"
+
+
+class Coupon(models.Model):
+    """Minimal first-phase Coupon architecture (TASK 21 design approved)."""
+
+    code = models.CharField(
+        max_length=50,
+        unique=True,
+        db_index=True,
+        verbose_name="Coupon code",
+        help_text="Normalized to uppercase at lookup.",
+    )
+    is_active = models.BooleanField(default=True, verbose_name="Active")
+    discount_percent = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Discount percent",
+        help_text="Percentage off (0 = no percentage discount). Must be non-negative.",
+    )
+    discount_amount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0"),
+        verbose_name="Fixed discount amount",
+        help_text="Fixed amount off (0 = no fixed discount). Must be non-negative.",
+    )
+    valid_from = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Valid from",
+        help_text="Optional start date/time.",
+    )
+    valid_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Valid until",
+        help_text="Optional expiration date/time.",
+    )
+    min_subtotal = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("0"),
+        verbose_name="Minimum subtotal",
+        help_text="Subtotal must meet or exceed this value for coupon to apply.",
+    )
+    max_discount = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=Decimal("1000000"),
+        null=True,
+        blank=True,
+        verbose_name="Maximum discount",
+        help_text="Cap on percentage-based discount. Null/blank = no cap.",
+    )
+    usage_limit = models.PositiveIntegerField(
+        default=1,
+        null=True,
+        blank=True,
+        verbose_name="Usage limit",
+        help_text="Maximum redemptions. Null/blank = unlimited.",
+    )
+    usage_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name="Usage count",
+        help_text="Number of times redeemed (updated at checkout).",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Coupon"
+        verbose_name_plural = "Coupons"
+        ordering = ["-is_active", "code"]
+        indexes = [
+            models.Index(fields=["is_active", "code"]),
+        ]
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        errors = {}
+        percent = int(self.discount_percent) if self.discount_percent is not None else 0
+        amount = Decimal(str(self.discount_amount)) if self.discount_amount is not None else Decimal("0")
+        if percent <= 0 and amount <= Decimal("0"):
+            errors["discount_percent"] = ValidationError(
+                "At least one of discount_percent or discount_amount must be positive.",
+                code="invalid_discount",
+            )
+        if not self.code or not str(self.code).strip():
+            errors["code"] = ValidationError(
+                "Coupon code cannot be empty.", code="required"
+            )
+        if percent < 0:
+            errors["discount_percent"] = ValidationError(
+                "Discount percent cannot be negative.", code="negative"
+            )
+        if amount < Decimal("0"):
+            errors["discount_amount"] = ValidationError(
+                "Discount amount cannot be negative.", code="negative"
+            )
+        if Decimal(str(self.min_subtotal or "0")) < Decimal("0"):
+            errors["min_subtotal"] = ValidationError(
+                "Minimum subtotal cannot be negative.", code="negative"
+            )
+        if self.max_discount is not None and Decimal(str(self.max_discount)) < Decimal("0"):
+            errors["max_discount"] = ValidationError(
+                "Maximum discount cannot be negative.", code="negative"
+            )
+        if self.usage_count is not None and int(self.usage_count) < 0:
+            errors["usage_count"] = ValidationError(
+                "Usage count cannot be negative.", code="negative"
+            )
+        if self.usage_limit is not None and int(self.usage_limit) < 0:
+            errors["usage_limit"] = ValidationError(
+                "Usage limit cannot be negative.", code="negative"
+            )
+        if self.valid_from is not None and self.valid_until is not None:
+            from django.utils import timezone
+            now = timezone.now()
+            if self.valid_until < self.valid_from:
+                errors["valid_until"] = ValidationError(
+                    "Valid until must be after valid from.", code="invalid_range"
+                )
+        if errors:
+            raise ValidationError(errors)
+
+    def __str__(self):
+        return f"Coupon: {self.code}"

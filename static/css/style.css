@@ -594,3 +594,37 @@ main {
         max-width: 1624px;
     }
 }
+
+/* ============================================================
+   GLOBAL SCROLLBAR STYLING - #198754
+   Apply globally to the entire project.
+   Use browser default width, only color is customized.
+   ============================================================ */
+
+/* Webkit (Chrome, Edge, Safari) - default width, green color */
+::-webkit-scrollbar {
+    width: auto;
+    height: auto;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #198754;
+    border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #157347;
+}
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Firefox - auto width (browser default), green color */
+html {
+    scrollbar-color: #198754 #f1f1f1;
+}

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart Design Lab — TB SAS</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Vazirmatn", Roboto, sans-serif;
+  background: linear-gradient(180deg, #f4faf6 0%, #e8f0ea 100%);
+  color: #1a2a22;
+  direction: ltr;
+  min-height: 100vh;
+}
+.lab-bar {
+  position: sticky; top: 0; z-index: 999;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #0e5c3d, #198754);
+  color: #fff;
+  font-size: 13px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+}
+.lab-bar .lab-brand { font-weight: 700; letter-spacing: 1px; }
+.lab-bar .lab-title { font-weight: 500; opacity: .92; }
+.hero {
+  text-align: center; padding: 80px 24px 40px; max-width: 1000px; margin: 0 auto;
+}
+.hero .badge {
+  display: inline-block; background: #198754; color: #fff;
+  padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: 42px; font-weight: 800; color: #0e5c3d;
+  letter-spacing: -.5px; margin-bottom: 12px;
+}
+.hero p {
+  font-size: 17px; color: #4a5b53; max-width: 600px; margin: 0 auto 16px; line-height: 1.7;
+}
+.versions {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px 80px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;
+}
+.card {
+  background: #fff; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 4px 16px rgba(13, 62, 41, .08);
+  transition: all .3s ease; text-decoration: none; color: inherit; display: block;
+  border: 1px solid rgba(25, 135, 84, .08);
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px -10px rgba(21, 115, 71, .25);
+}
+.card .preview {
+  height: 200px; display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.card .num {
+  position: absolute; top: 16px; left: 16px;
+  background: #fff; width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; color: #198754;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+}
+.card .tag {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(255, 255, 255, .95); padding: 4px 10px; border-radius: 12px;
+  font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #0e5c3d;
+}
+.card .body { padding: 24px; }
+.card .body h3 { font-size: 20px; font-weight: 700; color: #1a2a22; margin-bottom: 8px; }
+.card .body .phil { font-size: 12px; color: #198754; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 8px; }
+.card .body p { font-size: 14px; color: #5a6b63; line-height: 1.6; margin-bottom: 16px; }
+.card .cta { display: inline-flex; align-items: center; gap: 6px; color: #198754; font-size: 13px; font-weight: 700; }
+
+.preview-1 { background: linear-gradient(135deg, #f8fafc 0%, #e5e7eb 100%); }
+.preview-2 { background: linear-gradient(135deg, #f0f9f3 0%, #dcefe4 100%); }
+.preview-3 { background: linear-gradient(135deg, #1a2a22 0%, #2d3f37 100%); }
+.preview-3 .num { color: #198754; }
+.preview-3 .tag { color: #ca8a04; }
+
+.mock {
+  width: 85%; height: 75%;
+  background: #fff; border-radius: 8px;
+  display: flex; overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+}
+.preview-3 .mock { background: #2a3833; }
+.mock-items {
+  width: 65%;
+  padding: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.mock-summary {
+  width: 35%;
+  background: #fafbfa;
+  padding: 10px;
+  display: flex; flex-direction: column; gap: 6px;
+  border-left: 1px solid #e6e9e7;
+}
+.preview-3 .mock-summary { background: #1f2c26; border-left-color: rgba(255, 255, 255, .08); }
+.mock-bar { height: 6px; background: #e6e9e7; border-radius: 3px; }
+.preview-3 .mock-bar { background: rgba(255, 255, 255, .1); }
+.mock-bar.lg { width: 80%; height: 10px; }
+.mock-bar.md { width: 60%; }
+.mock-bar.sm { width: 40%; }
+.mock-bar.btn { background: #198754; width: 50%; height: 14px; border-radius: 6px; margin-top: auto; }
+.preview-3 .mock-bar.btn { background: #27a06b; }
+.preview-1 .mock-bar.btn { background: #0a0a0a; }
+footer { text-align: center; padding: 30px; color: #5a6b63; font-size: 13px; }
+
+@media (max-width: 768px) {
+  .hero { padding: 50px 16px 24px; }
+  .hero h1 { font-size: 28px; }
+  .hero p { font-size: 14px; }
+  .versions { grid-template-columns: 1fr; padding: 0 16px 50px; }
+}
+</style>
+</head>
+<body>
+
+<div class="lab-bar">
+  <div class="lab-brand">TB SAS</div>
+  <div class="lab-title">Cart Design Lab</div>
+  <div style="width:80px"></div>
+</div>
+
+<div class="hero">
+  <div class="badge">Design Lab</div>
+  <h1>Cart Page — Three Design Directions</h1>
+  <p>Three isolated Cart UI prototypes for visual and interaction comparison. Each version mirrors the real Cart contract (session-based, server-authoritative) but uses different design approaches. Click any version below to explore.</p>
+</div>
+
+<div class="versions">
+
+  <a href="v1/index.html" class="card">
+    <div class="preview preview-1">
+      <div class="num">1</div>
+      <div class="tag">Clean Modern</div>
+      <div class="mock">
+        <div class="mock-items">
+          <div class="mock-bar lg"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar"></div>
+          <div class="mock-bar md"></div>
+        </div>
+        <div class="mock-summary">
+          <div class="mock-bar md"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar btn"></div>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="phil">Minimal · Premium · Spacious</div>
+      <h3>V1 — Clean Modern</h3>
+      <p>A polished, minimal, premium Cart. Generous spacing, strong typography, restrained borders, modern cards. The reference benchmark for a clean, distraction-free shopping experience.</p>
+      <span class="cta">View V1 →</span>
+    </div>
+  </a>
+
+  <a href="v2/index.html" class="card">
+    <div class="preview preview-2">
+      <div class="num">2</div>
+      <div class="tag">Audit Driven</div>
+      <div class="mock">
+        <div class="mock-items">
+          <div class="mock-bar lg"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar md"></div>
+          <div class="mock-bar"></div>
+          <div class="mock-bar md"></div>
+        </div>
+        <div class="mock-summary">
+          <div class="mock-bar md"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar"></div>
+          <div class="mock-bar btn"></div>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="phil">Functional · Honest · Complete</div>
+      <h3>V2 — Audit Driven</h3>
+      <p>Directly derived from the Cart audit findings. Every UX gap addressed: stock state, quantity input, remove confirmation, coupon chip, accessible labels, mobile-friendly. A serious production-ready design.</p>
+      <span class="cta">View V2 →</span>
+    </div>
+  </a>
+
+  <a href="v3/index.html" class="card">
+    <div class="preview preview-3">
+      <div class="num">3</div>
+      <div class="tag">Hybrid</div>
+      <div class="mock">
+        <div class="mock-items">
+          <div class="mock-bar lg"></div>
+          <div class="mock-bar md"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar"></div>
+        </div>
+        <div class="mock-summary">
+          <div class="mock-bar md"></div>
+          <div class="mock-bar sm"></div>
+          <div class="mock-bar"></div>
+          <div class="mock-bar btn"></div>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="phil">Refined · Compact · Confident</div>
+      <h3>V3 — Hybrid / Experimental</h3>
+      <p>Combines V1's visual polish with V2's functional completeness. Adds a denser item card, smart inline price breakdown, refined checkout flow, and a confident dark-accent final CTA.</p>
+      <span class="cta">View V3 →</span>
+    </div>
+  </a>
+
+</div>
+
+<footer>
+  Cart Design Lab — All prototypes are isolated. The production Cart files remain untouched.
+</footer>
+
+</body>
+</html>

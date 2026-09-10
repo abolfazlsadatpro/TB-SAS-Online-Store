@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 2 — Modern E-Commerce</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="shared/base.css">
+<style>
+/* ============================================================
+   PROPOSAL 2 — MODERN E-COMMERCE
+   Cleaner marketplace feel: light 1px borders, hover zoom,
+   full-width CTA, segmented sort, whitespace-driven.
+   ============================================================ */
+.p2 { --brand: #0ca678; --brand-dark: #087f5b; --page-bg: #f7f9f8; }
+
+body[data-proposal="2"] { background: var(--page-bg); }
+
+.p2-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin: 4px 0 22px; flex-wrap: wrap;
+}
+.p2-crumb { font-size: 13px; color: #868e96; }
+.p2-crumb a:hover { color: var(--brand-dark); }
+.p2-crumb b { color: #212529; }
+.p2-title { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -.5px; }
+.p2-count { color: #868e96; font-size: 14px; }
+
+.p2-acts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.p2-acts .chip {
+    background: #fff; border: 1px solid #e9ecef; color: #495057;
+    font-size: 12.5px; font-weight: 600; padding: 6px 13px; border-radius: 8px;
+}
+.p2-acts .chip .rm { margin-left: 6px; color: #adb5bd; cursor: pointer; }
+
+.p2-shell { display: grid; grid-template-columns: 248px 1fr; gap: 28px; align-items: start; }
+
+/* Sidebar */
+.p2-aside { position: sticky; top: 88px; align-self: start; background: transparent; }
+.p2-filters {
+    background: #fff; border: 1px solid #e9ecef; border-radius: 14px; overflow: hidden;
+}
+.p2-filters-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 20px; border-bottom: 1px solid #e9ecef; font-weight: 700; font-size: 15px;
+}
+.p2-filters-head a { font-size: 12.5px; color: var(--brand-dark); font-weight: 600; }
+.p2-filters-head .cls { display: none; }
+.p2-sec { padding: 16px 20px; border-bottom: 1px solid #e9ecef; }
+.p2-sec:last-child { border-bottom: none; }
+.p2-sec h4 { margin: 0 0 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .7px; color: #495057; }
+.p2-opt { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 14px; color: #343a40; cursor: pointer; }
+.p2-opt input { accent-color: var(--brand); width: 17px; height: 17px; }
+.p2-opt .n { margin-left: auto; background: #f1f3f5; color: #868e96; font-size: 12px; padding: 1px 8px; border-radius: 99px; }
+.p2-swatch { gap: 9px; display: flex; flex-wrap: wrap; }
+.p2-swatch span { width: 28px; height: 28px; border-radius: 8px; cursor: pointer; border: 1px solid #dee2e6; }
+.p2-swatch span.on { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* Sort */
+.p2-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.p2-seg {
+    display: inline-flex; background: #fff; border: 1px solid #e9ecef; border-radius: 10px;
+    padding: 3px; gap: 2px;
+}
+.p2-seg button {
+    border: none; background: transparent; padding: 8px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: #495057; cursor: pointer;
+}
+.p2-seg button.active { background: var(--brand-dark); color: #fff; }
+.p2-result { font-size: 13px; color: #868e96; }
+
+/* Grid + cards */
+.p2-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.p2-card {
+    background: #fff; border: 1px solid #e9ecef; border-radius: 14px; overflow: hidden;
+    display: flex; flex-direction: column; transition: box-shadow .2s, border-color .2s;
+}
+.p2-card:hover { box-shadow: 0 14px 34px -18px rgba(0,0,0,.22); border-color: #dbe4e0; }
+.p2-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #f8f9fa; }
+.p2-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+.p2-card:hover .p2-media img { transform: scale(1.05); }
+.p2-flag {
+    position: absolute; top: 12px; left: 12px; background: #fff; color: #c92a2a;
+    font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+.p2-heart {
+    position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 50%;
+    background: #fff; border: 1px solid #e9ecef; color: #adb5bd; cursor: pointer; display: grid; place-items: center;
+    font-size: 15px; transition: color .15s, transform .15s;
+}
+.p2-heart:hover { transform: scale(1.08); }
+.p2-heart.active { color: #e11d48; }
+.p2-body { padding: 15px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.p2-brand { font-size: 12px; font-weight: 700; color: var(--brand); }
+.p2-name { font-size: 15px; font-weight: 700; margin: 0; line-height: 1.35; }
+.p2-rate { display: flex; align-items: center; gap: 6px; color: #f59f00; font-size: 13px; }
+.p2-rate .c { color: #adb5bd; font-size: 12px; }
+.p2-price { display: flex; align-items: center; gap: 8px; }
+.p2-price .old { color: #adb5bd; text-decoration: line-through; font-size: 13px; }
+.p2-price .now { font-size: 18px; font-weight: 800; color: #e8590c; }
+.p2-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #868e96; }
+.p2-meta .ok { color: var(--brand-dark); font-weight: 600; }
+.p2-meta .no { color: #c92a2a; font-weight: 600; }
+.p2-cta {
+    display: flex; gap: 8px; margin-top: auto; padding-top: 4px;
+}
+.p2-add {
+    flex: 1; background: var(--brand-dark); color: #fff; border: none; border-radius: 9px;
+    font-weight: 700; font-size: 13.5px; padding: 10px; cursor: pointer; transition: background .15s;
+}
+.p2-add:hover { background: #065f46; }
+.p2-add:disabled { background: #ced4da; cursor: not-allowed; }
+.p2-eye {
+    width: 42px; border: 1px solid #dee2e6; background: #fff; color: #495057;
+    border-radius: 9px; cursor: pointer; font-size: 15px;
+}
+.p2-eye:hover { background: #f1f3f5; }
+
+/* Pagination */
+.p2-pages { display: flex; justify-content: center; gap: 8px; margin-top: 28px; align-items: center; }
+.p2-pages button {
+    min-width: 38px; height: 38px; border: 1px solid #e9ecef; background: #fff; border-radius: 9px;
+    color: #495057; font-weight: 700; cursor: pointer; display: grid; place-items: center;
+}
+.p2-pages button.on { background: var(--brand-dark); color: #fff; border-color: var(--brand-dark); }
+.p2-pages button:hover:not(.on) { border-color: #adb5bd; }
+
+/* Overlay, toggle, modal, skeleton */
+.p2-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 59; opacity: 0; pointer-events: none; transition: opacity .25s; }
+.p2-overlay.show { opacity: 1; pointer-events: auto; }
+.p2-toggle { display: none; position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--brand-dark); color: #fff; border: none; border-radius: 999px; padding: 13px 24px; font-weight: 700; font-size: 14px; box-shadow: 0 10px 26px rgba(8,127,91,.35); cursor: pointer; }
+.p2-modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; align-items: center; justify-content: center; z-index: 70; padding: 24px; }
+.p2-modal.show { display: flex; }
+.p2-modalbox { background: #fff; border-radius: 18px; width: 100%; max-width: 620px; overflow: hidden; }
+.p2-modalhead { display: flex; justify-content: space-between; align-items: center; padding: 16px 22px; border-bottom: 1px solid #e9ecef; font-weight: 700; }
+.p2-modalhead button { border: none; background: none; font-size: 20px; color: #868e96; cursor: pointer; }
+.p2-modalbody { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 22px; }
+.p2-modalbody img { width: 100%; border-radius: 12px; }
+.p2-modalbody h4 { font-size: 19px; font-weight: 800; margin: 0 0 4px; }
+.p2-modalbody .pr { color: #e8590c; font-weight: 800; font-size: 21px; margin: 10px 0; }
+.p2-modalbody p { color: #868e96; font-size: 14px; }
+
+.sk2 { background: #fff; border: 1px solid #e9ecef; border-radius: 14px; overflow: hidden; }
+.sk2 .img { aspect-ratio: 4/3; background: #f1f3f5; }
+.sk2 .l { height: 13px; margin: 12px 14px 0; border-radius: 7px; background: #f1f3f5; }
+.sk2 .l.w { width: 55%; margin-bottom: 14px; }
+@keyframes p2pulse { 50% { opacity: .5; } }
+.p2-pulse { animation: p2pulse 1.1s ease-in-out infinite; }
+
+@media (max-width: 992px) {
+    .p2-shell { grid-template-columns: 1fr; }
+    .p2-aside { position: static; }
+    .p2-filters {
+        position: fixed; top: 0; right: 0; bottom: 0; width: 320px; max-width: 88%;
+        border-radius: 0; z-index: 60; transform: translateX(100%); transition: transform .3s; overflow-y: auto;
+    }
+    .p2-filters.open { transform: translateX(0); }
+    .p2-filters-head .cls { display: block; }
+    .p2-toggle { display: block; }
+}
+@media (max-width: 560px) {
+    .p2-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .p2-seg { flex-wrap: wrap; }
+    .p2-modalbody { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body data-proposal="2">
+<main class="lab-container">
+    <div class="p2-top">
+        <div class="p2-crumb">TB SAS Online Store / Home / Digital / <b>Mobile Phones</b></div>
+        <div>
+            <h1 class="p2-title">Mobile Phones</h1>
+            <span class="p2-count"><span data-total-count>12</span> products</span>
+        </div>
+    </div>
+
+    <div class="p2-acts" data-active-chips>
+        <span data-chips-empty style="font-size:13px;color:#adb5bd;display:none;">No active filters</span>
+    </div>
+
+    <div class="p2-shell">
+        <aside class="p2-aside">
+            <div class="p2-filters" data-filter-sidebar>
+                <div class="p2-filters-head"><span>Filters</span><a href="#">Clear all</a><button class="cls" data-drawer-close><i class="fa-solid fa-xmark"></i></button></div>
+                <div class="p2-sec">
+                    <h4>Brand</h4>
+                    <label class="p2-opt"><input type="checkbox" value="Apple" data-chip-filter> Apple <span class="n">2</span></label>
+                    <label class="p2-opt"><input type="checkbox" value="Samsung" data-chip-filter> Samsung <span class="n">1</span></label>
+                    <label class="p2-opt"><input type="checkbox" value="Xiaomi" data-chip-filter> Xiaomi <span class="n">3</span></label>
+                    <label class="p2-opt"><input type="checkbox" value="HP" data-chip-filter> HP <span class="n">1</span></label>
+                    <label class="p2-opt"><input type="checkbox" value="Sony" data-chip-filter> Sony <span class="n">1</span></label>
+                </div>
+                <div class="p2-sec">
+                    <h4>Category</h4>
+                    <label class="p2-opt"><input type="checkbox" value="Phone" data-chip-filter> Phone <span class="n">6</span></label>
+                    <label class="p2-opt"><input type="checkbox" value="Laptop" data-chip-filter> Laptop <span class="n">4</span></label>
+                    <label class="p2-opt"><input type="checkbox" value="Audio" data-chip-filter> Audio <span class="n">2</span></label>
+                </div>
+                <div class="p2-sec">
+                    <h4>Color</h4>
+                    <div class="p2-swatch">
+                        <span style="background:#1a1a1a"></span>
+                        <span style="background:#c8c8c8"></span>
+                        <span style="background:#3a5ba0"></span>
+                        <span style="background:#dc2626"></span>
+                        <span style="background:#ffd700"></span>
+                        <span style="background:#16a34a"></span>
+                    </div>
+                </div>
+                <div class="p2-sec">
+                    <h4>Price</h4>
+                    <input type="range" min="149" max="1399" value="800" style="width:100%;accent-color:#0ca678;">
+                    <div style="display:flex;justify-content:space-between;font-size:12px;color:#868e96;margin-top:6px;"><span>$149</span><span>$1,399</span></div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="p2-overlay" data-overlay></div>
+
+        <section>
+            <div class="p2-toolbar">
+                <div class="p2-seg">
+                    <button data-sort class="active">Popular</button>
+                    <button data-sort>Newest</button>
+                    <button data-sort>Low → High</button>
+                    <button data-sort>High → Low</button>
+                </div>
+                <span class="p2-result">Showing 12 of 12</span>
+            </div>
+
+            <div class="p2-grid" data-products-grid></div>
+
+            <div class="p2-pages">
+                <button><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="on">1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>…</button>
+                <button>8</button>
+                <button><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
+            <div style="margin-top:26px;text-align:center;">
+                <button data-demo-loading style="border:1px solid #dee2e6;background:#fff;color:#495057;font-weight:700;padding:9px 18px;border-radius:9px;cursor:pointer;">Demo loading skeleton</button>
+            </div>
+        </section>
+    </div>
+</main>
+
+<button class="p2-toggle" data-drawer-open><i class="fa-solid fa-sliders"></i> Filters</button>
+
+<div class="p2-modal" data-quickview-modal>
+    <div class="p2-modalbox">
+        <div class="p2-modalhead"><span>Quick View</span><button data-quickview-close><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="p2-modalbody">
+            <img data-quickview-img src="">
+            <div>
+                <span class="p2-brand">Phone</span>
+                <h4 data-quickview-title>Product name</h4>
+                <div class="pr">$1,399</div>
+                <p>See full specifications, reviews and availability on the product detail page.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="shared/data.js"></script>
+<script src="shared/header.js"></script>
+<script src="shared/app.js"></script>
+<script>
+(function () {
+    var grid = document.querySelector('[data-products-grid]');
+    if (!grid || !window.PRODUCTS_DATA) return;
+    function stars(r) {
+        var b = window.starBreakdown(r), h = '';
+        for (var i=0;i<b.full;i++) h += '<i class="fa-solid fa-star"></i>';
+        if (b.half) h += '<i class="fa-solid fa-star-half-stroke"></i>';
+        for (var j=0;j<b.empty;j++) h += '<i class="fa-regular fa-star"></i>';
+        return h;
+    }
+    grid.innerHTML = window.PRODUCTS_DATA.map(function (p) {
+        return '' +
+        '<article class="p2-card p2-pulse" style="animation:none;">' +
+          '<div class="p2-media">' +
+            (p.discount ? '<span class="p2-flag">-'+p.discount+'%</span>' : (p.is_new ? '<span class="p2-flag" style="color:#087f5b;">NEW</span>' : '')) +
+            '<button class="p2-heart" data-wishlist><i class="fa-regular fa-heart"></i></button>' +
+            '<img src="' + window.productImageURI(p) + '" alt="' + p.name + '" loading="lazy">' +
+          '</div>' +
+          '<div class="p2-body">' +
+            '<span class="p2-brand">' + p.brand + '</span>' +
+            '<h3 class="p2-name">' + p.name + '</h3>' +
+            '<div class="p2-rate">' + stars(p.rating) + ' <span class="c">' + p.rating_count + '</span></div>' +
+            '<div class="p2-price">' +
+              (p.old_price ? '<span class="old">$' + p.old_price + '</span>' : '') +
+              '<span class="now">$' + p.price + '</span>' +
+            '</div>' +
+            '<div class="p2-meta"><span class="' + (p.in_stock ? 'ok' : 'no') + '">' + (p.in_stock ? '✓ In stock' : '✗ Out of stock') + '</span><span>' + p.colors.length + ' colors</span></div>' +
+            '<div class="p2-cta">' +
+              '<button class="p2-add" ' + (p.in_stock ? '' : 'disabled') + '><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>' +
+              '<button class="p2-eye" data-quickview="' + p.name + '" data-product-id="' + p.id + '"><i class="fa-regular fa-eye"></i></button>' +
+            '</div>' +
+          '</div>' +
+        '</article>';
+    }).join('');
+})();
+</script>
+</body>
+</html>

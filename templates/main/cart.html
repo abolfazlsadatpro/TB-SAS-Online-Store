@@ -4,192 +4,218 @@
 {% block title %}Shopping Cart{% endblock %}
 
 {% block css %}
-
     <link rel="stylesheet" href="{% static 'css/cart.css' %}">
 {% endblock %}
 
 {% block content %}
 
-    <section class="cart-page">
-        <div class="container">
+<section class="cart-page">
 
-            <!-- Breadcrumb -->
-            <div class="breadcrumb-box">
-                <a href="#">TB SAS Online Store</a>
-                <span>/</span>
-                <a href="{% url 'home' %}">Home</a>
-                <span>/</span>
-                <strong>Shopping Cart</strong>
+    <div class="container cart-container">
+
+        <!-- Breadcrumb -->
+        <nav class="cart-breadcrumb" aria-label="Breadcrumb">
+            <a href="{% url 'home' %}">Home</a>
+            <span class="sep" aria-hidden="true">/</span>
+            <span class="last" aria-current="page">Shopping Cart</span>
+        </nav>
+
+        <!-- Page heading -->
+        <div class="cart-header">
+            <h1>Shopping Cart</h1>
+            <div class="cart-subtitle" id="cartSubtitle">
+                {{ lines_count }} product{{ lines_count|pluralize:"s" }} ·
+                {{ badge }} item{{ badge|pluralize:"s" }}
             </div>
+        </div>
 
-            <p class="cart-subtitle">3 products in your cart</p>
+        <div class="cart-layout">
 
-            <div class="cart-layout">
+            <!-- LEFT: items + coupon -->
+            <div class="cart-left">
 
-                <!-- LEFT SIDE -->
-                <div class="cart-items">
+                <div class="cart-items" id="cartItems" role="list" aria-label="Cart items">
+                    {% if cart_items %}
+                        {% for item in cart_items %}
+                        <article class="cart-card {% if not item.is_in_stock %}is-out{% endif %}"
+                                 data-cart-key="{{ item.key }}"
+                                 data-product-id="{{ item.product_id }}"
+                                 data-color-id="{{ item.color_id|default:0 }}"
+                                 role="listitem">
+                            <a class="cart-card-image" href="{% url 'product_detail' item.product_id %}" aria-label="View {{ item.display_name }}">
+                                {% if item.image_url %}
+                                    <img src="{{ item.image_url }}" alt="{{ item.display_name }}">
+                                {% else %}
+                                    <img src="{% static 'images/no-image.png' %}" alt="No image available">
+                                {% endif %}
+                            </a>
 
-                    <!-- Product 1 -->
-                    <div class="cart-card">
-
-                        <img src="{% static 'images/iPhone 17 Pro Max.webp' %}" alt="">
-
-                        <div class="cart-info">
-                            <h4>Apple iPhone 17 Pro Max</h4>
-                            <div class="cart-color">
-                                <span>Color:</span>
-                                <div class="color-dot orange"></div>
-                                <span>Orange</span>
+                            <div class="cart-card-info">
+                                <h3 class="cart-card-name">
+                                    <a href="{% url 'product_detail' item.product_id %}">{{ item.display_name }}</a>
+                                </h3>
+                                {% if item.color_name %}
+                                <div class="cart-card-attr">
+                                    <span class="cart-color-dot" style="background-color: {{ item.color_code|default:'#ccc' }}; border-color: {{ item.color_code|default:'#ddd' }};"></span>
+                                    <span>Color: <strong>{{ item.color_name }}</strong></span>
+                                </div>
+                                {% endif %}
+                                <div class="cart-card-meta">
+                                    <span class="cart-card-stock {% if item.is_in_stock %}in{% else %}out{% endif %}">
+                                        {% if item.is_in_stock %}
+                                            <i class="fa-solid fa-check" aria-hidden="true"></i> In stock
+                                        {% else %}
+                                            <i class="fa-solid fa-xmark" aria-hidden="true"></i> Out of stock
+                                        {% endif %}
+                                    </span>
+                                    <span class="cart-card-price-line">
+                                        {{ item.quantity }} × ${{ item.unit_price|floatformat:"2" }}
+                                    </span>
+                                </div>
                             </div>
-                            <p class="cart-warranty">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                18 Months Warranty
-                            </p>
-                        </div>
 
-                        <div class="cart-quantity">
-                            <button>-</button>
-                            <span>1</span>
-                            <button>+</button>
-                        </div>
-
-                        <div class="cart-price">
-                            $2,951
-                        </div>
-
-                        <button class="remove-btn">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-
-                    </div>
-
-                    <!-- Product 2 -->
-                    <div class="cart-card">
-
-                        <img src="{% static 'images/Galaxy S25 Ultra 5G.webp' %}" alt="">
-
-                        <div class="cart-info">
-                            <h4>Samsung Galaxy S25 Ultra</h4>
-                            <div class="cart-color">
-                                <span>Color:</span>
-                                <div class="color-dot black"></div>
-                                <span>Black</span>
+                            <div class="cart-card-actions">
+                                <div class="cart-card-line-total" data-line-total>${{ item.line_subtotal|floatformat:"2" }}</div>
+                                <div class="cart-qty" role="group" aria-label="Quantity for {{ item.display_name }}">
+                                    <button type="button" class="cart-qty-btn" data-action="decrease" aria-label="Decrease quantity">−</button>
+                                    <input type="number"
+                                           class="cart-qty-input"
+                                           min="1"
+                                           max="99"
+                                           value="{{ item.quantity }}"
+                                           data-qty-input
+                                           aria-label="Quantity for {{ item.display_name }}">
+                                    <button type="button" class="cart-qty-btn" data-action="increase" aria-label="Increase quantity">+</button>
+                                </div>
+                                <button type="button" class="cart-remove" data-action="remove" aria-label="Remove {{ item.display_name }} from cart">
+                                    <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+                                    <span>Remove</span>
+                                </button>
                             </div>
-                            <p class="cart-warranty">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                18 Months Warranty
-                            </p>
-                        </div>
 
-                        <div class="cart-quantity">
-                            <button>-</button>
-                            <span>1</span>
-                            <button>+</button>
-                        </div>
-
-                        <div class="cart-price">
-                            $1,800
-                        </div>
-
-                        <button class="remove-btn">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-
-                    </div>
-
-                    <!-- Product 3 -->
-                    <div class="cart-card">
-
-                        <img src="{% static 'images/Xiaomi Mi 15T 5G.webp' %}" alt="">
-
-                        <div class="cart-info">
-                            <h4>Xiaomi 15T</h4>
-                            <div class="cart-color">
-                                <span>Color:</span>
-                                <div class="color-dot silver"></div>
-                                <span>ُُُُSilver</span>
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                        <div class="cart-empty" id="cartEmpty" aria-label="Empty cart">
+                            <div class="cart-empty-icon" aria-hidden="true">
+                                <i class="fa-solid fa-cart-shopping"></i>
                             </div>
-                            <p class="cart-warranty">
-                                <i class="fa-solid fa-shield-halved"></i>
-                                18 Months Warranty
-                            </p>
+                            <h2>Your cart is empty</h2>
+                            <p>You haven't added anything yet. Discover products and add your favorites to the cart.</p>
+                            <a href="{% url 'products' %}" class="cart-empty-action">
+                                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                                Continue Shopping
+                            </a>
                         </div>
-
-                        <div class="cart-quantity">
-                            <button>-</button>
-                            <span>2</span>
-                            <button>+</button>
-                        </div>
-
-                        <div class="cart-price">
-                            $700
-                        </div>
-
-                        <button class="remove-btn">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-
-                    </div>
-
-                    <!-- Coupon -->
-                    <div class="coupon-box">
-
-                        <input type="text" placeholder="Coupon Code">
-
-                        <button>
-                            Apply Coupon
-                        </button>
-
-                    </div>
-
+                    {% endif %}
                 </div>
 
-                <!-- RIGHT SIDE -->
-                <aside class="cart-summary">
-
-                    <h3>Order Summary</h3>
-
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span>$5,451</span>
+                <!-- Coupon -->
+                {% if cart_items %}
+                <section class="cart-coupon" aria-label="Coupon code">
+                    <h4 class="cart-coupon-title"><i class="fa-solid fa-tag" aria-hidden="true"></i> Have a coupon code?</h4>
+                    <form class="cart-coupon-form" id="cartCouponForm" onsubmit="return false">
+                        <label class="visually-hidden" for="cartCouponInput">Coupon code</label>
+                        <input id="cartCouponInput" placeholder="Enter code" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Coupon code">
+                        <button type="submit" id="cartCouponApply" class="cart-coupon-apply">Apply</button>
+                    </form>
+                    {% if coupon_applied %}
+                    <div class="cart-coupon-applied is-show" id="cartCouponApplied" role="status" aria-live="polite">
+                        <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                        Coupon <span class="cart-coupon-code">{{ coupon_code }}</span> applied
+                        <button type="button" class="cart-coupon-remove" id="cartCouponRemove">Remove</button>
                     </div>
-
-                    <div class="summary-row">
-                        <span>Shipping</span>
-                        <span>Free</span>
+                    {% else %}
+                    <div class="cart-coupon-applied" id="cartCouponApplied" role="status" aria-live="polite">
+                        <i class="fa-solid fa-check-circle" aria-hidden="true"></i>
+                        Coupon <span class="cart-coupon-code" id="cartCouponAppliedCode"></span> applied
+                        <button type="button" class="cart-coupon-remove" id="cartCouponRemove">Remove</button>
                     </div>
-
-                    <div class="summary-row">
-                        <span>Discount</span>
-                        <span>-$100</span>
+                    {% endif %}
+                    <div class="cart-coupon-error" id="cartCouponError" role="alert">
+                        <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                        <span id="cartCouponErrorMsg"></span>
                     </div>
-
-                    <hr>
-
-                    <div class="summary-total">
-                        <span>Total</span>
-                        <span>$5,351</span>
-                    </div>
-
-                    <button class="checkout-btn">
-                        Proceed to Checkout
-                    </button>
-
-                    <a href="{% url 'products' %}" class="continue-shopping">
-                        Continue Shopping
-                    </a>
-
-                </aside>
+                </section>
+                {% endif %}
 
             </div>
 
+            <!-- RIGHT: summary (sticky on desktop) -->
+            {% if cart_items %}
+            <aside class="cart-summary" aria-label="Order summary">
+
+                <!-- Step indicator at the top of the summary -->
+                <div class="step-indicator" aria-label="Checkout steps">
+                    <div class="step is-current" aria-current="step">
+                        <span class="step-num">1</span>
+                        <span>Cart</span>
+                    </div>
+                    <span class="step-arrow" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    <div class="step">
+                        <span class="step-num">2</span>
+                        <span>Checkout</span>
+                    </div>
+                    <span class="step-arrow" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
+                    <div class="step">
+                        <span class="step-num">3</span>
+                        <span>Payment</span>
+                    </div>
+                </div>
+
+                <hr class="cart-summary-divider">
+
+                <h3 class="cart-summary-title">Order Summary</h3>
+
+                <div class="cart-summary-row">
+                    <span class="cart-summary-label">Subtotal (<span id="cartSummaryCount">{{ badge }}</span> item{{ badge|pluralize:"s" }})</span>
+                    <span class="cart-summary-value" id="cartSummarySubtotal">${{ subtotal|floatformat:"2" }}</span>
+                </div>
+
+                <div class="cart-summary-row" id="cartSummaryDiscountRow" {% if not discount or discount|stringformat:"f" == "0.00" %}style="display:none"{% endif %}>
+                    <span class="cart-summary-label">Discount</span>
+                    <span class="cart-summary-value cart-summary-discount" id="cartSummaryDiscount">-${{ discount|floatformat:"2" }}</span>
+                </div>
+
+                <div class="cart-summary-row">
+                    <span class="cart-summary-label">Shipping</span>
+                    <span class="cart-summary-value" id="cartSummaryShipping">{% if shipping == "0.00" %}Free{% else %}${{ shipping|floatformat:"2" }}{% endif %}</span>
+                </div>
+
+                <div class="cart-summary-row" id="cartSummaryTaxRow" {% if not tax or tax|stringformat:"f" == "0.00" %}style="display:none"{% endif %}>
+                    <span class="cart-summary-label">Tax</span>
+                    <span class="cart-summary-value" id="cartSummaryTax">${{ tax|floatformat:"2" }}</span>
+                </div>
+
+                <hr class="cart-summary-divider">
+
+                <div class="cart-summary-total">
+                    <span class="cart-summary-total-label">Total</span>
+                    <span class="cart-summary-total-value" id="cartSummaryTotal">${{ total|floatformat:"2" }}</span>
+                </div>
+
+                <p class="cart-summary-note">Tax and shipping calculated at checkout</p>
+
+                <a href="{% url 'checkout' %}" class="cart-checkout-btn" id="cartCheckoutBtn">
+                    <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                    Proceed to Checkout
+                </a>
+
+                <a href="{% url 'products' %}" class="cart-continue-link">Continue Shopping</a>
+            </aside>
+            {% endif %}
+
         </div>
-    </section>
+
+    </div>
+
+    <!-- Toast / undo region (created by JS) -->
+    <div class="cart-toast-region" id="cartToastRegion" role="status" aria-live="polite"></div>
+
+</section>
 
 {% endblock %}
 
 {% block custom_js %}
-
     <script src="{% static 'js/cart.js' %}"></script>
-
 {% endblock %}

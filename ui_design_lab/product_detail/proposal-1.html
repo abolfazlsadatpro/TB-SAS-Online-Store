@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 1 — Project-Consistent | Product Detail Lab</title>
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+/* ============= PROPOSAL 1 — PROJECT-CONSISTENT ============= */
+:root {
+  --p1-brand: #198754;
+  --p1-brand-dark: #0e5c3d;
+  --p1-ink: #1a2a22;
+  --p1-muted: #6b7a72;
+  --p1-line: #e8ede9;
+  --p1-bg-soft: #f4faf6;
+  --p1-radius: 16px;
+}
+
+.pdl-p1-main {
+  background: #fff;
+  padding-top: 24px;
+  padding-bottom: 60px;
+}
+
+.pdl-p1-breadcrumb {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  padding: 0 20px;
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--p1-muted);
+  flex-wrap: wrap;
+}
+.pdl-p1-breadcrumb a { color: var(--p1-brand); font-weight: 500; }
+.pdl-p1-breadcrumb .sep { color: #c4c8d1; }
+
+.pdl-p1-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.pdl-p1-layout {
+  display: grid;
+  grid-template-columns: 460px 1fr 320px;
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* Gallery */
+.pdl-p1-gallery {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: var(--p1-radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.pdl-p1-mainimage {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 12px;
+  transition: opacity .2s ease;
+}
+.pdl-p1-thumbs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pdl-p1-thumbs img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: #fafafa;
+  transition: all .15s ease;
+}
+.pdl-p1-thumbs img:hover { transform: translateY(-2px); }
+.pdl-p1-thumbs img.is-active {
+  border-color: var(--p1-brand);
+  box-shadow: 0 4px 12px rgba(25, 135, 84, .25);
+}
+
+/* Product info */
+.pdl-p1-info {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: var(--p1-radius);
+  padding: 28px;
+  position: relative;
+}
+.pdl-p1-info h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--p1-ink);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.pdl-p1-info .brand-cat {
+  font-size: 13px;
+  color: var(--p1-muted);
+  margin-bottom: 12px;
+}
+.pdl-p1-info .brand-cat a { color: var(--p1-brand); }
+
+.pdl-p1-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: var(--p1-muted);
+}
+.pdl-p1-stars { color: #ffc107; display: flex; gap: 2px; }
+.pdl-p1-stars .empty { color: #e0e0e0; }
+
+.pdl-p1-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 12px 0;
+  border-top: 1px solid var(--p1-line);
+  border-bottom: 1px solid var(--p1-line);
+}
+.pdl-p1-price {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--p1-brand);
+}
+.pdl-p1-old-price {
+  font-size: 16px;
+  color: #999;
+  text-decoration: line-through;
+}
+.pdl-p1-discount {
+  background: #dc3545;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pdl-p1-section {
+  margin-bottom: 20px;
+}
+.pdl-p1-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--p1-ink);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.pdl-p1-color-section .selected-color {
+  font-size: 13px;
+  color: var(--p1-muted);
+  margin-bottom: 8px;
+}
+.pdl-p1-color-section .selected-color strong {
+  color: var(--p1-ink);
+}
+
+.pdl-p1-colors {
+  display: flex;
+  gap: 10px;
+}
+.pdl-p1-color {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #e0e0e0;
+  position: relative;
+  transition: all .15s ease;
+}
+.pdl-p1-color:hover { transform: scale(1.08); }
+.pdl-p1-color.is-selected {
+  border-color: var(--p1-brand);
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--p1-brand);
+}
+.pdl-p1-color.is-selected::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+
+.pdl-p1-stock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--p1-brand);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.pdl-p1-stock::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--p1-brand);
+  border-radius: 50%;
+}
+
+.pdl-p1-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.pdl-p1-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--p1-line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+.pdl-p1-qty button {
+  width: 40px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--p1-ink);
+  background: #fafafa;
+}
+.pdl-p1-qty button:hover { background: #f0f3f1; }
+.pdl-p1-qty-value {
+  min-width: 44px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 8px;
+}
+
+.pdl-p1-addcart {
+  flex: 1;
+  height: 44px;
+  background: var(--p1-brand);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all .15s ease;
+}
+.pdl-p1-addcart:hover { background: var(--p1-brand-dark); }
+.pdl-p1-addcart.is-added {
+  background: #198754;
+  animation: pdl-p1-pulse .4s ease;
+}
+@keyframes pdl-p1-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(.97); }
+  100% { transform: scale(1); }
+}
+
+.pdl-p1-wishlist {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--p1-line);
+  border-radius: 10px;
+  background: #fff;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s ease;
+}
+.pdl-p1-wishlist:hover { border-color: #e53935; color: #e53935; }
+.pdl-p1-wishlist.is-active { color: #e53935; }
+
+.pdl-p1-warranty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--p1-muted);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--p1-line);
+}
+.pdl-p1-warranty i { color: var(--p1-brand); }
+
+/* Buy box (sticky) */
+.pdl-p1-buybox {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: var(--p1-radius);
+  padding: 20px;
+  position: sticky;
+  top: 150px;
+  align-self: flex-start;
+}
+.pdl-p1-buybox .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--p1-ink);
+  padding: 8px 0;
+}
+.pdl-p1-buybox .row i { color: var(--p1-brand); width: 18px; }
+.pdl-p1-buybox .row b { margin-left: auto; font-weight: 700; }
+
+.pdl-p1-buybox .delivery {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--p1-line);
+  font-size: 12px;
+  color: var(--p1-muted);
+  line-height: 1.6;
+}
+
+/* Details section */
+.pdl-p1-details {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding: 0 20px;
+}
+.pdl-p1-tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--p1-line);
+  margin-bottom: 20px;
+  position: sticky;
+  top: 130px;
+  background: #fff;
+  z-index: 100;
+  padding-top: 8px;
+}
+.pdl-p1-tab {
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--p1-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .15s ease;
+}
+.pdl-p1-tab:hover { color: var(--p1-ink); }
+.pdl-p1-tab.is-active {
+  color: var(--p1-brand);
+  border-bottom-color: var(--p1-brand);
+}
+
+.pdl-p1-tabpanel { display: none; }
+.pdl-p1-tabpanel.is-active { display: block; }
+
+.pdl-p1-specs {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: var(--p1-radius);
+  padding: 8px 24px;
+}
+.pdl-p1-spec-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--p1-line);
+  font-size: 14px;
+}
+.pdl-p1-spec-item:last-child { border-bottom: none; }
+.pdl-p1-spec-item .k { color: var(--p1-muted); }
+.pdl-p1-spec-item .v { color: var(--p1-ink); font-weight: 600; }
+
+.pdl-p1-showmore {
+  text-align: center;
+  padding: 14px 0 4px;
+  color: var(--p1-brand);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.pdl-p1-showmore svg { transition: transform .2s ease; }
+.pdl-p1-showmore.is-open svg { transform: rotate(180deg); }
+.pdl-p1-extra-specs { display: none; }
+.pdl-p1-extra-specs.is-open { display: block; }
+
+.pdl-p1-reviews {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+.pdl-p1-review {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: 12px;
+  padding: 16px;
+}
+.pdl-p1-review .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.pdl-p1-review .user { font-weight: 700; font-size: 13px; }
+.pdl-p1-review .date { font-size: 11px; color: var(--p1-muted); }
+.pdl-p1-review .text { font-size: 13px; color: var(--p1-ink); line-height: 1.6; }
+
+/* Pros cons */
+.pdl-p1-proscons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+.pdl-p1-pc-card {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: 12px;
+  padding: 20px;
+}
+.pdl-p1-pc-card h4 {
+  font-size: 14px;
+  margin-bottom: 10px;
+  padding-top: 8px;
+}
+.pdl-p1-pc-card.pros h4 { color: var(--p1-brand); border-top: 3px solid var(--p1-brand); }
+.pdl-p1-pc-card.cons h4 { color: #dc3545; border-top: 3px solid #dc3545; }
+.pdl-p1-pc-card li { font-size: 13px; margin-bottom: 6px; color: var(--p1-ink); }
+
+/* Mini product card (sticky right) */
+.pdl-p1-mini-wrap {
+  position: sticky;
+  top: 150px;
+  align-self: flex-start;
+}
+.pdl-p1-mini {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: var(--p1-radius);
+  padding: 20px;
+  text-align: center;
+}
+.pdl-p1-mini img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.pdl-p1-mini h4 { font-size: 15px; margin-bottom: 4px; }
+.pdl-p1-mini .mini-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--p1-brand);
+  margin: 10px 0;
+}
+
+/* Related */
+.pdl-p1-related {
+  max-width: 1200px;
+  margin: 60px auto 0;
+  padding: 0 20px;
+}
+.pdl-p1-related h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--p1-ink);
+  margin-bottom: 20px;
+}
+.pdl-p1-related-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+.pdl-p1-related-card {
+  background: #fff;
+  border: 1px solid var(--p1-line);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  transition: all .2s ease;
+}
+.pdl-p1-related-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 0, 0, .08); }
+.pdl-p1-related-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.pdl-p1-related-card .pname { font-size: 12px; color: var(--p1-ink); margin-bottom: 4px; }
+.pdl-p1-related-card .pprice { font-size: 14px; font-weight: 700; color: var(--p1-brand); }
+
+/* Details 2-col layout */
+.pdl-p1-details-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1100px) {
+  .pdl-p1-layout { grid-template-columns: 1fr; }
+  .pdl-p1-buybox { position: static; }
+  .pdl-p1-details-layout { grid-template-columns: 1fr; }
+  .pdl-p1-mini-wrap { position: static; }
+  .pdl-p1-related-grid { grid-template-columns: repeat(3, 1fr); }
+  .pdl-p1-reviews { grid-template-columns: 1fr; }
+  .pdl-p1-proscons { grid-template-columns: 1fr; }
+  .pdl-p1-tabs { top: 120px; }
+}
+@media (max-width: 500px) {
+  .pdl-p1-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .pdl-p1-gallery { padding: 10px; }
+  .pdl-p1-info { padding: 18px; }
+  .pdl-p1-actions { flex-wrap: wrap; }
+  .pdl-p1-addcart { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="lab-badge">PROPOSAL 1</div>
+<a href="index.html" class="lab-back">← Back to Lab</a>
+
+<!-- Site shell (visual reference only) -->
+<nav class="custom-navbar">
+  <div class="nav-top">
+    <a class="nav-logo" href="#"><div style="width:80px;height:32px;background:rgba(255,255,255,.2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">TBSAS</div></a>
+    <form class="nav-search" onsubmit="return false"><span class="search-icon">⌕</span><input placeholder="Search products..."></form>
+    <div class="nav-actions">
+      <a href="#" class="cart-link">🛒<span>Cart</span><span class="cart-badge">0</span></a>
+    </div>
+  </div>
+</nav>
+<div class="category-bar">
+  <div class="container">
+    <a href="#">Mobiles</a><a href="#">Laptops</a><a href="#">Tablets</a><a href="#">Accessories</a>
+  </div>
+</div>
+
+<main class="pdl-p1-main">
+
+  <div class="pdl-p1-breadcrumb">
+    <a href="#">Home</a><span class="sep">/</span>
+    <a href="#">Smartphones</a><span class="sep">/</span>
+    <span id="pdl-p1-bcname">Apple iPhone 17 Pro Max</span>
+  </div>
+
+  <div class="pdl-p1-container">
+    <div class="pdl-p1-layout">
+
+      <!-- Gallery -->
+      <div class="pdl-p1-gallery">
+        <img class="pdl-p1-mainimage" data-pdl-mainimage
+             src="https://images.unsplash.com/photo-1592286927504-1b2b2b2b2b2b?w=800&h=800&fit=crop"
+             alt="Apple iPhone 17 Pro Max" id="pdl-p1-mainimg">
+        <div class="pdl-p1-thumbs" id="pdl-p1-thumbs"></div>
+      </div>
+
+      <!-- Product info -->
+      <div class="pdl-p1-info">
+        <div class="brand-cat">
+          Brand: <a href="#">Apple</a> &nbsp;·&nbsp; Category: <a href="#">Smartphones</a>
+        </div>
+        <h1 id="pdl-p1-name">Apple iPhone 17 Pro Max</h1>
+
+        <div class="pdl-p1-rating">
+          <div class="pdl-p1-stars" id="pdl-p1-stars"></div>
+          <span>4.7</span>
+          <span>·</span>
+          <span>128 reviews</span>
+          <span>·</span>
+          <span>47 comments</span>
+        </div>
+
+        <div class="pdl-p1-price-row">
+          <div class="pdl-p1-price" id="pdl-p1-price">$1,499</div>
+          <div class="pdl-p1-old-price" id="pdl-p1-old">$1,799</div>
+          <div class="pdl-p1-discount" id="pdl-p1-disc">-17%</div>
+        </div>
+
+        <div class="pdl-p1-section pdl-p1-color-section">
+          <div class="selected-color">Selected Color: <strong data-pdl-colorname>Dark Blue</strong></div>
+          <div class="pdl-p1-colors" data-pdl-colorpicker id="pdl-p1-colors"></div>
+        </div>
+
+        <div class="pdl-p1-stock">In Stock — Ships within 24 hours</div>
+
+        <div class="pdl-p1-actions">
+          <div class="pdl-p1-qty" data-pdl-qty>
+            <button class="pdl-p1-qty-minus is-min">−</button>
+            <div class="pdl-p1-qty-value">1</div>
+            <button class="pdl-p1-qty-plus">+</button>
+          </div>
+          <button class="pdl-p1-addcart" data-pdl-addtocart>
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+          <button class="pdl-p1-wishlist" data-pdl-wishlist aria-label="Add to wishlist">
+            <i class="fa-regular fa-heart" style="font-size:18px"></i>
+          </button>
+        </div>
+
+        <div class="pdl-p1-warranty">
+          <i class="fa-solid fa-shield-halved"></i> Official 2-year warranty &nbsp;·&nbsp; Free returns within 7 days
+        </div>
+      </div>
+
+      <!-- Buy box -->
+      <div class="pdl-p1-buybox">
+        <div class="row"><i class="fa-solid fa-face-smile"></i><b>4.7</b> Customer Rating</div>
+        <div class="row"><i class="fa-solid fa-chart-line"></i><span>1,240 Views</span></div>
+        <div class="row"><i class="fa-solid fa-shield-halved"></i><span>Official Warranty</span></div>
+        <div class="row"><i class="fa-solid fa-store"></i><span>Pickup in store</span></div>
+        <div class="row"><i class="fa-solid fa-rotate-left"></i><span>7-Day Returns</span></div>
+        <div class="delivery">
+          <i class="fa-solid fa-truck-fast"></i> Free shipping on orders over $50
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Details -->
+  <div class="pdl-p1-details">
+    <div class="pdl-p1-tabs" data-pdl-tabs id="pdl-p1-tabs">
+      <div class="pdl-p1-tab is-active" data-target="pdl-p1-tab-specs">Specifications</div>
+      <div class="pdl-p1-tab" data-target="pdl-p1-tab-reviews">Reviews (128)</div>
+      <div class="pdl-p1-tab" data-target="pdl-p1-tab-comments">Comments (47)</div>
+    </div>
+
+    <div class="pdl-p1-details-layout">
+      <div>
+        <div class="pdl-p1-tabpanel is-active" id="pdl-p1-tab-specs">
+          <div class="pdl-p1-specs" id="pdl-p1-specs">
+            <!-- Filled by JS -->
+            <div class="pdl-p1-showmore" data-pdl-showmore data-target="pdl-p1-extra-specs">
+              <span data-pdl-showmore-label>Show More</span>
+              <svg data-pdl-showmore-icon width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="pdl-p1-tabpanel" id="pdl-p1-tab-reviews">
+          <h3 style="font-size:18px;margin-bottom:16px">Customer Reviews</h3>
+          <div class="pdl-p1-reviews" id="pdl-p1-reviews"></div>
+        </div>
+
+        <div class="pdl-p1-tabpanel" id="pdl-p1-tab-comments">
+          <h3 style="font-size:18px;margin-bottom:16px">User Comments</h3>
+          <div class="pdl-p1-reviews" id="pdl-p1-comments"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="pdl-p1-mini-wrap">
+          <div class="pdl-p1-mini">
+            <img id="pdl-p1-miniimg" src="https://images.unsplash.com/photo-1592286927504-1b2b2b2b2b2b?w=400&h=400&fit=crop" alt="Apple iPhone 17 Pro Max">
+            <h4 id="pdl-p1-mininame">Apple iPhone 17 Pro Max</h4>
+            <div style="font-size:12px;color:#6b7a72">Color: Dark Blue</div>
+            <div class="mini-price">$1,499</div>
+            <button class="pdl-p1-addcart" data-pdl-addtocart style="width:100%">
+              <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related products -->
+  <div class="pdl-p1-related">
+    <h3>Similar Products</h3>
+    <div class="pdl-p1-related-grid" id="pdl-p1-related"></div>
+  </div>
+
+</main>
+
+<footer class="main-footer">
+  <p>© 2026 TBSAS — Product Detail Design Lab</p>
+</footer>
+
+<script src="shared/data.js"></script>
+<script src="shared/app.js"></script>
+<script>
+(function () {
+  var D = window.PDL_DATA;
+  var P = D.product8;
+  // small color code contrast helper
+  function isLight(hex) {
+    hex = hex.replace("#", "");
+    if (hex.length === 3) hex = hex.split("").map(function (c) { return c + c; }).join("");
+    var r = parseInt(hex.substr(0, 2), 16);
+    var g = parseInt(hex.substr(2, 2), 16);
+    var b = parseInt(hex.substr(4, 2), 16);
+    var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq > 160;
+  }
+
+  // Title and price
+  document.getElementById("pdl-p1-name").textContent = P.name;
+  document.getElementById("pdl-p1-bcname").textContent = P.name;
+  document.getElementById("pdl-p1-price").textContent = "$" + P.finalPrice.toLocaleString();
+  if (P.oldPrice) {
+    document.getElementById("pdl-p1-old").textContent = "$" + P.oldPrice.toLocaleString();
+    document.getElementById("pdl-p1-disc").textContent = "-" + P.discount + "%";
+  } else {
+    document.getElementById("pdl-p1-old").style.display = "none";
+    document.getElementById("pdl-p1-disc").style.display = "none";
+  }
+
+  // Stars
+  var starsEl = document.getElementById("pdl-p1-stars");
+  var full = Math.floor(P.rating);
+  var half = (P.rating - full) >= .5;
+  var html = "";
+  for (var i = 0; i < full; i++) html += '<i class="fa-solid fa-star"></i>';
+  if (half) html += '<i class="fa-solid fa-star-half-stroke"></i>';
+  for (var j = 0; j < (5 - full - (half ? 1 : 0)); j++) html += '<i class="fa-regular fa-star empty"></i>';
+  starsEl.innerHTML = html;
+
+  // Thumbs
+  var thumbsEl = document.getElementById("pdl-p1-thumbs");
+  var allImgs = P.images.length ? P.images : P.colors.filter(function (c) { return c.image; }).map(function (c) { return c.image; });
+  if (!allImgs.length) {
+    thumbsEl.innerHTML = '<div style="width:100%;padding:20px;background:#fafafa;border-radius:8px;text-align:center;color:#888;font-size:12px">No additional images</div>';
+  } else {
+    allImgs.forEach(function (src, i) {
+      var img = document.createElement("img");
+      img.src = src;
+      img.setAttribute("data-pdl-thumb", "");
+      img.setAttribute("data-image", src);
+      img.setAttribute("alt", P.name);
+      if (i === 0) img.classList.add("is-active");
+      thumbsEl.appendChild(img);
+    });
+  }
+
+  // Colors
+  var colorsEl = document.getElementById("pdl-p1-colors");
+  P.colors.forEach(function (c, i) {
+    var div = document.createElement("div");
+    div.className = "pdl-p1-color" + (i === 0 ? " is-selected" : "");
+    div.style.background = c.code;
+    div.setAttribute("data-name", c.name);
+    div.setAttribute("data-image", c.image);
+    div.setAttribute("title", c.name + (c.stock === 0 ? " (Out of stock)" : ""));
+    div.setAttribute("role", "radio");
+    div.setAttribute("aria-checked", i === 0 ? "true" : "false");
+    if (c.stock === 0) div.style.opacity = ".3";
+    colorsEl.appendChild(div);
+  });
+
+  // Specs - show first 4, hide rest
+  var specsEl = document.getElementById("pdl-p1-specs");
+  var visible = P.specs.slice(0, 4);
+  var extra = P.specs.slice(4);
+  visible.forEach(function (s) {
+    var row = document.createElement("div");
+    row.className = "pdl-p1-spec-item";
+    row.innerHTML = '<span class="k">' + s.title + '</span><span class="v">' + s.value + '</span>';
+    specsEl.insertBefore(row, specsEl.firstChild.nextSibling);
+  });
+  if (extra.length) {
+    var wrap = document.createElement("div");
+    wrap.id = "pdl-p1-extra-specs";
+    wrap.className = "pdl-p1-extra-specs";
+    extra.forEach(function (s) {
+      var row = document.createElement("div");
+      row.className = "pdl-p1-spec-item";
+      row.innerHTML = '<span class="k">' + s.title + '</span><span class="v">' + s.value + '</span>';
+      wrap.appendChild(row);
+    });
+    specsEl.insertBefore(wrap, specsEl.querySelector(".pdl-p1-showmore"));
+  } else {
+    specsEl.querySelector(".pdl-p1-showmore").style.display = "none";
+  }
+
+  // Reviews
+  var reviewsEl = document.getElementById("pdl-p1-reviews");
+  D.reviews.forEach(function (r) {
+    var card = document.createElement("div");
+    card.className = "pdl-p1-review";
+    var stars = "";
+    for (var k = 0; k < r.rating; k++) stars += '<i class="fa-solid fa-star"></i>';
+    for (var m = 0; m < 5 - r.rating; m++) stars += '<i class="fa-regular fa-star empty"></i>';
+    card.innerHTML =
+      '<div class="top"><div class="user">' + r.user + '</div><div class="date">' + r.date + '</div></div>' +
+      '<div class="pdl-p1-stars" style="margin-bottom:8px">' + stars + '</div>' +
+      '<div class="text">' + r.text + '</div>';
+    reviewsEl.appendChild(card);
+  });
+  // Mirror to comments
+  document.getElementById("pdl-p1-comments").innerHTML = reviewsEl.innerHTML;
+
+  // Related
+  var relEl = document.getElementById("pdl-p1-related");
+  D.related.forEach(function (r) {
+    var card = document.createElement("a");
+    card.href = "#";
+    card.className = "pdl-p1-related-card";
+    card.innerHTML =
+      '<img src="' + r.image + '" alt="' + r.name + '">' +
+      '<div class="pname">' + r.name + '</div>' +
+      '<div class="pprice">$' + r.price.toLocaleString() + '</div>';
+    relEl.appendChild(card);
+  });
+
+  // Update minicart when main image changes
+  var miniImg = document.getElementById("pdl-p1-miniimg");
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-pdl-thumb]");
+    if (t && miniImg) miniImg.src = t.getAttribute("data-image") || t.src;
+  });
+})();
+</script>
+</body>
+</html>

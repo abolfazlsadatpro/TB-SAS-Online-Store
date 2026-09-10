@@ -1,11 +1,15 @@
 from django.contrib import messages
+from django.db import transaction, IntegrityError
+from django.db.models import Avg, Count, Q, Min, Max, F, Exists, OuterRef, IntegerField, FloatField
+
 from store.models import (
     VoteProduct, CommentVote, Product, Wishlist, Brand, AboutUsSection,
-    SettingSite, Category, ProductSpecification, ProductAttribute, ProductAttributeValue
+    SettingSite, Category, ProductSpecification, ProductAttribute, ProductAttributeValue,
+    Order, OrderItem, Coupon
 )
 from store.forms import VoteSubmitForm
 from django.shortcuts import render
-from django.db.models import Avg, Count, Q, Min, Max, F, Exists, OuterRef, IntegerField, FloatField
+from django.db.models import Avg, Count, Q, Min, Max, Exists, OuterRef, IntegerField, FloatField
 from django.db.models.functions import Coalesce
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
@@ -14,7 +18,25 @@ from store.services.home_services import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods
+from django.db.models import Avg, Count, Q, Min, Max, F, Exists, OuterRef, IntegerField, FloatField
+from django.db.models.functions import Coalesce
+from django.core.paginator import Paginator
+from django.template.loader import render_to_string
+from .forms import ContactMessageForm
+from store.services.home_services import *
+from store.services import cart_service as cs
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from decimal import Decimal
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST, require_http_methods
+from store.services import cart_service as cs, coupon_service as coupon_svc
+from decimal import Decimal
 
 
 def home_page(request):
@@ -110,12 +132,14 @@ def filter_test(request):
     search_q = request.GET.get("q", "").strip()
     sort_key = request.GET.get("sort", "").strip()
 
-    # Attribute filters: attr_<attribute_slug>=value1,value2
+    # Attribute filters: attr_<attribute_slug>=value1&attr_<attribute_slug>=value2
     attr_filters = {}
-    for key, value in request.GET.items():
-        if key.startswith("attr_") and value:
+    for key in request.GET.keys():
+        if key.startswith("attr_"):
             attr_slug = key[5:]  # Remove 'attr_' prefix
-            attr_filters[attr_slug] = value.split(",")
+            values = request.GET.getlist(key)
+            if values:
+                attr_filters[attr_slug] = values
 
     # Effective price annotation
     effective_price = Coalesce(F("discount_price"), F("price"), output_field=IntegerField())
@@ -345,12 +369,14 @@ def products(request):
     search_q = request.GET.get("q", "").strip()
     sort_key = request.GET.get("sort", "").strip()
 
-    # Attribute filters: attr_<attribute_slug>=value1,value2
+    # Attribute filters: attr_<attribute_slug>=value1&attr_<attribute_slug>=value2
     attr_filters = {}
-    for key, value in request.GET.items():
-        if key.startswith("attr_") and value:
+    for key in request.GET.keys():
+        if key.startswith("attr_"):
             attr_slug = key[5:]  # Remove 'attr_' prefix
-            attr_filters[attr_slug] = value.split(",")
+            values = request.GET.getlist(key)
+            if values:
+                attr_filters[attr_slug] = values
 
     # Check if AJAX request
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest" or request.GET.get("ajax") == "1"
@@ -729,6 +755,74 @@ def product_detail(request, product_id):
     )
 
 
+def get_product_details(request, product_id):
+    try:
+        product = Product.objects.get(
+            id=product_id,
+            is_active=True,
+            is_available=True
+        )
+    except Product.DoesNotExist:
+        return JsonResponse(
+            {"success": False, "error": "Product not found"},
+            status=404,
+        )
+
+    # Wishlist status
+    in_wishlist = False
+    if request.user.is_authenticated:
+        in_wishlist = Wishlist.objects.filter(
+            user=request.user, product=product
+        ).exists()
+
+    # Average rating
+    average_rating = (
+        product.comments.filter(status=True)
+        .aggregate(Avg("rating"))["rating__avg"]
+        or 0
+    )
+    full_stars = int(average_rating)
+    half_star = (average_rating - full_stars) >= 0.5
+
+    # Images
+    images = []
+    if product.main_image:
+        images.append({"url": product.main_image.url, "kind": "normal"})
+    for color in product.colors.all():
+        if color.image:
+            images.append({"url": color.image.url, "kind": "color", "name": color.name})
+    for image in product.images.all():
+        if image.image:
+            images.append({"url": image.image.url, "kind": "normal"})
+
+    # Attributes
+    attributes = []
+    for aa in product.attribute_assignments.all():
+        attributes.append({"name": aa.attribute.name, "value": aa.value.value})
+
+    data = {
+        "success": True,
+        "product": {
+            "id": product.id,
+            "name": product.name,
+            "category": product.category.name if product.category else "",
+            "images": images,
+            "main_image": product.main_image.url if product.main_image else "",
+            "star_full": list(range(full_stars)),
+            "star_half": half_star,
+            "rating_count": product.comments.filter(status=True).count(),
+            "has_discount": product.has_discount,
+            "price": product.price,
+            "final_price": product.discount_price if product.has_discount else product.price,
+            "discount_percent": product.discount_percent,
+            "description": product.description or "",
+            "in_wishlist": in_wishlist,
+            "attributes": attributes,
+        },
+    }
+    return JsonResponse(data)
+
+
 @login_required
 def submit_review(request, product_id):
     product = get_object_or_404(Product, id=product_id)
@@ -900,10 +994,12 @@ def filter_mockups(request):
     sort_key = request.GET.get("sort", "").strip()
 
     attr_filters = {}
-    for key, value in request.GET.items():
-        if key.startswith("attr_") and value:
+    for key in request.GET.keys():
+        if key.startswith("attr_"):
             attr_slug = key[5:]      # حذف 'attr_'
-            attr_filters[attr_slug] = value.split(",")
+            values = request.GET.getlist(key)
+            if values:
+                attr_filters[attr_slug] = values
 
     effective_price = Coalesce(F("discount_price"), F("price"), output_field=IntegerField())
 
@@ -1047,3 +1143,381 @@ def filter_mockups(request):
     # -------------------------------------------------
 
     return render(request, "main/mockups/filter/index.html", context)
+
+
+# ============================================================
+# Cart / Checkout Endpoints (TASK 25/26 — restored)
+# ============================================================
+
+def _serialize_money(value):
+    """Serialize Decimal/float to string with 2 decimal places."""
+    if value is None:
+        return "0.00"
+    try:
+        return f"{Decimal(str(value)):.2f}"
+    except Exception:
+        return "0.00"
+
+
+def _build_items_json(resolved_items):
+    result = []
+    for item in resolved_items:
+        result.append({
+            "key": item.get("key"),
+            "product_id": item.get("product_id"),
+            "display_name": item.get("display_name", ""),
+            "color_name": item.get("color_name"),
+            "color_code": item.get("color_code"),
+            "quantity": item.get("quantity", 0),
+            "unit_price": _serialize_money(item.get("unit_price")),
+            "line_subtotal": _serialize_money(item.get("line_subtotal")),
+            "image_url": item.get("image_url"),
+            "is_in_stock": item.get("is_in_stock", True),
+        })
+    return result
+
+
+def _build_cart_response(request, extra_warnings=None):
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    totals = cs.calculate_totals(request)
+    return {
+        "success": True,
+        "badge": cs.get_badge_count(request),
+        "lines_count": cs.get_lines_count(request),
+        "items_count": cs.get_badge_count(request),
+        "subtotal": _serialize_money(totals.get("subtotal")),
+        "discount": _serialize_money(totals.get("discount")),
+        "shipping": _serialize_money(totals.get("shipping")),
+        "tax": _serialize_money(totals.get("tax")),
+        "total": _serialize_money(totals.get("total")),
+        "items": _build_items_json(resolved_items),
+        "warnings": warnings if extra_warnings is None else (extra_warnings or []),
+    }
+
+
+def cart_show(request):
+    """Cart page — dynamic, server-authoritative."""
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    subtotal = cs.calculate_subtotal(request)
+    session_discount = coupon_svc.get_coupon_discount(request, subtotal)
+    totals = cs.calculate_totals(request, discount=session_discount)
+    coupon_code = request.session.get("cart_coupon_code", "")
+    context = {
+        "cart_items": resolved_items,
+        "badge": cs.get_badge_count(request),
+        "lines_count": cs.get_lines_count(request),
+        "subtotal": totals.get("subtotal"),
+        "discount": totals.get("discount"),
+        "shipping": totals.get("shipping"),
+        "tax": totals.get("tax"),
+        "total": totals.get("total"),
+        "warnings": warnings,
+        "coupon_applied": bool(coupon_code) and session_discount > 0,
+        "coupon_code": coupon_code,
+    }
+    return render(request, 'main/cart.html', context)
+
+
+@require_http_methods(["POST"])
+def add_to_cart_view(request):
+    product_id_raw = request.POST.get("product_id") or request.POST.get("product_id[]")
+    quantity_raw = request.POST.get("quantity", 1)
+    color_id_raw = request.POST.get("color_id") or request.POST.get("color_id[]")
+    set_quantity_raw = request.POST.get("set_quantity", "false")
+    set_quantity = str(set_quantity_raw).lower() == "true"
+
+    if product_id_raw is None:
+        return JsonResponse({"success": False, "message": "Missing product_id."}, status=400)
+
+    try:
+        product_id = int(product_id_raw)
+    except (ValueError, TypeError):
+        return JsonResponse({"success": False, "message": "Invalid product_id."}, status=400)
+
+    color_id = None
+    if color_id_raw is not None and str(color_id_raw).strip() != "":
+        try:
+            color_id_val = int(color_id_raw)
+            color_id = None if color_id_val == 0 else color_id_val
+        except (ValueError, TypeError):
+            return JsonResponse({"success": False, "message": "Invalid color_id."}, status=400)
+
+    try:
+        quantity = int(quantity_raw)
+    except (ValueError, TypeError):
+        return JsonResponse({"success": False, "message": "Invalid quantity."}, status=400)
+
+    result = cs.add_item(request, product_id, quantity=quantity, color_id=color_id, set_quantity=set_quantity)
+    resolved_items, _, _ = cs.resolve_items(request)
+    totals = cs.calculate_totals(request)
+    response_data = _build_cart_response(request)
+    response_data["success"] = result.get("success", False)
+    response_data["message"] = result.get("message", "")
+    response_data["key"] = result.get("key")
+    response_data["quantity"] = result.get("quantity", 0)
+    status = 200 if result.get("success") else 400
+    return JsonResponse(response_data, status=status)
+
+
+@require_http_methods(["POST"])
+def update_cart_view(request):
+    key_raw = request.POST.get("key")
+    quantity_raw = request.POST.get("quantity")
+
+    if key_raw is None:
+        return JsonResponse({"success": False, "message": "Missing key."}, status=400)
+
+    try:
+        quantity = int(quantity_raw)
+    except (ValueError, TypeError):
+        return JsonResponse({"success": False, "message": "Invalid quantity."}, status=400)
+
+    result = cs.update_item(request, str(key_raw), quantity)
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    response_data = _build_cart_response(request, extra_warnings=warnings)
+    response_data["success"] = result.get("success", False)
+    response_data["message"] = result.get("message", "")
+    response_data["quantity"] = result.get("quantity", 0)
+    status = 200 if result.get("success") else 400
+    return JsonResponse(response_data, status=status)
+
+
+@require_http_methods(["POST"])
+def remove_cart_view(request):
+    key_raw = request.POST.get("key")
+    if key_raw is None:
+        return JsonResponse({"success": False, "message": "Missing key."}, status=400)
+
+    result = cs.remove_item(request, str(key_raw))
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    response_data = _build_cart_response(request, extra_warnings=warnings)
+    response_data["success"] = result.get("success", False)
+    response_data["message"] = result.get("message", "")
+    status = 200 if result.get("success") else 400
+    return JsonResponse(response_data, status=status)
+
+
+@require_http_methods(["GET"])
+def cart_state_view(request):
+    """GET endpoint: authoritative cart state."""
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    session_discount = coupon_svc.get_coupon_discount(request, cs.calculate_subtotal(request))
+    totals = cs.calculate_totals(request, discount=session_discount)
+    response_data = _build_cart_response(request, extra_warnings=warnings)
+    response_data.update({
+        "subtotal": _serialize_money(totals.get("subtotal")),
+        "discount": _serialize_money(totals.get("discount")),
+        "shipping": _serialize_money(totals.get("shipping")),
+        "tax": _serialize_money(totals.get("tax")),
+        "total": _serialize_money(totals.get("total")),
+    })
+    return JsonResponse(response_data)
+
+
+@require_http_methods(["POST"])
+def cart_coupon_apply(request):
+    code_raw = request.POST.get("code")
+    if code_raw is None:
+        return JsonResponse({"success": False, "message": "Missing coupon code."}, status=400)
+
+    result = coupon_svc.apply_coupon(request, str(code_raw))
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    totals = cs.calculate_totals(request, discount=result.get("discount", Decimal("0")))
+    response_data = _build_cart_response(request, extra_warnings=warnings)
+    response_data["success"] = result.get("success", False)
+    response_data["message"] = result.get("message", "")
+    response_data["coupon_applied"] = result.get("coupon_applied", False)
+    response_data["coupon_code"] = result.get("coupon_code")
+    response_data["discount"] = _serialize_money(result.get("discount", totals.get("discount")))
+    response_data["total"] = _serialize_money(totals.get("total"))
+    status = 200 if result.get("success") else 400
+    return JsonResponse(response_data, status=status)
+
+
+@require_http_methods(["POST"])
+def cart_coupon_remove(request):
+    result = coupon_svc.remove_coupon(request)
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    totals = cs.calculate_totals(request, discount=Decimal("0"))
+    response_data = _build_cart_response(request, extra_warnings=warnings)
+    response_data["success"] = result.get("success", False)
+    response_data["message"] = result.get("message", "")
+    response_data["coupon_applied"] = False
+    response_data["coupon_code"] = None
+    response_data["total"] = _serialize_money(totals.get("total"))
+    return JsonResponse(response_data)
+
+
+def checkout_page(request):
+    """Checkout page — handles GET (display) and POST (create Order with Coupon integration)."""
+    if request.method == "POST":
+        idempotency_key = (request.POST.get("idempotency_key") or "").strip()
+        if idempotency_key:
+            existing_order = Order.objects.filter(idempotency_key=idempotency_key).first()
+            if existing_order is not None:
+                messages.success(request, 'Your order has already been placed (duplicate submission ignored).')
+                return redirect('checkout')
+
+        resolved_items, warnings, _ = cs.resolve_items(request)
+        if not resolved_items:
+            context = {
+                "cart_items": resolved_items,
+                "badge": cs.get_badge_count(request),
+                "lines_count": cs.get_lines_count(request),
+                "subtotal": Decimal("0"),
+                "shipping": Decimal("0"),
+                "tax": Decimal("0"),
+                "total": Decimal("0"),
+                "discount": Decimal("0"),
+                "warnings": warnings,
+                "checkout_error": "Your cart is empty.",
+                "idempotency_key": idempotency_key,
+            }
+            return render(request, 'main/checkout.html', context)
+
+        session_discount = coupon_svc.get_coupon_discount(request, cs.calculate_subtotal(request))
+        totals = cs.calculate_totals(request, discount=session_discount)
+
+        session_coupon_code = None
+        session_obj = getattr(request, "session", None)
+        if session_obj is not None:
+            raw_coupon = session_obj.get("cart_coupon_code", None)
+            if raw_coupon:
+                session_coupon_code = coupon_svc.normalize_coupon_code(raw_coupon)
+
+        full_name = request.POST.get("full_name", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        address = request.POST.get("address", "").strip()
+        country = request.POST.get("country", "").strip()
+        city = request.POST.get("city", "").strip()
+        postal_code = request.POST.get("postal_code", "").strip()
+        payment_method = request.POST.get("payment", "cash_on_delivery").strip()
+
+        if not full_name or not email or not address:
+            context = {
+                "cart_items": resolved_items,
+                "badge": cs.get_badge_count(request),
+                "lines_count": cs.get_lines_count(request),
+                "subtotal": totals.get("subtotal"),
+                "shipping": totals.get("shipping"),
+                "tax": totals.get("tax"),
+                "total": totals.get("total"),
+                "discount": totals.get("discount"),
+                "warnings": warnings,
+                "checkout_error": "Please complete all required customer information fields.",
+                "idempotency_key": idempotency_key,
+            }
+            return render(request, 'main/checkout.html', context)
+
+        customer = None
+        if request.user.is_authenticated:
+            from store.models import Customer
+            try:
+                customer = Customer.objects.get(user=request.user)
+            except Customer.DoesNotExist:
+                customer = None
+
+        if not idempotency_key:
+            import secrets
+            idempotency_key = secrets.token_urlsafe(32)
+
+        coupon_limit_exceeded = False
+        with transaction.atomic():
+            existing_order = Order.objects.filter(idempotency_key=idempotency_key).first()
+            if existing_order is not None:
+                messages.success(request, 'Your order has already been placed (duplicate submission ignored).')
+                return redirect('checkout')
+
+            try:
+                with transaction.atomic():
+                    order = Order.objects.create(
+                        customer=customer,
+                        is_paid=False,
+                        total_price=int(totals.get("total")) if totals.get("total") is not None else 0,
+                        status=0,
+                        note="Checkout from session cart.",
+                        method_auto=True,
+                        coupon_code=session_coupon_code or "",
+                        discount_amount=session_discount or Decimal("0"),
+                        idempotency_key=idempotency_key,
+                    )
+            except IntegrityError:
+                existing_order = Order.objects.filter(idempotency_key=idempotency_key).first()
+                if existing_order is None:
+                    raise
+                messages.success(request, 'Your order has already been placed (duplicate submission ignored).')
+                return redirect('checkout')
+
+            for item in resolved_items:
+                selected_color_obj = item.get("selected_color")
+                OrderItem.objects.create(
+                    order=order,
+                    product=item.get("product"),
+                    quantity=item.get("quantity", 0),
+                    price=item.get("unit_price", Decimal("0")) if item.get("unit_price") is not None else Decimal("0"),
+                    color=selected_color_obj if selected_color_obj else None,
+                )
+
+            if session_coupon_code:
+                coupon = Coupon.objects.filter(code=session_coupon_code).first()
+                if coupon is not None and coupon.usage_limit is not None and coupon.usage_limit > 0:
+                    rows_updated = Coupon.objects.filter(
+                        id=coupon.id,
+                        usage_count__lt=coupon.usage_limit,
+                    ).update(usage_count=F("usage_count") + 1)
+                    if rows_updated == 0:
+                        transaction.set_rollback(True)
+                        coupon_limit_exceeded = True
+
+            if not coupon_limit_exceeded:
+                cs.clear_cart(request)
+                session = getattr(request, "session", None)
+                if session is not None:
+                    session.pop("cart_coupon_code", None)
+                    if hasattr(session, "modified"):
+                        session.modified = True
+
+        if coupon_limit_exceeded:
+            session = getattr(request, "session", None)
+            if session is not None:
+                session.pop("cart_coupon_code", None)
+                if hasattr(session, "modified"):
+                    session.modified = True
+            totals_without_coupon = cs.calculate_totals(request, discount=Decimal("0"))
+            context = {
+                "cart_items": resolved_items,
+                "badge": cs.get_badge_count(request),
+                "lines_count": cs.get_lines_count(request),
+                "subtotal": totals_without_coupon.get("subtotal"),
+                "shipping": totals_without_coupon.get("shipping"),
+                "tax": totals_without_coupon.get("tax"),
+                "total": totals_without_coupon.get("total"),
+                "discount": Decimal("0"),
+                "warnings": warnings,
+                "checkout_error": "The applied coupon has reached its usage limit and was removed.",
+                "idempotency_key": idempotency_key,
+            }
+            return render(request, 'main/checkout.html', context)
+
+        messages.success(request, 'Order placed successfully.')
+        return redirect('checkout')
+
+    import secrets
+    new_idempotency_key = secrets.token_urlsafe(32)
+    resolved_items, warnings, _ = cs.resolve_items(request)
+    totals = cs.calculate_totals(request)
+    context = {
+        "cart_items": resolved_items,
+        "badge": cs.get_badge_count(request),
+        "lines_count": cs.get_lines_count(request),
+        "subtotal": totals.get("subtotal"),
+        "shipping": totals.get("shipping"),
+        "tax": totals.get("tax"),
+        "total": totals.get("total"),
+        "discount": totals.get("discount"),
+        "warnings": warnings,
+        "checkout_error": None,
+        "idempotency_key": new_idempotency_key,
+    }
+    return render(request, 'main/checkout.html', context)

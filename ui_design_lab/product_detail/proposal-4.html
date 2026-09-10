@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposal 4 — UX-First | Product Detail Lab</title>
+<link rel="stylesheet" href="shared/base.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<style>
+/* ============= PROPOSAL 4 — UX-FIRST ============= */
+:root {
+  --p4-brand: #198754;
+  --p4-brand-dark: #0e5c3d;
+  --p4-ink: #0a0a0a;
+  --p4-muted: #5e6b62;
+  --p4-line: #e0e5e1;
+  --p4-bg-soft: #fefdf7;
+  --p4-warn: #d97706;
+  --p4-error: #dc2626;
+  --p4-radius: 10px;
+}
+
+body { background: var(--p4-bg-soft); }
+
+/* Stronger navbar to anchor UX */
+.custom-navbar { background: linear-gradient(135deg, #0e5c3d, #198754); border-radius: 0; margin: 0; }
+.category-bar { background: #fff; border: none; border-bottom: 1px solid var(--p4-line); border-radius: 0; margin: 0; padding: 10px 0; margin-top: 75px; }
+.category-bar .container { max-width: 1240px; margin: 0 auto; }
+.category-bar a { color: var(--p4-ink); font-size: 14px; font-weight: 500; }
+
+body { padding-top: 130px; }
+
+.pdl-p4-main { padding: 16px 0 60px; }
+.pdl-p4-container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
+
+/* UX-bar: a clear status strip at top of the page */
+.pdl-p4-uxbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--p4-line);
+  border-radius: var(--p4-radius);
+  padding: 10px 16px;
+  margin: 16px 0 20px;
+  font-size: 13px;
+  color: var(--p4-ink);
+}
+.pdl-p4-uxbar .dot { width: 8px; height: 8px; background: var(--p4-brand); border-radius: 50%; }
+.pdl-p4-uxbar b { font-weight: 600; }
+.pdl-p4-uxbar .spacer { flex: 1; }
+.pdl-p4-uxbar a { color: var(--p4-brand); font-weight: 500; }
+.pdl-p4-uxbar .arrow { color: #cbd5e1; }
+
+.pdl-p4-breadcrumb {
+  display: flex;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--p4-muted);
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.pdl-p4-breadcrumb a { color: var(--p4-muted); }
+.pdl-p4-breadcrumb a:hover { color: var(--p4-brand); text-decoration: underline; }
+.pdl-p4-breadcrumb .last { color: var(--p4-ink); font-weight: 600; }
+.pdl-p4-breadcrumb .sep { color: #cbd5e1; }
+
+/* Layout: gallery | info | buy */
+.pdl-p4-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 300px;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Gallery: thumbnail strip below large image */
+.pdl-p4-gallery {
+  background: #fff;
+  border: 1px solid var(--p4-line);
+  border-radius: var(--p4-radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pdl-p4-mainimage-wrap {
+  background: #fafafa;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.pdl-p4-mainimage { max-width: 90%; max-height: 90%; object-fit: contain; transition: opacity .2s ease; }
+.pdl-p4-disc {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--p4-error);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.pdl-p4-thumbs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.pdl-p4-thumbs img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background: #fff;
+  transition: all .15s ease;
+}
+.pdl-p4-thumbs img:hover { transform: scale(1.06); }
+.pdl-p4-thumbs img.is-active { border-color: var(--p4-brand); }
+
+/* Info column */
+.pdl-p4-info {
+  background: #fff;
+  border: 1px solid var(--p4-line);
+  border-radius: var(--p4-radius);
+  padding: 24px;
+}
+.pdl-p4-brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--p4-muted);
+  margin-bottom: 4px;
+}
+.pdl-p4-brand-row a { color: var(--p4-brand); font-weight: 500; }
+.pdl-p4-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--p4-ink);
+  line-height: 1.3;
+  margin: 6px 0 8px;
+}
+.pdl-p4-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--p4-muted);
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--p4-line);
+}
+.pdl-p4-stars { color: #fbbf24; display: flex; gap: 1px; }
+.pdl-p4-stars .empty { color: #e5e7eb; }
+.pdl-p4-rating-score { font-weight: 700; color: var(--p4-ink); }
+.pdl-p4-divider { width: 1px; height: 12px; background: var(--p4-line); }
+.pdl-p4-rating-link { color: var(--p4-muted); text-decoration: underline; cursor: pointer; }
+.pdl-p4-rating-link:hover { color: var(--p4-brand); }
+
+/* Price callout — high contrast, unmistakable */
+.pdl-p4-price {
+  background: #f0fdf4;
+  border: 2px solid var(--p4-brand);
+  border-radius: var(--p4-radius);
+  padding: 16px 20px;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pdl-p4-price-now {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--p4-brand);
+  letter-spacing: -.5px;
+}
+.pdl-p4-price-old {
+  font-size: 16px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+.pdl-p4-price-save {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--p4-error);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.pdl-p4-stock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--p4-brand);
+}
+.pdl-p4-stock::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: var(--p4-brand);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(25, 135, 84, .2);
+}
+.pdl-p4-stock.low::before { background: var(--p4-warn); box-shadow: 0 0 0 4px rgba(217, 119, 6, .2); }
+.pdl-p4-stock.out::before { background: var(--p4-error); box-shadow: 0 0 0 4px rgba(220, 38, 38, .2); }
+
+.pdl-p4-section {
+  margin-bottom: 16px;
+}
+.pdl-p4-section-title {
+  font-size: 12px;
+  color: var(--p4-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.pdl-p4-section-title b { color: var(--p4-ink); }
+
+/* Color pickers with strong feedback */
+.pdl-p4-colors {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pdl-p4-color {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  border: 2px solid #d4d4d4;
+  transition: all .15s ease;
+}
+.pdl-p4-color:hover { transform: scale(1.1); }
+.pdl-p4-color.is-selected {
+  border-color: var(--p4-brand);
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--p4-brand);
+  transform: scale(1.08);
+}
+.pdl-p4-color.is-selected::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+  font-size: 15px;
+}
+.pdl-p4-color-name { display: inline-block; margin-left: 8px; font-size: 13px; color: var(--p4-ink); font-weight: 500; }
+
+/* Quantity with stepper */
+.pdl-p4-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--p4-line);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color .15s ease;
+}
+.pdl-p4-qty:focus-within { border-color: var(--p4-brand); }
+.pdl-p4-qty button {
+  width: 42px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--p4-ink);
+  background: #fff;
+  transition: background .15s ease;
+}
+.pdl-p4-qty button:hover { background: #f0fdf4; }
+.pdl-p4-qty-value {
+  min-width: 44px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 0 8px;
+  border-left: 1px solid var(--p4-line);
+  border-right: 1px solid var(--p4-line);
+}
+
+/* Primary CTA: large, accessible, with strong hover */
+.pdl-p4-addcart {
+  width: 100%;
+  height: 54px;
+  background: var(--p4-brand);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all .15s ease;
+  box-shadow: 0 2px 0 var(--p4-brand-dark), 0 4px 12px rgba(25, 135, 84, .25);
+  margin-bottom: 10px;
+}
+.pdl-p4-addcart:hover { background: var(--p4-brand-dark); transform: translateY(-1px); box-shadow: 0 3px 0 var(--p4-brand-dark), 0 6px 18px rgba(25, 135, 84, .4); }
+.pdl-p4-addcart:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--p4-brand-dark); }
+.pdl-p4-addcart.is-added { background: #15803d; animation: pdl-p4-pop .35s ease; }
+@keyframes pdl-p4-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(.97); }
+  100% { transform: scale(1); }
+}
+
+.pdl-p4-secondary-actions {
+  display: flex;
+  gap: 8px;
+}
+.pdl-p4-wishlist, .pdl-p4-compare {
+  flex: 1;
+  height: 42px;
+  border: 1px solid var(--p4-line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--p4-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .15s ease;
+}
+.pdl-p4-wishlist:hover { border-color: #e53935; color: #e53935; }
+.pdl-p4-wishlist.is-active { color: #e53935; border-color: #e53935; background: #fff5f5; }
+
+/* Buy box (right) */
+.pdl-p4-buybox {
+  background: #fff;
+  border: 2px solid var(--p4-brand);
+  border-radius: var(--p4-radius);
+  padding: 18px;
+  position: sticky;
+  top: 150px;
+  align-self: flex-start;
+}
+.pdl-p4-buybox-head {
+  text-align: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--p4-line);
+}
+.pdl-p4-buybox-head .ico {
+  width: 36px;
+  height: 36px;
+  background: #f0fdf4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  color: var(--p4-brand);
+  font-size: 16px;
+}
+.pdl-p4-buybox-head h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+.pdl-p4-buybox-head p { font-size: 12px; color: var(--p4-muted); }
+
+.pdl-p4-buybox-list { list-style: none; padding: 0; margin: 0 0 12px; }
+.pdl-p4-buybox-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--p4-line);
+  color: var(--p4-ink);
+}
+.pdl-p4-buybox-list li:last-child { border-bottom: none; }
+.pdl-p4-buybox-list i { color: var(--p4-brand); width: 16px; text-align: center; }
+.pdl-p4-buybox-list b { margin-left: auto; font-weight: 600; }
+
+/* Details */
+.pdl-p4-details {
+  background: #fff;
+  border: 1px solid var(--p4-line);
+  border-radius: var(--p4-radius);
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  padding: 24px;
+  align-items: flex-start;
+}
+.pdl-p4-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--p4-line);
+  margin: -24px -24px 20px;
+  padding: 0 24px;
+  position: sticky;
+  top: 130px;
+  background: #fff;
+  z-index: 50;
+  padding-top: 4px;
+}
+.pdl-p4-tab {
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--p4-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all .15s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pdl-p4-tab .count {
+  background: #f0f0f0;
+  color: var(--p4-muted);
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.pdl-p4-tab.is-active { color: var(--p4-brand); border-bottom-color: var(--p4-brand); }
+.pdl-p4-tab.is-active .count { background: var(--p4-brand); color: #fff; }
+
+.pdl-p4-tabpanel { display: none; }
+.pdl-p4-tabpanel.is-active { display: block; }
+
+.pdl-p4-specs { }
+.pdl-p4-spec-item {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--p4-line);
+  font-size: 14px;
+  gap: 12px;
+}
+.pdl-p4-spec-item:last-child { border-bottom: none; }
+.pdl-p4-spec-item .k { color: var(--p4-muted); }
+.pdl-p4-spec-item .v { color: var(--p4-ink); font-weight: 500; }
+
+.pdl-p4-showmore {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--p4-brand);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #f0fdf4;
+  border-radius: 6px;
+  transition: background .15s ease;
+}
+.pdl-p4-showmore:hover { background: #dcfce7; }
+.pdl-p4-showmore svg { transition: transform .2s ease; }
+.pdl-p4-showmore.is-open svg { transform: rotate(180deg); }
+.pdl-p4-extra-specs { display: none; }
+.pdl-p4-extra-specs.is-open { display: block; }
+
+.pdl-p4-mini {
+  background: var(--p4-bg-soft);
+  border: 1px solid var(--p4-line);
+  border-radius: var(--p4-radius);
+  padding: 16px;
+  text-align: center;
+  position: sticky;
+  top: 200px;
+  align-self: flex-start;
+}
+.pdl-p4-mini img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.pdl-p4-mini h4 { font-size: 14px; font-weight: 600; }
+.pdl-p4-mini .mp { font-size: 22px; font-weight: 800; color: var(--p4-brand); margin: 8px 0 12px; }
+.pdl-p4-mini .mc { font-size: 12px; color: var(--p4-muted); }
+
+/* Reviews */
+.pdl-p4-reviews { display: flex; flex-direction: column; gap: 12px; }
+.pdl-p4-review {
+  background: #f9fafb;
+  border: 1px solid var(--p4-line);
+  border-radius: 8px;
+  padding: 14px;
+}
+.pdl-p4-review-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.pdl-p4-review .user { font-weight: 600; font-size: 13px; }
+.pdl-p4-review .date { font-size: 11px; color: var(--p4-muted); }
+.pdl-p4-review .text { font-size: 13px; color: var(--p4-ink); line-height: 1.6; }
+
+/* Related */
+.pdl-p4-related { margin-top: 32px; }
+.pdl-p4-related h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.pdl-p4-related-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.pdl-p4-related-card {
+  background: #fff;
+  border: 1px solid var(--p4-line);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  transition: all .2s ease;
+}
+.pdl-p4-related-card:hover { transform: translateY(-3px); border-color: var(--p4-brand); box-shadow: 0 6px 16px rgba(25, 135, 84, .12); }
+.pdl-p4-related-card img { width: 100%; aspect-ratio: 1/1; object-fit: contain; background: #fafafa; border-radius: 6px; margin-bottom: 8px; }
+.pdl-p4-related-card .pn { font-size: 12px; margin-bottom: 4px; }
+.pdl-p4-related-card .pp { font-size: 14px; font-weight: 700; color: var(--p4-brand); }
+
+@media (max-width: 1100px) {
+  .pdl-p4-layout { grid-template-columns: 1fr; }
+  .pdl-p4-buybox { position: static; }
+  .pdl-p4-details { grid-template-columns: 1fr; }
+  .pdl-p4-mini { position: static; }
+  .pdl-p4-tabs { top: 120px; }
+  .pdl-p4-related-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 500px) {
+  .pdl-p4-related-grid { grid-template-columns: repeat(2, 1fr); }
+  .pdl-p4-secondary-actions { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<div class="lab-badge" style="background:#d97706">PROPOSAL 4</div>
+<a href="index.html" class="lab-back" style="background:#d97706;color:#fff">← Back to Lab</a>
+
+<nav class="custom-navbar">
+  <div class="nav-top">
+    <a class="nav-logo" href="#"><div style="width:80px;height:32px;background:rgba(255,255,255,.2);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700">TBSAS</div></a>
+    <form class="nav-search" onsubmit="return false"><span class="search-icon">⌕</span><input placeholder="Search products..."></form>
+    <div class="nav-actions"><a href="#" class="cart-link">🛒<span>Cart</span><span class="cart-badge">0</span></a></div>
+  </div>
+</nav>
+<div class="category-bar">
+  <div class="container">
+    <a href="#">Mobiles</a><a href="#">Laptops</a><a href="#">Tablets</a><a href="#">Accessories</a>
+  </div>
+</div>
+
+<main class="pdl-p4-main">
+  <div class="pdl-p4-container">
+
+    <!-- UX status bar -->
+    <div class="pdl-p4-uxbar">
+      <span class="dot"></span>
+      <b>25 in stock</b>
+      <span class="spacer"></span>
+      <a href="#pdl-p4-tab-specs">Specifications</a><span class="arrow">›</span>
+      <a href="#pdl-p4-tab-reviews">Reviews (128)</a><span class="arrow">›</span>
+      <a href="#">Add Comment</a>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="pdl-p4-breadcrumb">
+      <a href="#">Home</a><span class="sep">/</span>
+      <a href="#">Smartphones</a><span class="sep">/</span>
+      <span class="last" id="pdl-p4-bcname">Apple iPhone 17 Pro Max</span>
+    </div>
+
+    <div class="pdl-p4-layout">
+
+      <!-- Gallery -->
+      <div class="pdl-p4-gallery">
+        <div class="pdl-p4-mainimage-wrap">
+          <span class="pdl-p4-disc" id="pdl-p4-disc">-17%</span>
+          <img class="pdl-p4-mainimage" data-pdl-mainimage id="pdl-p4-mainimg"
+               src="https://images.unsplash.com/photo-1592286927504-1b2b2b2b2b2b?w=800&h=800&fit=crop" alt="Apple iPhone 17 Pro Max">
+        </div>
+        <div class="pdl-p4-thumbs" id="pdl-p4-thumbs"></div>
+      </div>
+
+      <!-- Info -->
+      <div class="pdl-p4-info">
+        <div class="pdl-p4-brand-row">
+          <div>Brand: <a href="#">Apple</a> · Category: <a href="#">Smartphones</a></div>
+          <div>SKU: APL-17PM</div>
+        </div>
+        <h1 class="pdl-p4-title" id="pdl-p4-title">Apple iPhone 17 Pro Max</h1>
+
+        <div class="pdl-p4-rating">
+          <div class="pdl-p4-stars" id="pdl-p4-stars"></div>
+          <span class="pdl-p4-rating-score" id="pdl-p4-rating">4.7</span>
+          <div class="pdl-p4-divider"></div>
+          <a class="pdl-p4-rating-link" id="pdl-p4-rlink">128 ratings · 47 comments</a>
+        </div>
+
+        <div class="pdl-p4-price">
+          <div class="pdl-p4-price-now" id="pdl-p4-price">$1,499</div>
+          <div class="pdl-p4-price-old" id="pdl-p4-old">$1,799</div>
+          <div class="pdl-p4-price-save" id="pdl-p4-save">Save $300</div>
+        </div>
+
+        <div class="pdl-p4-stock" id="pdl-p4-stock">
+          <span id="pdl-p4-stocktext">In Stock — Ships within 24 hours</span>
+        </div>
+
+        <div class="pdl-p4-section">
+          <div class="pdl-p4-section-title">Colour: <b data-pdl-colorname id="pdl-p4-cname">Dark Blue</b></div>
+          <div class="pdl-p4-colors" data-pdl-colorpicker id="pdl-p4-colors"></div>
+        </div>
+
+        <div class="pdl-p4-section">
+          <div class="pdl-p4-section-title">Quantity</div>
+          <div class="pdl-p4-qty" data-pdl-qty>
+            <button class="pdl-p4-qty-minus is-min">−</button>
+            <div class="pdl-p4-qty-value">1</div>
+            <button class="pdl-p4-qty-plus">+</button>
+          </div>
+        </div>
+
+        <button class="pdl-p4-addcart" data-pdl-addtocart>
+          <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+        </button>
+
+        <div class="pdl-p4-secondary-actions">
+          <button class="pdl-p4-wishlist" data-pdl-wishlist>
+            <i class="fa-regular fa-heart"></i> Wishlist
+          </button>
+          <button class="pdl-p4-compare">
+            <i class="fa-solid fa-arrow-right-arrow-left"></i> Compare
+          </button>
+        </div>
+      </div>
+
+      <!-- Buy box -->
+      <div class="pdl-p4-buybox">
+        <div class="pdl-p4-buybox-head">
+          <div class="ico"><i class="fa-solid fa-shield-halved"></i></div>
+          <h4>TBSAS Guarantee</h4>
+          <p>Official 2-year warranty</p>
+        </div>
+        <ul class="pdl-p4-buybox-list">
+          <li><i class="fa-solid fa-truck-fast"></i><span>Free shipping</span><b>$50+</b></li>
+          <li><i class="fa-solid fa-store"></i><span>Pickup in store</span><b>Free</b></li>
+          <li><i class="fa-solid fa-rotate-left"></i><span>Return policy</span><b>7 days</b></li>
+          <li><i class="fa-solid fa-headset"></i><span>24/7 Support</span><b>Always</b></li>
+        </ul>
+        <button class="pdl-p4-addcart" data-pdl-addtocart style="height:44px;font-size:14px">
+          <i class="fa-solid fa-bolt"></i> Buy Now
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Details -->
+    <div class="pdl-p4-details">
+      <div style="grid-column:1/-1">
+        <div class="pdl-p4-tabs" data-pdl-tabs id="pdl-p4-tabs">
+          <div class="pdl-p4-tab is-active" data-target="pdl-p4-tab-specs">Specifications</div>
+          <div class="pdl-p4-tab" data-target="pdl-p4-tab-reviews">Reviews <span class="count">128</span></div>
+          <div class="pdl-p4-tab" data-target="pdl-p4-tab-comments">Comments <span class="count">47</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="pdl-p4-tabpanel is-active" id="pdl-p4-tab-specs">
+          <div class="pdl-p4-specs" id="pdl-p4-specs"></div>
+          <div style="text-align:center">
+            <div class="pdl-p4-showmore" data-pdl-showmore data-target="pdl-p4-extra-specs">
+              <span data-pdl-showmore-label>Show More Specifications</span>
+              <svg data-pdl-showmore-icon width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="pdl-p4-tabpanel" id="pdl-p4-tab-reviews">
+          <h3 style="font-size:16px;margin-bottom:12px">Customer Reviews</h3>
+          <div class="pdl-p4-reviews" id="pdl-p4-reviews"></div>
+        </div>
+
+        <div class="pdl-p4-tabpanel" id="pdl-p4-tab-comments">
+          <h3 style="font-size:16px;margin-bottom:12px">User Comments</h3>
+          <div class="pdl-p4-reviews" id="pdl-p4-comments"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="pdl-p4-mini">
+          <img id="pdl-p4-miniimg" src="https://images.unsplash.com/photo-1592286927504-1b2b2b2b2b2b?w=400&h=400&fit=crop" alt="Apple iPhone 17 Pro Max">
+          <h4 id="pdl-p4-mininame">Apple iPhone 17 Pro Max</h4>
+          <div class="mc">Color: <span data-pdl-colorname>Dark Blue</span></div>
+          <div class="mp">$1,499</div>
+          <button class="pdl-p4-addcart" data-pdl-addtocart style="font-size:13px;height:40px">
+            <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related -->
+    <div class="pdl-p4-related">
+      <h3>You May Also Like</h3>
+      <div class="pdl-p4-related-grid" id="pdl-p4-related"></div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="main-footer">
+  <p>© 2026 TBSAS — Product Detail Design Lab</p>
+</footer>
+
+<script src="shared/data.js"></script>
+<script src="shared/app.js"></script>
+<script>
+(function () {
+  var D = window.PDL_DATA;
+  var P = D.product8;
+
+  document.getElementById("pdl-p4-bcname").textContent = P.name;
+  document.getElementById("pdl-p4-title").textContent = P.name;
+  document.getElementById("pdl-p4-mininame").textContent = P.name;
+
+  document.getElementById("pdl-p4-price").textContent = "$" + P.finalPrice.toLocaleString();
+  if (P.oldPrice) {
+    document.getElementById("pdl-p4-old").textContent = "$" + P.oldPrice.toLocaleString();
+    document.getElementById("pdl-p4-save").textContent = "Save $" + (P.oldPrice - P.finalPrice);
+    document.getElementById("pdl-p4-disc").textContent = "-" + P.discount + "%";
+  } else {
+    document.getElementById("pdl-p4-old").style.display = "none";
+    document.getElementById("pdl-p4-save").style.display = "none";
+    document.getElementById("pdl-p4-disc").style.display = "none";
+  }
+
+  // Stock state
+  var stock = P.stock;
+  var stockEl = document.getElementById("pdl-p4-stock");
+  var stockText = document.getElementById("pdl-p4-stocktext");
+  if (stock === 0) {
+    stockEl.classList.add("out");
+    stockText.textContent = "Out of Stock";
+  } else if (stock < 10) {
+    stockEl.classList.add("low");
+    stockText.textContent = "Only " + stock + " left in stock — order soon";
+  } else {
+    stockText.textContent = "In Stock — " + stock + " available · Ships within 24 hours";
+  }
+
+  var starsEl = document.getElementById("pdl-p4-stars");
+  var full = Math.floor(P.rating);
+  var half = (P.rating - full) >= .5;
+  var h = "";
+  for (var i = 0; i < full; i++) h += '<i class="fa-solid fa-star"></i>';
+  if (half) h += '<i class="fa-solid fa-star-half-stroke"></i>';
+  for (var j = 0; j < (5 - full - (half ? 1 : 0)); j++) h += '<i class="fa-regular fa-star empty"></i>';
+  starsEl.innerHTML = h;
+  document.getElementById("pdl-p4-rating").textContent = P.rating.toFixed(1);
+  document.getElementById("pdl-p4-rlink").textContent = P.reviewCount + " ratings · " + P.commentCount + " comments";
+
+  var thumbsEl = document.getElementById("pdl-p4-thumbs");
+  var allImgs = P.images.length ? P.images : P.colors.filter(function (c) { return c.image; }).map(function (c) { return c.image; });
+  if (!allImgs.length) {
+    thumbsEl.innerHTML = '<div style="padding:8px;color:#999;font-size:12px">No additional images</div>';
+  } else {
+    allImgs.forEach(function (src, i) {
+      var img = document.createElement("img");
+      img.src = src;
+      img.setAttribute("data-pdl-thumb", "");
+      img.setAttribute("data-image", src);
+      if (i === 0) img.classList.add("is-active");
+      thumbsEl.appendChild(img);
+    });
+  }
+
+  var colorsEl = document.getElementById("pdl-p4-colors");
+  P.colors.forEach(function (c, i) {
+    var div = document.createElement("div");
+    div.className = "pdl-p4-color" + (i === 0 ? " is-selected" : "");
+    div.style.background = c.code;
+    div.setAttribute("data-name", c.name);
+    div.setAttribute("data-image", c.image);
+    div.setAttribute("title", c.name + (c.stock === 0 ? " (Out of stock)" : ""));
+    div.setAttribute("role", "radio");
+    div.setAttribute("aria-checked", i === 0 ? "true" : "false");
+    if (c.stock === 0) div.style.opacity = ".3";
+    colorsEl.appendChild(div);
+  });
+
+  var specsEl = document.getElementById("pdl-p4-specs");
+  var visible = P.specs.slice(0, 4);
+  var extra = P.specs.slice(4);
+  visible.forEach(function (s) {
+    var row = document.createElement("div");
+    row.className = "pdl-p4-spec-item";
+    row.innerHTML = '<span class="k">' + s.title + '</span><span class="v">' + s.value + '</span>';
+    specsEl.appendChild(row);
+  });
+  if (extra.length) {
+    var wrap = document.createElement("div");
+    wrap.id = "pdl-p4-extra-specs";
+    wrap.className = "pdl-p4-extra-specs";
+    extra.forEach(function (s) {
+      var row = document.createElement("div");
+      row.className = "pdl-p4-spec-item";
+      row.innerHTML = '<span class="k">' + s.title + '</span><span class="v">' + s.value + '</span>';
+      wrap.appendChild(row);
+    });
+    specsEl.appendChild(wrap);
+  } else {
+    document.querySelector("[data-pdl-showmore]").style.display = "none";
+  }
+
+  function renderReviews(el) {
+    D.reviews.forEach(function (r) {
+      var card = document.createElement("div");
+      card.className = "pdl-p4-review";
+      var stars = "";
+      for (var k = 0; k < r.rating; k++) stars += '<i class="fa-solid fa-star"></i>';
+      for (var m = 0; m < 5 - r.rating; m++) stars += '<i class="fa-regular fa-star empty"></i>';
+      card.innerHTML =
+        '<div class="pdl-p4-review-top"><div class="user">' + r.user + '</div><div class="date">' + r.date + '</div></div>' +
+        '<div class="pdl-p4-stars" style="margin-bottom:6px">' + stars + '</div>' +
+        '<div class="text">' + r.text + '</div>';
+      el.appendChild(card);
+    });
+  }
+  renderReviews(document.getElementById("pdl-p4-reviews"));
+  renderReviews(document.getElementById("pdl-p4-comments"));
+
+  var relEl = document.getElementById("pdl-p4-related");
+  D.related.forEach(function (r) {
+    var card = document.createElement("a");
+    card.href = "#";
+    card.className = "pdl-p4-related-card";
+    card.innerHTML =
+      '<img src="' + r.image + '" alt="' + r.name + '">' +
+      '<div class="pn">' + r.name + '</div>' +
+      '<div class="pp">$' + r.price.toLocaleString() + '</div>';
+    relEl.appendChild(card);
+  });
+
+  var mini = document.getElementById("pdl-p4-miniimg");
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest("[data-pdl-thumb]");
+    if (t && mini) mini.src = t.getAttribute("data-image") || t.src;
+  });
+})();
+</script>
+</body>
+</html>
