@@ -16,70 +16,84 @@ Products
 
     <div class="p1-shell">
 
-<!-- BREADCRUMB -->
-         <nav class="p1-breadcrumb" aria-label="Breadcrumb">
-             <a href="#">TB SAS Online Store</a>
-             <span aria-hidden="true">/</span>
-             <a href="{% url 'home' %}">Home</a>
-             <span aria-hidden="true">/</span>
-             <a href="#">Digital</a>
-             <span aria-hidden="true">/</span>
-             <strong>Mobile Phones</strong>
-</nav>
+        <!-- BREADCRUMB -->
+        <nav class="p1-breadcrumb" aria-label="Breadcrumb">
+            <a href="#">TB SAS Online Store</a>
+            <span aria-hidden="true">/</span>
+            <a href="{% url 'home' %}">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="#">Digital</a>
+            <span aria-hidden="true">/</span>
+            <strong>Mobile Phones</strong>
+        </nav>
 
-         <!-- PAGE HEADER -->
-         <div class="p1-pagehead">
-             <div>
-                 <h1>Mobile Phones</h1>
-                 <span class="count"><span data-total-count>{{ total_count }}</span> products found</span>
-             </div>
-         </div>
+        <!-- PAGE HEADER -->
+        <div class="p1-pagehead">
+            <div>
+                <h1>Mobile Phones</h1>
+                <span class="count"><span data-total-count>{{ total_count }}</span> products found</span>
+            </div>
+        </div>
 
-         <!-- QUICK VIEW MODAL -->
-        <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+        <!-- QUICK VIEW MODAL -->
+        <div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="quickViewModalLabel">Quick View</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="quickViewContent">
+                    <div class="cart-toast" id="cartToast"
+                         style="position: fixed; top: 20px; right: 20px; z-index: 100000; background: #198754; color: #fff; padding: 12px 20px; border-radius: 12px; font-weight: 600; box-shadow: 0 8px 24px rgba(0, 0, 0, .2); opacity: 0; transform: translateY(-14px); transition: opacity .25s ease, transform .25s ease; direction: ltr; display: none;">
                     </div>
+
+                    <style>
+                        #cartToast.show {
+                            display: block;
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    </style>
                 </div>
             </div>
         </div>
 
-         <!-- ACTIVE FILTER CHIPS -->
-         <div class="p1-actives" data-active-chips>
-             {% if current_brands %}
-             {% for brand in current_brands %}
-             <span class="chip">
+        <!-- ACTIVE FILTER CHIPS -->
+        <div class="p1-actives" data-active-chips>
+            {% if current_brands %}
+            {% for brand in current_brands %}
+            <span class="chip">
                  {{ brand }}
                  <button type="button" class="chip-x" onclick="clearFilterChip('brand', '{{ brand }}')">&times;</button>
              </span>
-             {% endfor %}
-             {% endif %}
-             {% if price_min or price_max != price_range.max_price %}
-             <span class="chip">
+            {% endfor %}
+            {% endif %}
+            {% if price_min or price_max != price_range.max_price %}
+            <span class="chip">
                  Price: ${{ price_min|default:price_range.min_price }} - ${{ price_max|default:price_range.max_price }}
                  <button type="button" class="chip-x" onclick="clearPriceFilter()">&times;</button>
              </span>
-             {% endif %}
-         </div>
+            {% endif %}
+        </div>
 
-         <div class="p1-layout">
+        <div class="p1-layout">
 
             <!-- FILTER OVERLAY (mobile) -->
             <div class="p1-overlay filter-overlay" data-overlay id="filterOverlay"></div>
 
 
             <!-- FILTER SIDEBAR -->
-            <aside class="p1-filters filters filters--design-custom sticky-filter" id="filterSidebar" data-filter-sidebar>
+            <aside class="p1-filters filters filters--design-custom sticky-filter" id="filterSidebar"
+                   data-filter-sidebar>
 
-<header class="filters-header">
+                <header class="filters-header">
                     <h3>Filters
-                        <button class="clear-all clear-all-filters" data-clear-all aria-label="Clear all filters" onclick="clearAllFilters()">Clear All</button>
-                        <button type="button" class="close btn-close-filters" id="closeFilters" data-drawer-close aria-label="Close filters"><i class="fa-solid fa-xmark"></i></button>
+                        <button class="clear-all clear-all-filters" data-clear-all aria-label="Clear all filters"
+                                onclick="clearAllFilters()">Clear All
+                        </button>
+                        <button type="button" class="close btn-close-filters" id="closeFilters" data-drawer-close
+                                aria-label="Close filters"><i class="fa-solid fa-xmark"></i></button>
                     </h3>
                 </header>
 
@@ -88,19 +102,25 @@ Products
                     <!-- BRAND FILTER -->
                     {% if brands %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>Brand <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>Brand <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for brand in brands %}
-                            <label class="p1-check filter-check"><input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}" {% if brand.name in current_brands %}checked{% endif %}><span class="checkmark"></span> {{ brand.name }}</label>
+                            <label class="p1-check filter-check"><input type="checkbox" class="brand-filter"
+                                                                        name="brand" value="{{ brand.name }}" {% if
+                                                                        brand.name in current_brands %}checked{% endif
+                                                                        %}><span class="checkmark"></span> {{ brand.name
+                                }}</label>
                             {% endfor %}
                         </div>
                     </div>
                     {% endif %}
 
-<!-- PRICE RANGE FILTER -->
+                    <!-- PRICE RANGE FILTER -->
                     {% if price_range.min_price is not None and price_range.max_price is not None %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>Price Range <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>Price Range <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             <div class="price-range-wrap">
                                 <div class="price-inputs">
@@ -108,51 +128,58 @@ Products
                                            value="{{ price_min|default:price_range.min_price|default:0 }}"
                                            min="{{ price_range.min_price|default:0 }}"
                                            max="{{ price_range.max_price|default:9999 }}" placeholder="Min">
-                                      <span class="price-separator">&ndash;</span>
-                                      <input type="number" id="priceMaxInput" name="price_max"
-                                             value="{{ price_max|default:price_range.max_price|default:9999 }}"
-                                             min="{{ price_range.min_price|default:0 }}"
-                                             max="{{ price_range.max_price|default:9999 }}" placeholder="Max">
-                                  </div>
-<div class="p1-range-dual">
-                                      <div class="p1-range-track"></div>
-                                      <div class="p1-range-track-fill"></div>
-                                      <input type="range"
-                                             class="p1-range-min"
-                                             id="priceRangeMin"
-                                             name="price_min_range"
-                                             min="{{ price_range.min_price|default:0 }}"
-                                             max="{{ price_range.max_price|default:9999 }}"
-                                             value="{{ price_min|default:price_range.min_price|default:0 }}"
-                                             aria-label="Minimum price">
-                                      <input type="range"
-                                             class="p1-range-max"
-                                             id="priceRangeMax"
-                                             name="price_max_range"
-                                             min="{{ price_range.min_price|default:0 }}"
-                                             max="{{ price_range.max_price|default:9999 }}"
-                                             value="{{ price_max|default:price_range.max_price|default:9999 }}"
-                                             aria-label="Maximum price">
-                                   </div>
-                                  <div class="price-values">
-                                      <span id="priceMinLabel">${{ price_range.min_price|default:0 }}</span>
-                                      <span id="priceValue">${{ price_max|default:price_range.max_price|default:9999 }}</span>
-                                  </div>
-                          </div>
-                     </div>
-                 </div>
-                 {% endif %}
+                                    <span class="price-separator">&ndash;</span>
+                                    <input type="number" id="priceMaxInput" name="price_max"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}" placeholder="Max">
+                                </div>
+                                <div class="p1-range-dual">
+                                    <div class="p1-range-track"></div>
+                                    <div class="p1-range-track-fill"></div>
+                                    <input type="range"
+                                           class="p1-range-min"
+                                           id="priceRangeMin"
+                                           name="price_min_range"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_min|default:price_range.min_price|default:0 }}"
+                                           aria-label="Minimum price">
+                                    <input type="range"
+                                           class="p1-range-max"
+                                           id="priceRangeMax"
+                                           name="price_max_range"
+                                           min="{{ price_range.min_price|default:0 }}"
+                                           max="{{ price_range.max_price|default:9999 }}"
+                                           value="{{ price_max|default:price_range.max_price|default:9999 }}"
+                                           aria-label="Maximum price">
+                                </div>
+                                <div class="price-values">
+                                    <span id="priceMinLabel">${{ price_range.min_price|default:0 }}</span>
+                                    <span id="priceValue">${{ price_max|default:price_range.max_price|default:9999 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
                     <!-- COLOR FILTER -->
                     {% with color_attr=filter_attributes_dict|dict_get:'color' %}
                     {% if color_attr %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>{{ color_attr.display_name }} <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>{{ color_attr.display_name }} <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             <div class="p1-swatches filter-colors">
-                            {% for attr_value in color_attr.filter_values %}
-                            <label class="p1-check filter-check filter-check-color" title="{{ attr_value.display_value|default:attr_value.value }}"><input type="checkbox" name="attr_color" value="{{ attr_value.value }}" {% if 'color' in attr_filters and attr_value.value in attr_filters|dict_get:'color' %}checked{% endif %}><span class="checkmark color-swatch" style="background:{{ attr_value.color_code }}"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
-                            {% endfor %}
+                                {% for attr_value in color_attr.filter_values %}
+                                <label class="p1-check filter-check filter-check-color"
+                                       title="{{ attr_value.display_value|default:attr_value.value }}"><input
+                                        type="checkbox" name="attr_color" value="{{ attr_value.value }}" {% if 'color'
+                                    in attr_filters and attr_value.value in attr_filters|dict_get:'color' %}checked{%
+                                    endif %}><span class="checkmark color-swatch"
+                                                   style="background:{{ attr_value.color_code }}"></span> {{
+                                    attr_value.display_value|default:attr_value.value }}</label>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -163,10 +190,15 @@ Products
                     {% with ram_attr=filter_attributes_dict|dict_get:'ram' %}
                     {% if ram_attr %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>{{ ram_attr.display_name }} <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>{{ ram_attr.display_name }} <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in ram_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="checkbox" name="attr_ram" value="{{ attr_value.value }}" {% if 'ram' in attr_filters and attr_value.value in attr_filters|dict_get:'ram' %}checked{% endif %}><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
+                            <label class="p1-check filter-check"><input type="checkbox" name="attr_ram"
+                                                                        value="{{ attr_value.value }}" {% if 'ram' in
+                                attr_filters and attr_value.value in attr_filters|dict_get:'ram' %}checked{% endif
+                                %}><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value
+                                }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -177,10 +209,15 @@ Products
                     {% with storage_attr=filter_attributes_dict|dict_get:'storage' %}
                     {% if storage_attr %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>{{ storage_attr.display_name }} <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>{{ storage_attr.display_name }} <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in storage_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="checkbox" name="attr_storage" value="{{ attr_value.value }}" {% if 'storage' in attr_filters and attr_value.value in attr_filters|dict_get:'storage' %}checked{% endif %}><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
+                            <label class="p1-check filter-check"><input type="checkbox" name="attr_storage"
+                                                                        value="{{ attr_value.value }}" {% if 'storage'
+                                in attr_filters and attr_value.value in attr_filters|dict_get:'storage' %}checked{%
+                                endif %}><span class="checkmark"></span> {{
+                                attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -191,10 +228,15 @@ Products
                     {% with condition_attr=filter_attributes_dict|dict_get:'condition' %}
                     {% if condition_attr %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>{{ condition_attr.display_name }} <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>{{ condition_attr.display_name }} <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in condition_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="radio" name="attr_condition" value="{{ attr_value.value }}" {% if 'condition' in attr_filters and attr_value.value in attr_filters|dict_get:'condition' %}checked{% endif %} data-radio-group="attr_condition"><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
+                            <label class="p1-check filter-check"><input type="radio" name="attr_condition"
+                                                                        value="{{ attr_value.value }}" {% if 'condition'
+                                in attr_filters and attr_value.value in attr_filters|dict_get:'condition' %}checked{%
+                                endif %} data-radio-group="attr_condition"><span class="checkmark"></span> {{
+                                attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -205,10 +247,16 @@ Products
                     {% with screen_attr=filter_attributes_dict|dict_get:'screen-size' %}
                     {% if screen_attr %}
                     <div class="p1-group open filter-group">
-                        <div class="p1-group-title filter-toggle" data-toggle>{{ screen_attr.display_name }} <i class="fa-solid fa-chevron-down"></i></div>
+                        <div class="p1-group-title filter-toggle" data-toggle>{{ screen_attr.display_name }} <i
+                                class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in screen_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="radio" name="attr_screen-size" value="{{ attr_value.value }}" {% if 'screen-size' in attr_filters and attr_value.value in attr_filters|dict_get:'screen-size' %}checked{% endif %} data-radio-group="attr_screen-size"><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
+                            <label class="p1-check filter-check"><input type="radio" name="attr_screen-size"
+                                                                        value="{{ attr_value.value }}" {% if
+                                'screen-size' in attr_filters and attr_value.value in
+                                attr_filters|dict_get:'screen-size' %}checked{% endif %}
+                                data-radio-group="attr_screen-size"><span class="checkmark"></span> {{
+                                attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -223,7 +271,7 @@ Products
 
                 </form>
 
-</aside>
+            </aside>
 
             <!-- MAIN CONTENT AREA -->
             <div>
@@ -231,11 +279,31 @@ Products
                 <div class="p1-sort" role="group" aria-label="Sort products">
                     <span class="label">Sort by:</span>
                     <div class="p1-sort-group">
-                        <button type="button" class="p1-sort-btn sort-btn {% if current_sort == 'popular' %}active{% endif %}" data-sort="popular" aria-pressed="{% if current_sort == 'popular' %}true{% else %}false{% endif %}"><i class="fa-solid fa-fire"></i><span> Most Popular</span></button>
-                        <button type="button" class="p1-sort-btn sort-btn {% if not current_sort or current_sort == 'newest' %}active{% endif %}" data-sort="newest" aria-pressed="{% if not current_sort or current_sort == 'newest' %}true{% else %}false{% endif %}"><i class="fa-solid fa-sparkles"></i><span> Newest</span></button>
-                        <button type="button" class="p1-sort-btn sort-btn {% if current_sort == 'cheapest' %}active{% endif %}" data-sort="cheapest" aria-pressed="{% if current_sort == 'cheapest' %}true{% else %}false{% endif %}"><i class="fa-solid fa-arrow-down-long"></i><span> Price: Low to High</span></button>
-                        <button type="button" class="p1-sort-btn sort-btn {% if current_sort == 'expensive' %}active{% endif %}" data-sort="expensive" aria-pressed="{% if current_sort == 'expensive' %}true{% else %}false{% endif %}"><i class="fa-solid fa-arrow-up-long"></i><span> Price: High to Low</span></button>
-                        <button type="button" class="p1-sort-btn sort-btn {% if current_sort == 'best_selling' %}active{% endif %}" data-sort="best_selling" aria-pressed="{% if current_sort == 'best_selling' %}true{% else %}false{% endif %}"><i class="fa-solid fa-chart-line"></i><span> Best Selling</span></button>
+                        <button type="button"
+                                class="p1-sort-btn sort-btn {% if current_sort == 'popular' %}active{% endif %}"
+                                data-sort="popular"
+                                aria-pressed="{% if current_sort == 'popular' %}true{% else %}false{% endif %}"><i
+                                class="fa-solid fa-fire"></i><span> Most Popular</span></button>
+                        <button type="button"
+                                class="p1-sort-btn sort-btn {% if not current_sort or current_sort == 'newest' %}active{% endif %}"
+                                data-sort="newest"
+                                aria-pressed="{% if not current_sort or current_sort == 'newest' %}true{% else %}false{% endif %}">
+                            <i class="fa-solid fa-sparkles"></i><span> Newest</span></button>
+                        <button type="button"
+                                class="p1-sort-btn sort-btn {% if current_sort == 'cheapest' %}active{% endif %}"
+                                data-sort="cheapest"
+                                aria-pressed="{% if current_sort == 'cheapest' %}true{% else %}false{% endif %}"><i
+                                class="fa-solid fa-arrow-down-long"></i><span> Price: Low to High</span></button>
+                        <button type="button"
+                                class="p1-sort-btn sort-btn {% if current_sort == 'expensive' %}active{% endif %}"
+                                data-sort="expensive"
+                                aria-pressed="{% if current_sort == 'expensive' %}true{% else %}false{% endif %}"><i
+                                class="fa-solid fa-arrow-up-long"></i><span> Price: High to Low</span></button>
+                        <button type="button"
+                                class="p1-sort-btn sort-btn {% if current_sort == 'best_selling' %}active{% endif %}"
+                                data-sort="best_selling"
+                                aria-pressed="{% if current_sort == 'best_selling' %}true{% else %}false{% endif %}"><i
+                                class="fa-solid fa-chart-line"></i><span> Best Selling</span></button>
                     </div>
                 </div>
 
@@ -248,17 +316,22 @@ Products
                 {% if page_obj.has_next or page_obj.has_previous %}
                 <nav class="p1-pagination" aria-label="Products pagination">
                     {% if page_obj.has_previous %}
-                    <button type="button" class="p1-pagination-btn page-btn prev" data-page="{{ page_obj.previous_page_number }}" aria-label="Previous page">&laquo; Prev</button>
+                    <button type="button" class="p1-pagination-btn page-btn prev"
+                            data-page="{{ page_obj.previous_page_number }}" aria-label="Previous page">&laquo; Prev
+                    </button>
                     {% endif %}
                     {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                        <button type="button" class="p1-pagination-btn page-btn active" data-page="{{ num }}">{{ num }}</button>
-                        {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-                        <button type="button" class="p1-pagination-btn" data-page="{{ num }}">{{ num }}</button>
-                        {% endif %}
+                    {% if page_obj.number == num %}
+                    <button type="button" class="p1-pagination-btn page-btn active" data-page="{{ num }}">{{ num }}
+                    </button>
+                    {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                    <button type="button" class="p1-pagination-btn" data-page="{{ num }}">{{ num }}</button>
+                    {% endif %}
                     {% endfor %}
                     {% if page_obj.has_next %}
-                    <button type="button" class="p1-pagination-btn page-btn next" data-page="{{ page_obj.next_page_number }}" aria-label="Next page">Next &raquo;</button>
+                    <button type="button" class="p1-pagination-btn page-btn next"
+                            data-page="{{ page_obj.next_page_number }}" aria-label="Next page">Next &raquo;
+                    </button>
                     {% endif %}
                 </nav>
                 {% endif %}
@@ -266,8 +339,10 @@ Products
 
         </div>
 
-<!-- MOBILE FILTER TOGGLE -->
-        <button type="button" class="p1-toggle mobile-filter-toggle" id="mobileFilterToggle" aria-label="Open filters"><i class="fa-solid fa-filter"></i><span> Filters</span><span class="filter-badge" id="filterBadge" style="display:none"></span></button>
+        <!-- MOBILE FILTER TOGGLE -->
+        <button type="button" class="p1-toggle mobile-filter-toggle" id="mobileFilterToggle" aria-label="Open filters">
+            <i class="fa-solid fa-filter"></i><span> Filters</span><span class="filter-badge" id="filterBadge"
+                                                                         style="display:none"></span></button>
 </section>
 
 {% endblock %}
