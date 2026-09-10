@@ -32,36 +32,66 @@ function getActiveColorId() {
     return null;
 }
 
+/* ==================================================
+   ONE shared renderer for every Product Detail
+   quantity control. Nothing else may write .qty-value.
+   ================================================== */
+function renderProductDetailCartState(quantity) {
+    const min = 1;
+    const max = 99;
+
+    let next = Number(quantity);
+    if (!isFinite(next) || next < min) next = min;
+    if (next > max) next = max;
+
+    pdpQuantity = next;
+
+    document
+        .querySelectorAll(".buy-box .qty-stepper, .mini-product-card .qty-stepper")
+        .forEach(function (stepper) {
+            const valueEl = stepper.querySelector(".qty-value");
+            const minusBtn = stepper.querySelector(".qty-minus");
+            const plusBtn = stepper.querySelector(".qty-plus");
+
+            if (valueEl) valueEl.textContent = pdpQuantity;
+            if (minusBtn) minusBtn.disabled = pdpQuantity <= min;
+            if (plusBtn) plusBtn.disabled = pdpQuantity >= max;
+        });
+}
+
+/* Bumped by every local +/- interaction, so a slow /cart/state/
+   response can never overwrite a quantity the user just picked. */
+let pdpMutationCounter = 0;
+
 function syncProductDetailWithCart() {
     const productButtons = document.querySelectorAll(".mini-cart-btn[data-cart]");
     const productId = productButtons[0]?.dataset?.productId;
     if (!productId) return;
+
+    const startedAt = pdpMutationCounter;
 
     fetch("/cart/state/")
         .then((response) => response.json())
         .then((data) => {
             if (!data.success) return;
 
+            // The user changed the quantity while this request was in flight.
+            if (pdpMutationCounter !== startedAt) return;
+
+            // _build_items_json() in store/views.py does NOT serialize color_id.
+            // Every line carries key = "<product_id>:<color_id>" (0 == no color),
+            // built by cart_service._make_key(). That key is the only reliable match.
             const activeColorId = getActiveColorId();
+            const expectedKey = String(productId) + ":" + String(activeColorId || "0");
+
             const items = data.items || [];
-            const matchingItem = items.find(item => {
-                if (item.product_id != productId) return false;
-                if (activeColorId) {
-                    return item.color_id == activeColorId;
-                }
-                return item.color_id == 0 || item.color_id === null || item.color_id === undefined;
+            const matchingItem = items.find(function (item) {
+                return String(item.key) === expectedKey;
             });
 
-            // Authoritative cart quantity for this product/color
             const authQty = matchingItem ? matchingItem.quantity : 1;
+            renderProductDetailCartState(authQty);
 
-            // Update both Product Detail quantity steppers
-            pdpQuantity = authQty;
-            document.querySelectorAll(".qty-value").forEach(function (el) {
-                el.textContent = pdpQuantity;
-            });
-
-            // Also update the mini-cart badge / summary consistency
             const cartBadge = document.getElementById("cartBadge");
             if (cartBadge && data.badge !== undefined) {
                 cartBadge.textContent = data.badge;
@@ -74,7 +104,6 @@ function syncProductDetailWithCart() {
 document.addEventListener("DOMContentLoaded", function () {
     syncProductDetailWithCart();
 });
-
 function addToCartServer(btn, quantity) {
     const productId = btn.dataset.productId;
     const colorId = getActiveColorId();
@@ -109,13 +138,9 @@ function addToCartServer(btn, quantity) {
                 // rather than the requested quantity, in case stock validation
                 // or business rules adjusted it.
                 const authQty = data.quantity !== undefined ? data.quantity : quantity;
-                pdpQuantity = authQty;
+                renderProductDetailCartState(authQty);
 
                 addToCartFeedback(btn);
-                // Sync quantity display on Product Detail page (both steppers)
-                document.querySelectorAll(".qty-value").forEach(function (el) {
-                    el.textContent = pdpQuantity;
-                });
                 // Update cart badge if exists
                 const cartBadge = document.getElementById("cartBadge");
                 if (cartBadge && data.badge !== undefined) {
@@ -673,93 +698,50 @@ function initQuantitySteppers() {
 /*==================================================
         QTY ROW TOGGLE LOGIC
 ==================================================*/
+/*==================================================
+        QTY ROW + ADD TO CART  (single shared state)
+==================================================*/
 function initQtyRowToggle() {
     document.querySelectorAll(".mini-cart-btn[data-cart]").forEach(function (btn) {
-        var buyBox = btn.closest(".buy-box, .mini-product-card");
-        if (!buyBox) return;
+        var container = btn.closest(".buy-box, .mini-product-card");
+        if (!container) return;
 
-        var qtyRow = buyBox.querySelector(".qty-row");
+        var qtyRow = container.querySelector(".qty-row");
         var stepper = qtyRow ? qtyRow.querySelector(".qty-stepper") : null;
         var minusBtn = stepper ? stepper.querySelector(".qty-minus") : null;
         var plusBtn = stepper ? stepper.querySelector(".qty-plus") : null;
         var valueEl = stepper ? stepper.querySelector(".qty-value") : null;
-        var min = 1;
 
         if (!qtyRow || !stepper || !minusBtn || !plusBtn || !valueEl) return;
 
-        // Function to update minus button state (trash vs minus)
-        function updateMinusButton() {
-            var cur = Number(pdpQuantity) || min;
-            if (cur <= min) {
-                minusBtn.classList.add("trash");
-                minusBtn.disabled = false; // trash button should be clickable to close
-                minusBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>';
-                minusBtn.setAttribute("aria-label", "Remove from cart");
-            } else {
-                minusBtn.classList.remove("trash");
-                minusBtn.innerHTML = '&#8722;';
-                minusBtn.setAttribute("aria-label", "Decrease quantity");
-            }
-        }
+        // product_detail.css declares .qty-row twice; the later rule
+        // (display: none) wins, and only .qty-row.open re-enables it.
+        // The stepper must be usable BEFORE Add to Cart is clicked,
+        // so open the row on init and keep the button visible.
+        qtyRow.classList.add("open");
+        btn.style.display = "inline-flex";
 
-        // Function to open qty row
-        function openQtyRow() {
-            qtyRow.style.display = 'flex';
-            qtyRow.style.opacity = '1';
-            qtyRow.style.maxHeight = '60px';
-            qtyRow.style.overflow = 'hidden';
-            qtyRow.style.pointerEvents = 'auto';
-            btn.style.display = 'none'; // Hide Add to Cart button
-            // Use global pdpQuantity, do NOT reset to min
-            valueEl.textContent = pdpQuantity;
-            updateMinusButton();
-        }
-
-        // Function to close qty row
-        function closeQtyRow() {
-            qtyRow.style.display = 'none';
-            btn.style.display = 'inline-flex'; // Show Add to Cart button again
-            // Keep the current pdpQuantity visible
-            valueEl.textContent = pdpQuantity;
-            updateMinusButton();
-        }
-
-        // Click on Add to Cart button
-        // - First click: send quantity to cart + close the qty row
-        // - If qty row already open, still send to cart
+        // Add to Cart -> send the shared quantity. One request per click.
         btn.addEventListener("click", function (e) {
             e.preventDefault();
-            // Send the current authoritative quantity to the cart
             addToCartServer(btn, pdpQuantity);
-            // Close the qty row after sending
-            closeQtyRow();
         });
 
-        // Minus button click - handle both trash and decrement
         minusBtn.addEventListener("click", function (e) {
             e.stopPropagation();
-            if (pdpQuantity <= min) {
-                // Currently at 1, trash icon clicked -> close the row
-                closeQtyRow();
-            } else {
-                // Decrement normally using global state
-                pdpQuantity = Math.max(min, pdpQuantity - 1);
-                valueEl.textContent = pdpQuantity;
-                updateMinusButton();
-            }
+            pdpMutationCounter++;
+            renderProductDetailCartState(pdpQuantity - 1);
         });
 
-        // Plus button click
         plusBtn.addEventListener("click", function (e) {
             e.stopPropagation();
-            pdpQuantity = Math.min(99, pdpQuantity + 1);
-            valueEl.textContent = pdpQuantity;
-            updateMinusButton();
+            pdpMutationCounter++;
+            renderProductDetailCartState(pdpQuantity + 1);
         });
-
-        // Initialize
-        updateMinusButton();
     });
+
+    // Initial paint from the shared state; the /cart/state/ sync refines it.
+    renderProductDetailCartState(pdpQuantity);
 }
 
 function normalizeText(text) {
@@ -1216,18 +1198,57 @@ function shareProduct() {
 }
 
 const wishlistBtn =
-    document.querySelector(".wishlist-btn");
+    document.querySelector(".product-actions .wishlist-btn[data-id]");
 
-if(wishlistBtn){
+if (wishlistBtn) {
 
-    wishlistBtn.addEventListener(
-        "click",
-        function(){
-            // Use the shared pdpQuantity state and addToCartServer
-            // instead of the wishlist /wishlist/add/ endpoint
-            addToCartServer(wishlistBtn, pdpQuantity);
-        }
-    );
+    wishlistBtn.addEventListener("click", function (e) {
+
+        e.preventDefault();
+
+        const productId = wishlistBtn.dataset.id;
+        if (!productId) return;
+
+        fetch("/wishlist/add/" + productId + "/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+        })
+            .then(function (response) {
+                // add_to_wishlist is @login_required -> anonymous users are
+                // redirected to the login page, which is not JSON.
+                if (response.redirected) {
+                    window.location.href = response.url;
+                    return null;
+                }
+                return response.json();
+            })
+            .then(function (data) {
+                if (!data || !data.success) return;
+
+                const icon = wishlistBtn.querySelector("i");
+                if (icon) {
+                    if (data.action === "added") {
+                        icon.classList.remove("fa-regular");
+                        icon.classList.add("fa-solid");
+                    } else {
+                        icon.classList.remove("fa-solid");
+                        icon.classList.add("fa-regular");
+                    }
+                }
+
+                const countEl = document.getElementById("wishlistToastCount");
+                if (countEl && data.total !== undefined) {
+                    countEl.textContent = data.total;
+                }
+
+                if (data.action === "added") {
+                    showWishlistToast();
+                }
+            })
+            .catch(console.error);
+    });
 }
 
 
