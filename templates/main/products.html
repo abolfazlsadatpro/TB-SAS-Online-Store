@@ -106,11 +106,7 @@ Products
                                 class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for brand in brands %}
-                            <label class="p1-check filter-check"><input type="checkbox" class="brand-filter"
-                                                                        name="brand" value="{{ brand.name }}" {% if
-                                                                        brand.name in current_brands %}checked{% endif
-                                                                        %}><span class="checkmark"></span> {{ brand.name
-                                }}</label>
+                                <label class="p1-check filter-check"><input type="checkbox" class="brand-filter" name="brand" value="{{ brand.name }}"{% if brand.name in current_brands %} checked{% endif %}><span class="checkmark"></span> {{ brand.name }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -172,13 +168,7 @@ Products
                         <div class="p1-group-body filter-content">
                             <div class="p1-swatches filter-colors">
                                 {% for attr_value in color_attr.filter_values %}
-                                <label class="p1-check filter-check filter-check-color"
-                                       title="{{ attr_value.display_value|default:attr_value.value }}"><input
-                                        type="checkbox" name="attr_color" value="{{ attr_value.value }}" {% if 'color'
-                                    in attr_filters and attr_value.value in attr_filters|dict_get:'color' %}checked{%
-                                    endif %}><span class="checkmark color-swatch"
-                                                   style="background:{{ attr_value.color_code }}"></span> {{
-                                    attr_value.display_value|default:attr_value.value }}</label>
+                                    <label class="p1-check filter-check filter-check-color" title="{{ attr_value.display_value|default:attr_value.value }}"><input type="checkbox" name="attr_color" value="{{ attr_value.value }}"{% if 'color' in attr_filters and attr_value.value in attr_filters|dict_get:'color' %} checked{% endif %}><span class="checkmark color-swatch" style="background:{{ attr_value.color_code }}"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
                                 {% endfor %}
                             </div>
                         </div>
@@ -194,11 +184,7 @@ Products
                                 class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in ram_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="checkbox" name="attr_ram"
-                                                                        value="{{ attr_value.value }}" {% if 'ram' in
-                                attr_filters and attr_value.value in attr_filters|dict_get:'ram' %}checked{% endif
-                                %}><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value
-                                }}</label>
+                                <label class="p1-check filter-check"><input type="checkbox" name="attr_ram" value="{{ attr_value.value }}"{% if 'ram' in attr_filters and attr_value.value in attr_filters|dict_get:'ram' %} checked{% endif %}><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -213,11 +199,7 @@ Products
                                 class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in storage_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="checkbox" name="attr_storage"
-                                                                        value="{{ attr_value.value }}" {% if 'storage'
-                                in attr_filters and attr_value.value in attr_filters|dict_get:'storage' %}checked{%
-                                endif %}><span class="checkmark"></span> {{
-                                attr_value.display_value|default:attr_value.value }}</label>
+                                <label class="p1-check filter-check"><input type="checkbox" name="attr_storage" value="{{ attr_value.value }}"{% if 'storage' in attr_filters and attr_value.value in attr_filters|dict_get:'storage' %} checked{% endif %}><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -232,11 +214,7 @@ Products
                                 class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in condition_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="radio" name="attr_condition"
-                                                                        value="{{ attr_value.value }}" {% if 'condition'
-                                in attr_filters and attr_value.value in attr_filters|dict_get:'condition' %}checked{%
-                                endif %} data-radio-group="attr_condition"><span class="checkmark"></span> {{
-                                attr_value.display_value|default:attr_value.value }}</label>
+                                <label class="p1-check filter-check"><input type="radio" name="attr_condition" value="{{ attr_value.value }}"{% if 'condition' in attr_filters and attr_value.value in attr_filters|dict_get:'condition' %} checked{% endif %} data-radio-group="attr_condition"><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
@@ -251,12 +229,7 @@ Products
                                 class="fa-solid fa-chevron-down"></i></div>
                         <div class="p1-group-body filter-content">
                             {% for attr_value in screen_attr.filter_values %}
-                            <label class="p1-check filter-check"><input type="radio" name="attr_screen-size"
-                                                                        value="{{ attr_value.value }}" {% if
-                                'screen-size' in attr_filters and attr_value.value in
-                                attr_filters|dict_get:'screen-size' %}checked{% endif %}
-                                data-radio-group="attr_screen-size"><span class="checkmark"></span> {{
-                                attr_value.display_value|default:attr_value.value }}</label>
+                                <label class="p1-check filter-check"><input type="radio" name="attr_screen-size" value="{{ attr_value.value }}"{% if 'screen-size' in attr_filters and attr_value.value in attr_filters|dict_get:'screen-size' %} checked{% endif %} data-radio-group="attr_screen-size"><span class="checkmark"></span> {{ attr_value.display_value|default:attr_value.value }}</label>
                             {% endfor %}
                         </div>
                     </div>
