@@ -1962,6 +1962,31 @@ function renderQuickViewContent(product) {
     if (!modalContent) {
         return;
     }
+    const images = Array.isArray(product.images)
+    ? product.images
+        .map(img => {
+            if (typeof img === 'string') {
+                return { url: img };
+            }
+
+            if (img && typeof img === 'object' && img.url) {
+                return { url: img.url };
+            }
+
+            return null;
+        })
+        .filter(Boolean)
+    : [];
+
+    let mainImageUrl = product.main_image;
+
+    if (!mainImageUrl && images.length > 0) {
+        mainImageUrl = images[0].url;
+    }
+
+    if (!mainImageUrl) {
+        mainImageUrl = '/static/images/placeholder-product.png';
+    }
 
 
     modalContent.innerHTML = `
@@ -2012,7 +2037,7 @@ function renderQuickViewContent(product) {
                             `
                                 <div class="carousel-item active">
                                     <img
-                                        src="${product.main_image.url}"
+                                        src="${mainImageUrl}"
                                         class="d-block w-100"
                                         alt="${product.name}"
                                     >
@@ -2749,7 +2774,21 @@ function renderQuickViewContent(product) {
 
     const colors = product.colors || [];
     const hasColors = colors.length > 0;
-    const images = product.images || [];
+    const images = Array.isArray(product.images)
+    ? product.images
+        .map(img => {
+            if (typeof img === 'string') {
+                return { url: img };
+            }
+
+            if (img && typeof img === 'object' && img.url) {
+                return { url: img.url };
+            }
+
+            return null;
+        })
+        .filter(Boolean)
+    : [];
 
     // Build thumbnail HTML
     let thumbnailsHtml = '';
@@ -2813,7 +2852,11 @@ function renderQuickViewContent(product) {
                 <!-- LEFT: Image Column -->
                 <div class="qv-image-col">
                     <div class="qv-main-image">
-                        [${mainImageUrl}](${mainImageUrl})
+                        <img
+                            src="${mainImageUrl}"
+                            alt="${product.name || 'Product image'}"
+                            class="qv-main-image-img"
+                        >
                     </div>
                     ${images.length > 1 ? `
                         <div class="qv-thumbnails">
