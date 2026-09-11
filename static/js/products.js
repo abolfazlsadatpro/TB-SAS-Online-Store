@@ -2368,7 +2368,7 @@ function addToWishlist(productId) {
 }
 
 // ============================================================
-// QUICK VIEW — PROFESSIONAL REDESIGN
+// QUICK VIEW REDESIGN — PROFESSIONAL E-COMMERCE MODAL
 // ============================================================
 
 // Per-modal instance state
@@ -2377,12 +2377,35 @@ let quickViewState = {
     selectedColorId: null,
     quantity: 1,
     mutationCounter: 0,
+    selectedImageIndex: 0,
 };
 
-// Toast notification system
+// ============================================================
+// TOAST NOTIFICATION SYSTEM — TOP CENTER ANIMATION
+// ============================================================
+
 function createQuickViewToast(type, title, message) {
-    const toastContainer = document.getElementById('cartToast');
-    if (!toastContainer) return;
+    // Ensure toast container exists and is top-centered
+    let toastContainer = document.getElementById('quickViewToastContainer');
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'quickViewToastContainer';
+        toastContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100000;
+            width: auto;
+            max-width: 90%;
+        `;
+        document.body.appendChild(toastContainer);
+    }
+
+    // Build toast element
+    const toastEl = document.createElement('div');
+    toastEl.className = 'qv-toast';
+    toastEl.setAttribute('data-toast-type', type);
 
     const icons = {
         success: '<i class="fa-solid fa-check-circle"></i>',
@@ -2391,50 +2414,62 @@ function createQuickViewToast(type, title, message) {
         wishlist: '<i class="fa-solid fa-heart"></i>',
     };
 
-    const colors = {
-        success: '#198754',
-        error: '#dc3545',
-        warning: '#ffc107',
-        wishlist: '#e11d48',
-    };
-
-    toastContainer.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <span style="font-size: 18px; color: ${colors[type]};">
-                ${icons[type]}
+    toastEl.innerHTML = `
+        <div class="qv-toast-content">
+            <span class="qv-toast-icon">
+                ${icons[type] || icons.success}
             </span>
-            <div>
-                <div style="font-weight: 700; font-size: 13px;">${title}</div>
-                ${message ? `<div style="font-size: 12px; opacity: 0.9; margin-top: 2px;">${message}</div>` : ''}
+            <div class="qv-toast-text">
+                <div class="qv-toast-title">${title}</div>
+                ${message ? `<div class="qv-toast-message">${message}</div>` : ''}
             </div>
+            <button class="qv-toast-close" aria-label="Close toast">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
     `;
 
-    toastContainer.style.background = '#fff';
-    toastContainer.style.color = '#1b2b22';
-    toastContainer.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15)';
-    toastContainer.style.border = `2px solid ${colors[type]}`;
+    // Close button handler
+    toastEl.querySelector('.qv-toast-close').addEventListener('click', () => {
+        toastEl.classList.add('qv-toast-exit');
+        setTimeout(() => toastEl.remove(), 300);
+    });
 
-    toastContainer.classList.remove('show');
-    void toastContainer.offsetWidth;
-    toastContainer.classList.add('show');
+    // Add to container
+    toastContainer.innerHTML = '';
+    toastContainer.appendChild(toastEl);
 
-    setTimeout(() => {
-        toastContainer.classList.remove('show');
+    // Trigger animation
+    setTimeout(() => toastEl.classList.add('qv-toast-show'), 10);
+
+    // Auto-dismiss
+    const autoDismissTimer = setTimeout(() => {
+        if (toastEl.parentElement) {
+            toastEl.classList.add('qv-toast-exit');
+            setTimeout(() => toastEl.remove(), 300);
+        }
     }, 3500);
+
+    // Clear timer on manual close
+    toastEl.querySelector('.qv-toast-close').addEventListener('click', () => {
+        clearTimeout(autoDismissTimer);
+    });
 }
 
-// Reset quick view state
+// ============================================================
+// QUICK VIEW STATE MANAGEMENT
+// ============================================================
+
 function resetQuickViewState() {
     quickViewState = {
         productId: null,
         selectedColorId: null,
         quantity: 1,
         mutationCounter: 0,
+        selectedImageIndex: 0,
     };
 }
 
-// Render quantity stepper
 function renderQuickViewQuantity(quantity) {
     const min = 1;
     const max = 99;
@@ -2445,16 +2480,19 @@ function renderQuickViewQuantity(quantity) {
 
     quickViewState.quantity = next;
 
-    const valueEl = document.querySelector('#quickViewContent .qty-value');
-    const minusBtn = document.querySelector('#quickViewContent .qty-minus');
-    const plusBtn = document.querySelector('#quickViewContent .qty-plus');
+    const valueEl = document.querySelector('#quickViewContent .qv-qty-value');
+    const minusBtn = document.querySelector('#quickViewContent .qv-qty-minus');
+    const plusBtn = document.querySelector('#quickViewContent .qv-qty-plus');
 
     if (valueEl) valueEl.textContent = quickViewState.quantity;
     if (minusBtn) minusBtn.disabled = quickViewState.quantity <= min;
     if (plusBtn) plusBtn.disabled = quickViewState.quantity >= max;
 }
 
-// Sync quick view with cart server state
+// ============================================================
+// CART SYNC
+// ============================================================
+
 function syncQuickViewWithCart(productId, colorId) {
     fetch('/cart/state/')
         .then(response => response.json())
@@ -2473,22 +2511,21 @@ function syncQuickViewWithCart(productId, colorId) {
         .catch(console.error);
 }
 
-// Add item to cart
-function addQuickViewToCart(btn, productId, colorId, quantity) {
-    // Validate color selection
-    if (colorId === null || colorId === '') {
-        const product = quickViewState.productId;
+// ============================================================
+// ADD TO CART
+// ============================================================
 
-        // Check if product actually requires a color
-        const colorSelector = document.querySelector('#quickViewContent .quick-view-color-selector');
-        if (colorSelector && colorSelector.children.length > 0) {
-            createQuickViewToast('error', 'Please select a color', 'Choose a color before adding to cart');
-            return;
-        }
+function addQuickViewToCart(btn, productId, colorId, quantity) {
+    // Validate color if required
+    const colorSelector = document.querySelector('#quickViewContent .qv-color-selector');
+    if (colorSelector && colorSelector.children.length > 0 && (colorId === null || colorId === '')) {
+        createQuickViewToast('error', 'Please select a color', 'Choose a color before adding to cart');
+        return;
     }
 
     btn.disabled = true;
-    btn.style.opacity = '0.6';
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
 
     const formData = new FormData();
     formData.append('product_id', productId);
@@ -2508,21 +2545,21 @@ function addQuickViewToCart(btn, productId, colorId, quantity) {
         .then(response => response.json())
         .then(data => {
             btn.disabled = false;
-            btn.style.opacity = '1';
+            btn.innerHTML = originalContent;
 
             if (data.success) {
                 const authQty = data.quantity !== undefined ? data.quantity : quantity;
-                const colorName = document.querySelector(
-                    `#quickViewContent .quick-view-color-btn[data-color-id="${colorId}"]`
-                )?.textContent || '';
+                const colorBtn = document.querySelector(
+                    `#quickViewContent .qv-color-btn[data-color-id="${colorId}"]`
+                );
+                const colorName = colorBtn ? colorBtn.title : 'Product';
 
                 createQuickViewToast(
                     'success',
                     'Added to cart',
-                    `${authQty} × ${colorName || 'Product'}`
+                    `${authQty} × ${colorName}`
                 );
 
-                // Re-sync to get fresh cart state
                 syncQuickViewWithCart(productId, colorId);
             } else {
                 createQuickViewToast('error', 'Failed to add', data.message || 'Try again');
@@ -2530,20 +2567,23 @@ function addQuickViewToCart(btn, productId, colorId, quantity) {
         })
         .catch(error => {
             btn.disabled = false;
-            btn.style.opacity = '1';
+            btn.innerHTML = originalContent;
             console.error('Cart error:', error);
             createQuickViewToast('error', 'Error occurred', 'Please try again');
         });
 }
 
-// Show Quick View modal
+// ============================================================
+// SHOW QUICK VIEW MODAL
+// ============================================================
+
 function showQuickView(productId) {
     resetQuickViewState();
 
     const modalContent = document.getElementById('quickViewContent');
     if (modalContent) {
         modalContent.innerHTML = `
-            <div class="text-center py-5">
+            <div class="qv-loading">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
@@ -2582,7 +2622,10 @@ function showQuickView(productId) {
         });
 }
 
-// Initialize Quick View buttons and interactivity
+// ============================================================
+// INITIALIZE QUICK VIEW INTERACTIONS
+// ============================================================
+
 function initializeQuickViewButtons(productId) {
     const modalContent = document.getElementById('quickViewContent');
     if (!modalContent) return;
@@ -2591,7 +2634,7 @@ function initializeQuickViewButtons(productId) {
     quickViewState.quantity = 1;
 
     // Color selector buttons
-    const colorBtns = modalContent.querySelectorAll('.quick-view-color-btn');
+    const colorBtns = modalContent.querySelectorAll('.qv-color-btn');
     colorBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -2600,27 +2643,34 @@ function initializeQuickViewButtons(productId) {
             if (!colorId) return;
 
             // Update selection
-            colorBtns.forEach(b => b.classList.remove('selected'));
-            this.classList.add('selected');
+            colorBtns.forEach(b => b.classList.remove('qv-color-selected'));
+            this.classList.add('qv-color-selected');
             quickViewState.selectedColorId = colorId;
 
-            // Sync cart for this color
+            // Update product image if this color has one
+            const colorImageUrl = this.getAttribute('data-image-url');
+            if (colorImageUrl) {
+                const mainImage = modalContent.querySelector('.qv-main-image img');
+                if (mainImage) {
+                    mainImage.src = colorImageUrl;
+                }
+            }
+
+            // Sync cart
             syncQuickViewWithCart(productId, colorId);
         });
     });
 
-    // Set default color selected (if any)
+    // Set default color
     if (colorBtns.length > 0) {
         const defaultBtn = Array.from(colorBtns).find(btn => btn.getAttribute('data-is-default') === 'true')
             || colorBtns[0];
-
         defaultBtn.click();
     }
 
-    // Quantity stepper buttons
-    const stepper = modalContent.querySelector('.qty-stepper');
-    const minusBtn = stepper ? stepper.querySelector('.qty-minus') : null;
-    const plusBtn = stepper ? stepper.querySelector('.qty-plus') : null;
+    // Quantity stepper
+    const minusBtn = modalContent.querySelector('.qv-qty-minus');
+    const plusBtn = modalContent.querySelector('.qv-qty-plus');
 
     if (minusBtn) {
         minusBtn.addEventListener('click', function(e) {
@@ -2639,7 +2689,7 @@ function initializeQuickViewButtons(productId) {
     }
 
     // Add to Cart button
-    const addToCartBtn = modalContent.querySelector('.mini-cart-btn');
+    const addToCartBtn = modalContent.querySelector('.qv-add-to-cart-btn');
     if (addToCartBtn) {
         addToCartBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -2653,7 +2703,7 @@ function initializeQuickViewButtons(productId) {
     }
 
     // Wishlist button
-    const wishlistBtn = modalContent.querySelector('.product-wishlist-btn');
+    const wishlistBtn = modalContent.querySelector('.qv-wishlist-btn');
     if (wishlistBtn) {
         const newWishlistBtn = wishlistBtn.cloneNode(true);
         wishlistBtn.parentNode.replaceChild(newWishlistBtn, wishlistBtn);
@@ -2665,39 +2715,74 @@ function initializeQuickViewButtons(productId) {
             const pid = this.getAttribute('data-product-id');
             if (!pid) return;
 
-            toggleCardWishlist(pid, this, true);  // true = show toast in Quick View
+            toggleCardWishlist(pid, this, true);
         });
     }
 
-    // Initial quantity sync
+    // Image thumbnails
+    const thumbnails = modalContent.querySelectorAll('.qv-thumbnail');
+    thumbnails.forEach((thumb, index) => {
+        thumb.addEventListener('click', function() {
+            const mainImage = modalContent.querySelector('.qv-main-image img');
+            const imageSrc = this.getAttribute('data-image-url');
+            if (mainImage && imageSrc) {
+                mainImage.src = imageSrc;
+                quickViewState.selectedImageIndex = index;
+            }
+
+            // Update thumbnail active state
+            thumbnails.forEach(t => t.classList.remove('qv-thumbnail-active'));
+            this.classList.add('qv-thumbnail-active');
+        });
+    });
+
     renderQuickViewQuantity(1);
 }
 
-// Render Quick View content
+// ============================================================
+// RENDER QUICK VIEW CONTENT
+// ============================================================
+
 function renderQuickViewContent(product) {
     const modalContent = document.getElementById('quickViewContent');
     if (!modalContent) return;
 
     const colors = product.colors || [];
     const hasColors = colors.length > 0;
+    const images = product.images || [];
+
+    // Build thumbnail HTML
+    let thumbnailsHtml = '';
+    if (images.length > 0) {
+        thumbnailsHtml = images.slice(0, 5).map((img, idx) => `
+            <button
+                type="button"
+                class="qv-thumbnail ${idx === 0 ? 'qv-thumbnail-active' : ''}"
+                data-image-url="${img.url}"
+                aria-label="View image ${idx + 1}"
+            >
+                [${img.url}](${img.url})
+            </button>
+        `).join('');
+    }
 
     // Build color selector HTML
     let colorSelectorHtml = '';
     if (hasColors) {
         colorSelectorHtml = `
-            <div class="quick-view-color-selector-wrapper">
-                <div class="quick-view-label">
-                    <strong>Color:</strong>
-                </div>
-                <div class="quick-view-color-selector">
+            <div class="qv-color-section">
+                <div class="qv-color-label">Color:</div>
+                <div class="qv-color-selector">
                     ${colors.map(color => `
                         <button
                             type="button"
-                            class="quick-view-color-btn"
+                            class="qv-color-btn"
                             data-color-id="${color.id}"
-                            data-is-default="${color.is_default}"
+                            data-is-default="${color.is_default ? 'true' : 'false'}"
+                            data-image-url="${color.image ? color.image.url || '' : ''}"
                             title="${color.name}"
-                            style="background-color: ${color.color_code}; border-radius: 50%; width: 36px; height: 36px; border: 2px solid #ddd; cursor: pointer; transition: all 0.15s; display: inline-block; margin-right: 8px; position: relative;"
+                            style="background-color: ${color.color_code};"
+                            aria-label="Select ${color.name}"
                         >
                             <span class="visually-hidden">${color.name}</span>
                         </button>
@@ -2707,184 +2792,143 @@ function renderQuickViewContent(product) {
         `;
     }
 
+    // Stock status
+    const stockStatus = product.is_in_stock
+        ? '<span class="qv-stock-badge qv-stock-in">In Stock</span>'
+        : '<span class="qv-stock-badge qv-stock-out">Out of Stock</span>';
+
+    // Main image URL (fallback logic)
+    let mainImageUrl = product.main_image;
+    if (!mainImageUrl && images.length > 0) {
+        mainImageUrl = images[0].url;
+    }
+    if (!mainImageUrl) {
+        mainImageUrl = 'https://via.placeholder.com/300x400?text=No+Image';
+    }
+
+    // Render modal
     modalContent.innerHTML = `
-        <div class="quick-view-container">
-            <div class="quick-view-row">
-                <!-- LEFT: Image Gallery -->
-                <div class="quick-view-image-col">
-                    <div id="quickViewImageCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            ${product.images && product.images.length > 0
-                                ? product.images.map((image, index) => `
-                                    <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                                        [${image.url}](${image.url})
-                                    </div>
-                                `).join('')
-                                : product.main_image
-                                ? `
-                                    <div class="carousel-item active">
-                                        [${product.main_image}](${product.main_image})
-                                    </div>
-                                `
-                                : `
-                                    <div class="carousel-item active">
-                                        [https://via.placeholder.com/400x400?text=No+Image](https://via.placeholder.com/400x400?text=No+Image)
-                                    </div>
-                                `
-                            }
-                        </div>
-                        ${product.images && product.images.length > 1
-                            ? `
-                                <button
-                                    class="carousel-control-prev"
-                                    type="button"
-                                    data-bs-target="#quickViewImageCarousel"
-                                    data-bs-slide="prev"
-                                >
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button
-                                    class="carousel-control-next"
-                                    type="button"
-                                    data-bs-target="#quickViewImageCarousel"
-                                    data-bs-slide="next"
-                                >
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            `
-                            : ''
-                        }
+        <div class="qv-wrapper">
+            <div class="qv-grid">
+                <!-- LEFT: Image Column -->
+                <div class="qv-image-col">
+                    <div class="qv-main-image">
+                        [${mainImageUrl}](${mainImageUrl})
                     </div>
+                    ${images.length > 1 ? `
+                        <div class="qv-thumbnails">
+                            ${thumbnailsHtml}
+                        </div>
+                    ` : ''}
                 </div>
 
-                <!-- RIGHT: Details -->
-                <div class="quick-view-details-col">
-                    <!-- Title -->
-                    <h3 class="quick-view-title">
-                        ${product.name}
-                    </h3>
-
-                    <!-- Category / Brand -->
-                    <div class="quick-view-meta">
-                        ${product.category && product.category.name
-                            ? `<span class="quick-view-category"><i class="fa-solid fa-tag" style="margin-right: 4px;"></i>${product.category.name}</span>`
-                            : ''
-                        }
-                        ${product.brand
-                            ? `<span class="quick-view-brand"><i class="fa-solid fa-building" style="margin-right: 4px;"></i>${product.brand}</span>`
-                            : ''
-                        }
+                <!-- RIGHT: Product Info Column -->
+                <div class="qv-info-col">
+                    <!-- Stock Badge -->
+                    <div class="qv-header">
+                        ${stockStatus}
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
+                    <!-- Title -->
+                    <h2 class="qv-title">${product.name || 'Product'}</h2>
+
                     <!-- Rating -->
-                    <div class="quick-view-rating">
-                        <div class="quick-view-stars" style="color: #f5a623; font-size: 14px;">
+                    <div class="qv-rating-section">
+                        <div class="qv-stars">
                             ${Array.from({length: 5}, (_, i) => {
                                 const isFull = i < product.star_full.length;
                                 const isHalf = product.star_half && i === Math.floor(product.star_full.length);
-
                                 if (isFull) return '<i class="fa-solid fa-star"></i>';
                                 if (isHalf) return '<i class="fa-solid fa-star-half-stroke"></i>';
                                 return '<i class="fa-regular fa-star"></i>';
                             }).join('')}
                         </div>
-                        ${product.rating_count
-                            ? `<span class="quick-view-rating-count">(${product.rating_count} reviews)</span>`
-                            : ''
-                        }
+                        ${product.rating_count ? `
+                            <span class="qv-rating-count">${product.rating_count} reviews</span>
+                        ` : ''}
                     </div>
 
-                    <!-- Price -->
-                    <div class="quick-view-price">
-                        ${product.has_discount
-                            ? `
-                                <span class="quick-view-old-price">$${product.price}</span>
-                                <span class="quick-view-final-price">$${product.final_price}</span>
-                                <span class="quick-view-discount-badge">${product.discount_percent}% OFF</span>
-                            `
-                            : `
-                                <span class="quick-view-final-price">$${product.final_price}</span>
-                            `
-                        }
+                    <!-- Price Section -->
+                    <div class="qv-price-section">
+                        <div class="qv-price">
+                            <span class="qv-final-price">$${product.final_price}</span>
+                            ${product.has_discount ? `
+                                <span class="qv-old-price">$${product.price}</span>
+                                <span class="qv-discount-badge">${product.discount_percent}% OFF</span>
+                            ` : ''}
+                        </div>
                     </div>
 
                     <!-- Description -->
-                    ${product.description
-                        ? `
-                            <div class="quick-view-description">
-                                <p>${product.description}</p>
-                            </div>
-                        `
-                        : ''
-                    }
+                    ${product.description ? `
+                        <div class="qv-description">
+                            <p>${product.description}</p>
+                        </div>
+                    ` : ''}
 
                     <!-- Specifications -->
-                    ${product.attributes && product.attributes.length > 0
-                        ? `
-                            <div class="quick-view-specs">
-                                <h6>Specifications</h6>
-                                <ul>
-                                    ${product.attributes.map(attr => `
-                                        <li><strong>${attr.name}:</strong> ${attr.value}</li>
-                                    `).join('')}
-                                </ul>
-                            </div>
-                        `
-                        : ''
-                    }
+                    ${product.attributes && product.attributes.length > 0 ? `
+                        <div class="qv-specs">
+                            <h6>Specifications</h6>
+                            <ul>
+                                ${product.attributes.map(attr => `
+                                    <li><strong>${attr.name}:</strong> ${attr.value}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
 
                     <!-- Color Selector -->
                     ${colorSelectorHtml}
 
-                    <!-- Quantity & Add to Cart -->
-                    <div class="quick-view-actions">
-                        <div class="qty-stepper">
-                            <button type="button" class="qty-btn qty-minus" aria-label="Decrease quantity">−</button>
-                            <span class="qty-value">1</span>
-                            <button type="button" class="qty-btn qty-plus" aria-label="Increase quantity">+</button>
+                    <!-- Quantity & Buttons -->
+                    <div class="qv-controls">
+                        <div class="qv-quantity-section">
+                            <label class="qv-qty-label">Quantity</label>
+                            <div class="qv-qty-stepper">
+                                <button type="button" class="qv-qty-minus" aria-label="Decrease quantity">−</button>
+                                <span class="qv-qty-value">1</span>
+                                <button type="button" class="qv-qty-plus" aria-label="Increase quantity">+</button>
+                            </div>
                         </div>
-                        <button
-                            type="button"
-                            class="mini-cart-btn"
-                            data-cart="quickview"
-                            data-product-id="${product.id}"
-                            data-color-id=""
-                        >
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <span class="cart-label">Add to Cart</span>
-                        </button>
+
+                        <div class="qv-action-buttons">
+                            <button type="button" class="qv-add-to-cart-btn">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span>Add to Cart</span>
+                            </button>
+                            <button type="button" class="qv-wishlist-btn product-wishlist-btn ${product.in_wishlist ? 'is-active' : ''}" data-product-id="${product.id}">
+                                <i class="${product.in_wishlist ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Wishlist Button -->
-                    <button
-                        type="button"
-                        class="quick-view-wishlist-btn product-wishlist-btn ${product.in_wishlist ? 'is-active' : ''}"
-                        data-product-id="${product.id}"
-                        aria-label="Add to wishlist"
-                    >
-                        <i class="${product.in_wishlist ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-                        <span>Add to Wishlist</span>
-                    </button>
+                    <!-- Service Info Row -->
+                    <div class="qv-service-row">
+                        <div class="qv-service-item">
+                            <i class="fa-solid fa-truck"></i>
+                            <span>Free Shipping</span>
+                        </div>
+                        <div class="qv-service-item">
+                            <i class="fa-solid fa-headset"></i>
+                            <span>24/7 Support</span>
+                        </div>
+                        <div class="qv-service-item">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Secure Payment</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     `;
 }
 
-// Hide Quick View
-function hideQuickView() {
-    const modalElement = document.getElementById('quickViewModal');
-    if (!modalElement) return;
+// ============================================================
+// ERROR MODAL
+// ============================================================
 
-    const quickViewModal = bootstrap.Modal.getInstance(modalElement);
-    if (quickViewModal) {
-        quickViewModal.hide();
-    }
-}
-
-// Show error in modal
 function showErrorInModal(message) {
     const modalContent = document.getElementById('quickViewContent');
     if (!modalContent) return;
@@ -2901,7 +2945,20 @@ function showErrorInModal(message) {
     `;
 }
 
-// Initialize Quick View buttons
+function hideQuickView() {
+    const modalElement = document.getElementById('quickViewModal');
+    if (!modalElement) return;
+
+    const quickViewModal = bootstrap.Modal.getInstance(modalElement);
+    if (quickViewModal) {
+        quickViewModal.hide();
+    }
+}
+
+// ============================================================
+// INITIALIZE QUICK VIEW BUTTONS
+// ============================================================
+
 function initQuickViewButtons() {
     document.querySelectorAll('.quick-view-btn').forEach(button => {
         button.addEventListener('click', function() {
@@ -2913,8 +2970,10 @@ function initQuickViewButtons() {
     });
 }
 
+// ============================================================
+// ENHANCED WISHLIST TOGGLE (WITH TOAST SUPPORT)
+// ============================================================
 
-// Enhanced wishlist toggler with toast support
 function toggleCardWishlist(productId, button, showToast = false) {
     const icon = button.querySelector('i');
     const csrfToken = getCsrfToken();
@@ -2970,7 +3029,7 @@ function toggleCardWishlist(productId, button, showToast = false) {
                     icon.classList.add('fa-regular');
                 }
                 if (showToast) {
-                    createQuickViewToast('error', 'Removed from Wishlist', 'Product removed');
+                    createQuickViewToast('error', 'Removed from Wishlist', '');
                 }
             }
 
@@ -2981,10 +3040,11 @@ function toggleCardWishlist(productId, button, showToast = false) {
         })
         .catch(error => {
             console.error('Wishlist update error:', error);
-            createQuickViewToast('error', 'Error', 'Could not update wishlist');
+            if (showToast) {
+                createQuickViewToast('error', 'Error', 'Could not update wishlist');
+            }
         });
 }
-
 
 // ------------------------------------------------------------
 // Project login page (used when the wishlist endpoint redirects)
