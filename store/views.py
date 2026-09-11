@@ -790,7 +790,7 @@ def get_product_details(request, product_id):
         images.append({"url": product.main_image.url, "kind": "normal"})
     for color in product.colors.all():
         if color.image:
-            images.append({"url": color.image.url, "kind": "color", "name": color.name})
+            images.append({"url": color.image.url, "kind": "color", "name": color.name, "color_id": color.id})
     for image in product.images.all():
         if image.image:
             images.append({"url": image.image.url, "kind": "normal"})
@@ -800,12 +800,27 @@ def get_product_details(request, product_id):
     for aa in product.attribute_assignments.all():
         attributes.append({"name": aa.attribute.name, "value": aa.value.value})
 
+    # Colors array for selector
+    colors = []
+    for color in product.colors.all():
+        colors.append({
+            "id": color.id,
+            "name": color.name,
+            "color_code": color.color_code,
+            "stock": color.stock,
+            "is_default": color.is_default,
+        })
+
     data = {
         "success": True,
         "product": {
             "id": product.id,
             "name": product.name,
-            "category": product.category.name if product.category else "",
+            "brand": product.brand or "",
+            "category": {
+                "id": product.category.id if product.category else None,
+                "name": product.category.name if product.category else "",
+            },
             "images": images,
             "main_image": product.main_image.url if product.main_image else "",
             "star_full": list(range(full_stars)),
@@ -818,9 +833,13 @@ def get_product_details(request, product_id):
             "description": product.description or "",
             "in_wishlist": in_wishlist,
             "attributes": attributes,
+            "colors": colors,  # NEW: Color selector data
+            "total_stock": product.total_stock,
+            "is_in_stock": product.is_in_stock,
         },
     }
     return JsonResponse(data)
+
 
 
 @login_required
